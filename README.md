@@ -1,27 +1,60 @@
-# ResearchConnect
+<h1 align="center">
+  <br>
+  <a href="#"><img src="/resources/logo.svg" alt="ResearchConnect" width="100"></a>
+  <br>
+</h1>
 
-Finding university research made easy
+<h4 align="center">Connecting UCSC students to faculty & research opportunities. </h4>
 
-### Prerequisites
-In order to create an account, you must have an "@ucsc.edu" email.
+<p align="center">
+<a href="https://forthebadge.com">
+      <img src="https://forthebadge.com/images/badges/made-with-javascript.svg">
+    </a>
+	<a href="https://forthebadge.com">
+      <img src="https://forthebadge.com/images/badges/built-with-love.svg">
+	</a>
+</p>
+<br>
 
-Make sure to import files from "DATABASES TO IMPORT INTO web2py" folder into their respective databases in web2py:
-* import db_ucsc_faculty_member.csv into ucsc_faculty_member
-* import db_cruzids_2018.csv into ucsc_user
-* import departments.csv into department
+<p align="center">
+  <a href="#the-issue">The Issue</a> •
+  <a href="#our-solution">Our Solution</a> •
+  <a href="#install">Install</a> •
+  <a href="#deploy">Deploy</a> •
+  <a href="#api-used">API Used</a> 
+  <a href="#credits">Credits</a> •
+  <a href="#license">Authors</a>
+</p>
 
-Alternatively, use the packed version of the project in EXTRAS: web2py.app.ResearchConnect.w2p
-* Install the application in web2py
-* The sample accounts are located in "Sample Accounts.txt" in the same folder
 
-## Relevant Links
+## The Issue
 
-* [Trello] ()
-* [Project Proposal] ()
+* Finding research opportunities on campus can be a very frustrating experience.
+* There is no central platform for students to connect with faculty.
 
-## Built With
 
-* [Web2py](http://www.web2py.com/)
+## Our Solution
+
+* We aim to help UCSC students find research opportunities easily.
+
+## Install
+
+* `$ brew install node`
+
+## Deploy
+
+* `$ npm run deploy`
+
+## API Used
+
+For this application, we used the following APIs :
+
+* FireBase
+* MongoDB
+
+## Credits
+
+This software uses the following open source packages:
 
 ## Authors
 
@@ -30,4 +63,8 @@ Alternatively, use the packed version of the project in EXTRAS: web2py.app.Resea
 * **Harpreet Singh**
 * **Sean Riley**
 * **Gene Choi**
+
+
+
+
 
