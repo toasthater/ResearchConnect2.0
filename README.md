@@ -39,7 +39,8 @@
 
 ## Install
 
-* `$ brew install node`
+* `$ cd research_connect`
+* `$ npm start`
 
 ## Deploy
 
