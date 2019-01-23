@@ -20,6 +20,7 @@
   <a href="#the-issue">The Issue</a> •
   <a href="#our-solution">Our Solution</a> •
   <a href="#install">Install</a> •
+  <a href="#install">Run</a> •
   <a href="#deploy">Deploy</a> •
   <a href="#api-used">API Used</a> 
   <a href="#credits">Credits</a> •
@@ -35,11 +36,16 @@
 
 ## Our Solution
 
-* We aim to help UCSC students find research opportunities easily.
+* We aim to connect UCSC students to faculty and research opportunities.
 
 ## Install
 
-* `$ brew install node`
+* `$ cd research_connect/app/frontend`
+* `$ npm install`
+
+## Run
+
+* `$ npm run dev`
 
 ## Deploy
 
