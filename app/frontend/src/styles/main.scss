@@ -81,24 +81,6 @@ html {
     overflow-y: auto;
   }
   
-  .react-calendar__tile--active {
-    background: $link !important;
-    &:hover {
-      background: $primary !important; 
-    }
-  }
-  
-  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside){
-    background: $link !important;
-    &:hover {
-      background: $primary !important; 
-    }
-  
-    .DayPicker-Caption.label{
-      color: $link !important;
-    }
-  }
-  
   #doit .hero {
     background: transparent;
     padding: 0 8em;

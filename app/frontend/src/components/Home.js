@@ -22,7 +22,7 @@ export default class Home extends React.PureComponent {
           <div className="hero-body">
             <div className="container">
               <h1 className="title is-size-1 has-text-white ">
-                researchConnect
+                ResearchConnect
               </h1>
               <h2 className="subtitle is-size-4 has-text-weight-bold has-text-white ">
                 A platform for UCSC students to connect with faculty and find research opportunities.

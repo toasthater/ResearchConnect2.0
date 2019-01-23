@@ -15,6 +15,7 @@ import About from './About';
 import ErrorBoundary from './ErrorBoundary';
 import Nav from './Nav';
 import * as db from '../db';
+import SetupStudent from './SetupStudent';
 
 
 // Set default NavLink activeClassName
@@ -38,6 +39,7 @@ const App = () => (
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/about" component={About} />
+          <Route exact path="/setup" component={SetupStudent} />
           <Route exact path="/logout" render={() => {
             db.signOut().catch(console.error);
             return <Redirect to="/" />;

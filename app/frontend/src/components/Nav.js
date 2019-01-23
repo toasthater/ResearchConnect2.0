@@ -73,7 +73,7 @@ class Nav extends React.PureComponent {
     }
 
     return (
-      <nav className={`navbar is-fixed-top ${front ? 'is-transparent' : 'is-link'}`}>
+      <nav className={`navbar is-fixed-top ${front ? 'is-link' : 'is-link'}`}>
         <div className="container">
           <div className="navbar-brand">
             <Link className="navbar-item " to="/">
