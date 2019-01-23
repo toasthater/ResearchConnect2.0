@@ -26,7 +26,8 @@
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "webpack-boiler": "^0.2.3"
+    "webpack-boiler": "^0.2.3",
+    "webpack-cli": "^3.2.1"
   },
   "private": true
 }
