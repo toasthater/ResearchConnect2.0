@@ -8,7 +8,7 @@ firebase.initializeApp({
     databaseURL: "https://researchconnect-1d2e4.firebaseio.com",
     projectId: "researchconnect-1d2e4",
     storageBucket: "researchconnect-1d2e4.appspot.com",
-    messagingSenderId: "126575556233"
+    messagingSenderId: "126575556233",
 });
 
 
@@ -73,6 +73,10 @@ export const init = () => firestore.enablePersistence()
 });
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+  hd: "ucsc.edu"
+});
 
 export const signIn = () => auth.signInWithPopup(googleProvider)
 .then(() => new Promise(resolve => setTimeout(() => resolve(), 1500)))
