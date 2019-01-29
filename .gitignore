@@ -1,6 +1,6 @@
 # Custom
 functions/credentials.json
-dist/
+app/config/keys.js
 
 # Logs
 logs
@@ -37,8 +37,6 @@ bower_components
 build/Release
 
 # Dependency directories
-app/frontend/node_modules/
-app/backend/node_modules/
 */node_modules
 jspm_packages/
 
@@ -49,6 +47,7 @@ typings/
 .npm
 
 # VSCode
+*/.vscode
 .vscode
 
 # Optional eslint cache

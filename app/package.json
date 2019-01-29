@@ -1,0 +1,33 @@
+{
+  "name": "researchconnect",
+  "version": "1.0.0",
+  "description": "a new app for students to connect with ucsc faculty",
+  "main": "server.js",
+  "scripts": {
+    "client-install": "npm install --prefix frontend",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "ucsc",
+    "faculty",
+    "students",
+    "research"
+  ],
+  "author": "ResearchConnect Team",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
+    "cookie-session": "^2.0.0-beta.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.6",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
