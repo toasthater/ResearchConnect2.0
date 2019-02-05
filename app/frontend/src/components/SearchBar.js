@@ -28,50 +28,8 @@ class SearchBar extends Component {
 
       let type = document.querySelector(".dropdown-trigger").innerHTML;
       let query = document.querySelector(".input").value;
-      searchPosts(type, query)();
-
-      /*fetchDepartments()()
-      .then(data => {
-        var departments = data;
-
-        fetchFaculty()()
-        .then(data => {
-          var faculty = data;
-
-          fetchPosts()()
-          .then(data => {
-            let type = document.querySelector(".dropdown-trigger").innerHTML;
-            let query = document.querySelector(".input").value;
-
-            let relevantDepartments = departments.filter(dept => dept.name.toLowerCase().includes(query.toLowerCase()));
-            let relevantFaculty = faculty.filter(fac => fac.name.toLowerCase().includes(query.toLowerCase()));
-
-            let relevantPosts = data.filter(post => {
-              switch (type)
-              {
-                case "Department":
-                  for (let i = 0; i < relevantDepartments.length; i++)
-                  {
-                    if (relevantDepartments[i]._id === post.department)
-                    {
-                      return true;
-                    }
-                  }
-
-                  return false;
-                case "Title":
-                  return post.title.toLowerCase().includes(query.toLowerCase());
-                case "Professor": 
-                default:
-                  return true;
-              }
-            });
-
-            console.log(relevantPosts);
-          })
-          .catch(err => console.log(err));
-        }).catch(err => console.log(err));
-      }).catch(err => console.log(err));*/
+      const data = searchPosts(type, query)();
+      console.log(data);
     }
 
     render() {

@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Spinner } from './Spinner';
+import axios from 'axios';
 
 class Home extends Component {
+    componentDidMount(){
+        console.log(this.props.auth);
+        this.getData();
+    }
+
+    async getData(){
+        const res = await axios.get('/api/search/Default/mantey');
+        console.log(res.data);
+    }
     render() {
         return(
             <section className="section">

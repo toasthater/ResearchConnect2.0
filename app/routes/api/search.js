@@ -85,7 +85,7 @@ router.get('/:type/:query', (req, res) => {
         case "Department":
             searchDepartments(req.params.query)
             .then((data) => {
-                res.json(data);
+                res.send(data);
             })
             .catch((err) => {
                 console.log(err);
@@ -95,7 +95,7 @@ router.get('/:type/:query', (req, res) => {
         case "Professor":
             searchFaculty(req.params.query)
             .then((data) => {
-                res.json(data);
+                res.send(data);
             })
             .catch((err) => {
                 console.log(err);
@@ -105,7 +105,7 @@ router.get('/:type/:query', (req, res) => {
         case "Title":
             searchTitle(req.params.query)
             .then((data) => {
-                res.json(data);
+                res.send(data);
             })
             .catch((err) => {
                 console.log(err);
@@ -132,7 +132,7 @@ router.get('/:type/:query', (req, res) => {
                     }
                 }
 
-                res.json(posts);
+                res.send(posts);
             })
             .catch((err) => {
                 console.log(err);
