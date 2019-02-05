@@ -19,7 +19,12 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     const researchPost = new Research({
         title: req.body.title,
-
+        owner: "5c4ab55a21e1383889614ec6", // Junecue Suh, Pat Mantey
+        tags: ["pure", "research"], // [linear, algebra], ["pure, research"]
+        description: "I sponser this project", // I am math teacher, I sponser this project
+        department: "5c4ab51421e1383889614c7a", // Mathematics, CE
+        status: "Open",
+        deadline: new Date(2020, 2, 8)
     });
 
     researchPost.save().then(research => res.json(research));
@@ -33,7 +38,5 @@ router.delete('/:id', (req, res) => {
         .then(research => research.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json({success: true}));
 });
-
-
 
 module.exports = router;

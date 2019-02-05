@@ -1,0 +1,145 @@
+const express = require('express');
+const router = express.Router();
+
+// Schemas
+const Research = require('../../models/Research');
+const Department = require('../../models/Department');
+const FacultyMember = require('../../models/FacultyMember');
+
+async function searchDepartments(name) {
+    let relevantDepartments = Department.find({
+        'name': {
+            '$regex': name.toLowerCase(),
+            $options: 'i'
+        }
+    });
+
+    var ret;
+
+    await relevantDepartments.then(async (data) => {
+        let deptIDs = []
+        for (let i = 0; i < data.length; i++) {
+            deptIDs.push(data[i]._id);
+        }
+
+        let relevantPosts = Research.find({
+            'department': deptIDs
+        });
+
+        await relevantPosts.then((posts) => {
+            ret = posts;
+        });
+    });
+
+    return ret;
+};
+
+async function searchFaculty(name) {
+    let relevantFaculty = FacultyMember.find({
+        'name': {
+            '$regex': name.toLowerCase(),
+            $options: 'i'
+        }
+    });
+
+    var ret;
+
+    await relevantFaculty.then(async (data) => {
+        let facIDs = []
+        for (let i = 0; i < data.length; i++) {
+            facIDs.push(data[i]._id);
+        }
+
+        let relevantPosts = Research.find({
+            'owner': facIDs
+        });
+
+        await relevantPosts.then((posts) => {
+            ret = posts;
+        });
+    });
+
+    return ret;
+}
+
+async function searchTitle(name) {
+    let relevantPosts = Research.find({
+        'title':{
+            '$regex': name.toLowerCase(),
+            $options: 'i'
+        }
+    });
+
+    var ret;
+
+    await relevantPosts.then((data) => {
+        ret = data;
+    });
+
+    return ret;
+}
+
+router.get('/:type/:query', (req, res) => {
+    switch (req.params.type)
+    {
+        case "Department":
+            searchDepartments(req.params.query)
+            .then((data) => {
+                res.json(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+            break;
+        case "Professor":
+            searchFaculty(req.params.query)
+            .then((data) => {
+                res.json(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+            break;
+        case "Title":
+            searchTitle(req.params.query)
+            .then((data) => {
+                res.json(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+            
+            break;
+        default:
+            var promises = [
+                searchDepartments(req.params.query),
+                searchFaculty(req.params.query),
+                searchTitle(req.params.query)
+            ];
+
+            Promise.all(promises).then((data) => {
+                let posts = [];
+
+                for (let i = 0; i < data.length; i++) {
+                    for (let j = 0; j < data[i].length; j++) {
+                        if (posts.find(post => post._id === data[i][j]._id) !== undefined) {
+                            continue;
+                        }
+
+                        posts.push(data[i][j]);
+                    }
+                }
+
+                res.json(posts);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+            break;
+    }
+});
+
+module.exports = router;
