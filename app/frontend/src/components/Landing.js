@@ -6,7 +6,7 @@ import signinButton from '../assets/google_signin.png';
 export default class Landing extends Component {
     render() {
         return(
-            <LazyImg src={landing} placeholder="#888888" className="home">
+            
             <section className="hero is-fullheight">
               <div className="hero-body">
                 <div className="container">
@@ -22,7 +22,6 @@ export default class Landing extends Component {
                 </div>
               </div>
             </section>
-          </LazyImg>
         )
     }
 }

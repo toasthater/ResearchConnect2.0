@@ -17,15 +17,12 @@ import ErrorBoundary from './ErrorBoundary';
 NavLink.defaultProps.activeClassName = 'is-active';
 
 
-
 class App extends Component {
-  
 
   componentDidMount() {
       this.props.fetchUser();
+      console.log(this.props.auth);
   }
-
-
 
   render() {
     return (
@@ -34,10 +31,12 @@ class App extends Component {
           <NavBar/>
           <ErrorBoundary>
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/" component={(this.props.auth) ? Home : Landing} />
+
               <Route exact component={Landing} path="/welcome" />
               <Route exact component={About} path="/about" />
               <Route render={() => { throw new Error({code: 404}); }} />
+              {(this.props.auth) ? <></> : <Redirect from="/*" to="/"/>}
             </Switch>
           </ErrorBoundary>
           <Route render={({ history }) => {
@@ -53,4 +52,8 @@ class App extends Component {
   }
 }
 
-export default connect(null, actions)(App);
+function mapStateToProps({auth}){
+  return { auth };
+}
+
+export default connect(mapStateToProps, actions)(App);

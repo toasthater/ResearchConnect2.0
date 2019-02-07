@@ -45,7 +45,7 @@ class NavBar extends Component {
             <nav className={`navbar is-fixed-top ${!this.props.auth ? 'is-transparent' : 'is-link'}`}>
             <div className="container">
               <div className="navbar-brand">
-                <Link className="navbar-item " to={this.props.auth ? "/home" : "/"}>
+                <Link className="navbar-item " to="/">
                   <img src={brandingImg} alt="Logo" />
                 </Link>
                 <div className={`navbar-burger burger ${open ? 'is-active' : ''}`}

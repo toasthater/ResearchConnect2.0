@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Spinner } from './Spinner';
 
 class Home extends Component {
+    componentDidMount() {
+        console.log(this.props.auth);
+    }
     render() {
         return(
             <section className="section">
-             {this.props.auth ? this.props.auth.isProfessor ? 'You are a professor' : 'You are a student' : <Spinner fullPage/>}
+             {this.props.auth ? this.props.auth.isProfessor ? 'You are a professor' : 'You are a student' : 'Data is loading'}
             </section>
         )
     }
@@ -14,6 +16,6 @@ class Home extends Component {
 
 function mapStateToProps({auth}){
     return { auth };
-  }
+}
 
 export default connect(mapStateToProps)(Home);
