@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Spinner = ({ fullPage }) => (
+const Spinner = ({ fullPage }) => (
     <div className={fullPage ? 'full-page' : ''}>
       <div className="spinner">
         <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
@@ -18,3 +18,5 @@ export const Spinner = ({ fullPage }) => (
       </div>
     </div>
   );
+
+export default Spinner;

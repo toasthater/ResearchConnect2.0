@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import Landing from './Landing';
 import Home from './Home';
 import About from './About';
+import Spinner from './Spinner';
 import {
   BrowserRouter as Router,
   Route,
@@ -19,43 +20,47 @@ NavLink.defaultProps.activeClassName = 'is-active';
 const PrivateRoute = ({ loggedIn, component, ...rest }) => (
   <Route {...rest} component={loggedIn ? component : Landing}/>
 );
+
 class App extends Component {
 
   componentDidMount() {
-      this.props.fetchUser();
-      console.log(this.props.auth);
+      this.props.fetchUser().then(() => {
+        console.log("Done loading : " + this.props.doneLoading);
+      });
   }
 
   render() {
     return (
-      <Router>
-        <>
-          <NavBar/>
-          <ErrorBoundary>
-            <Switch>
-              <PrivateRoute exact path="/" component={Home} loggedIn={this.props.auth} />
-              <Route exact path="/about" component={About} />
-              {/* This is how you would use a PrivateRoute */}
-              {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
-              <Route render={() => { throw new Error({code: 404}); }} />
-              {(this.props.auth) ? <></> : <Redirect from="/*" to="/"/>}
-            </Switch>
-          </ErrorBoundary>
-          <Route render={({ history }) => {
-          // Auto-update service worker on route change
-          history.listen(() => {
-            if (window.swUpdate === true) window.location.reload();
-          });
-          return null;
-        }} />
-        </>
-      </Router>
+      this.props.doneLoading ? (
+        <Router>
+          <>
+            <NavBar/>
+            <ErrorBoundary>
+              <Switch>
+                <PrivateRoute exact path="/" component={Home} loggedIn={this.props.auth} />
+                <Route exact path="/about" component={About} />
+                {/* This is how you would use a PrivateRoute */}
+                {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
+                <Route render={() => { throw new Error({code: 404}); }} />
+                {this.props.auth ? <></> : <Redirect from="/*" to="/"/>}
+              </Switch>
+            </ErrorBoundary>
+            <Route render={({ history }) => {
+            // Auto-update service worker on route change
+            history.listen(() => {
+              if (window.swUpdate === true) window.location.reload();
+            });
+            return null;
+          }} />
+          </>
+        </Router>
+      ) : <Spinner fullPage/>
     );
   }
 }
 
-function mapStateToProps({auth}){
-  return { auth };
+function mapStateToProps({auth, doneLoading}){
+  return { auth, doneLoading };
 }
 
 export default connect(mapStateToProps, actions)(App);

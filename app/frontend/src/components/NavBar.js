@@ -8,10 +8,6 @@ class NavBar extends Component {
         open: false
     }
 
-    componentDidMount() {
-      console.log(this.props.auth);
-    }
-
     toggle = () => this.setState({open: !this.state.isOpen});
     
     renderLoginButton() {

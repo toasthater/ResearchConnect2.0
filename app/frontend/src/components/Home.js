@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class Home extends Component {
-    componentDidMount() {
-        console.log(this.props.auth);
-    }
     render() {
         return(
             <section className="section">
