@@ -16,7 +16,9 @@ import ErrorBoundary from './ErrorBoundary';
 
 NavLink.defaultProps.activeClassName = 'is-active';
 
-
+const PrivateRoute = ({ loggedIn, component, ...rest }) => (
+  <Route {...rest} component={loggedIn ? component : Landing}/>
+);
 class App extends Component {
 
   componentDidMount() {
@@ -31,10 +33,10 @@ class App extends Component {
           <NavBar/>
           <ErrorBoundary>
             <Switch>
-              <Route exact path="/" component={(this.props.auth) ? Home : Landing} />
-
-              <Route exact component={Landing} path="/welcome" />
-              <Route exact component={About} path="/about" />
+              <PrivateRoute exact path="/" component={Home} loggedIn={this.props.auth} />
+              <Route exact path="/about" component={About} />
+              {/* This is how you would use a PrivateRoute */}
+              {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
               <Route render={() => { throw new Error({code: 404}); }} />
               {(this.props.auth) ? <></> : <Redirect from="/*" to="/"/>}
             </Switch>
