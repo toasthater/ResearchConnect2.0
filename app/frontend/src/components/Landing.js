@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import landing from '../assets/hero.jpg';
-import { LazyImg } from './LazyImg';
+import LazyHero from 'react-lazy-hero';
 import signinButton from '../assets/google_signin.png';
 
 export default class Landing extends Component {
     render() {
         return(
-            
+          <LazyHero imageSrc={landing} className="lazy loaded" opacity={0}>
             <section className="hero is-fullheight">
               <div className="hero-body">
                 <div className="container">
@@ -22,6 +22,7 @@ export default class Landing extends Component {
                 </div>
               </div>
             </section>
+            </LazyHero>
         )
     }
 }
