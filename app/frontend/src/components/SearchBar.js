@@ -42,6 +42,7 @@ class SearchBar extends Component {
                       <li className="dropdown-item" onClick={() => this.itemClicked("Department")}>Department</li>
                       <li className="dropdown-item" onClick={() => this.itemClicked("Professor")}>Professor</li>
                       <li className="dropdown-item" onClick={() => this.itemClicked("Title")}>Title</li>
+                      <li className="dropdown-item" onClick={() => this.itemClicked("Tags")}>Tags</li>
                     </ul> 
                   </div>
                 </div>

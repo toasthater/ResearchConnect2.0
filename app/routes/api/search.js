@@ -79,6 +79,29 @@ async function searchTitle(name) {
     return ret;
 }
 
+async function searchTags(name){
+    let relevantPosts = [];
+    
+    let allResearch = Research.find();
+
+    var posts = [];
+    await allResearch.then((data) => {
+        posts = data;
+    });
+
+    for(let i = 0; i < posts.length; i++)
+    {
+        for(let j = 0; j < posts[i].tags.length; j++)
+        {
+            if(name.toString().localeCompare(posts[i].tags[j].toString()) === 0)
+            {
+                relevantPosts.push(posts[i]);
+            }
+        }
+    }
+
+    return relevantPosts;
+}
 router.get('/', (req, res) => {
     switch (req.query.type)
     {
@@ -104,6 +127,16 @@ router.get('/', (req, res) => {
             break;
         case "Title":
             searchTitle(req.query.query)
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+            
+            break;
+        case "Tags":
+            searchTags(req.query.query)
             .then((data) => {
                 res.send(data);
             })
