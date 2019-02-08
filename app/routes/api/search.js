@@ -80,7 +80,6 @@ async function searchTitle(name) {
 }
 
 router.get('/', (req, res) => {
-    console.log("in the search function");
     switch (req.query.type)
     {
         case "Department":
@@ -122,14 +121,20 @@ router.get('/', (req, res) => {
 
             Promise.all(promises).then((data) => {
                 let posts = [];
-
+                
                 for (let i = 0; i < data.length; i++) {
                     for (let j = 0; j < data[i].length; j++) {
-                        if (posts.find(post => post._id === data[i][j]._id) !== undefined) {
-                            continue;
+                        let inArray = false;
+                        for (let post of posts)
+                        {
+                            if (post._id.toString().localeCompare(data[i][j]._id.toString()) === 0)
+                            {
+                                inArray = true;
+                                break;
+                            }
                         }
 
-                        posts.push(data[i][j]);
+                       if (!inArray) posts.push(data[i][j]);
                     }
                 }
 

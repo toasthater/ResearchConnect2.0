@@ -14,8 +14,7 @@ class Home extends Component {
             params: {
             type: 'Default',
             query: 'mantey'
-        }}
-          );
+        }});
         console.log(res.data);
     }
     render() {

@@ -22,6 +22,11 @@ export const fetchFaculty = () => async dispatch => {
 };
 
 export const searchPosts = (type, query) => async dispatch => {
-        const res = await axios.get('/api/search/' + type + '/' + query);
+        const res = await axios.get('/api/search/',
+        {
+            params: {
+            type: type,
+            query: query
+        }});
         return res.data;
 };
