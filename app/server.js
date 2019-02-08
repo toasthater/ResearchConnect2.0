@@ -5,6 +5,9 @@ const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const researchPosts = require('./routes/api/research_posts');
+const department = require('./routes/api/department');
+const facultyMember = require('./routes/api/faculty_members');
+const search = require('./routes/api/search');
 const authRoutes = require('./routes/authRoutes');
 require('./models/User');
 require('./models/Student');
@@ -25,12 +28,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 authRoutes(app);
-
+// searchRoutes(app);
 // Bodyparser middleware
 app.use(bodyParser.json());
 
 // Use routes
+app.use('/api/search', search);
 app.use('/api/research_posts', researchPosts);
+app.use('/api/department', department);
+app.use('/api/faculty_members', facultyMember);
 
 // DB config
 const db = require('./config/keys').mongoURI;

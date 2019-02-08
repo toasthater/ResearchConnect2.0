@@ -7,16 +7,27 @@ const ResearchSchema = new Schema({
         type: String,
         required: true
     },
-    owner: { type: Schema.Types.ObjectId, ref: 'faculty_members' }, 
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'faculty_members',
+        required: true
+    }, 
     created: {
         type: Date,
         default: Date.now
     },
     tags: [String],
     description: String,
-    department: { type: Schema.Types.ObjectId, ref: 'departments' },
+    department: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'departments',
+        required: true
+    },
     status: String,
-    deadline: Date
+    deadline: {
+        type: Date,
+        required: true
+    }
 });
 
 module.exports = Research = mongoose.model('research', ResearchSchema);

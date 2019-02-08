@@ -3,6 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 import brandingImg from '../assets/logo.svg';
 import { connect } from 'react-redux';
 
+import SearchBar from './SearchBar';
+
 class NavBar extends Component {
     state = {
         open: false
@@ -22,20 +24,20 @@ class NavBar extends Component {
         default:
           return (
             <div className="navbar-item has-dropdown is-hoverable">
-            <NavLink className="navbar-link" to="/account">
-              {this.props.auth.name}
-            </NavLink>
-            <div className="navbar-dropdown is-right is-boxed">
-              <Link className="navbar-item" to="/account">
-                Account
-              </Link>
-              <hr className="navbar-divider" />
-              <a className="navbar-item" href="/api/logout">
-                Logout
-              </a>
+              <NavLink className="navbar-link" to="/account">
+                {this.props.auth.name}
+              </NavLink>
+              <div className="navbar-dropdown is-right is-boxed">
+                <Link className="navbar-item" to="/account">
+                  Account
+                </Link>
+                <hr className="navbar-divider" />
+                <a className="navbar-item" href="/api/logout">
+                  Logout
+                </a>
+              </div>
             </div>
-          </div>
-            );
+          );
       }
     }
 
@@ -62,6 +64,7 @@ class NavBar extends Component {
                     About
                   </NavLink>
                 </div>
+                <SearchBar />
                 <div className="navbar-end">
                     <div className="navbar-item">
                         {this.renderLoginButton()}

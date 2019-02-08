@@ -11,10 +11,10 @@ export default () => (
     <div className="content">
       <h1 align="center">
         <br />
-        <a href="#"><img src={logoImg} alt="ResearchConnect" width={200} /></a>
+        <img src={logoImg} alt="ResearchConnect" width={200} />
         <br />
       </h1>
-      <h4 align="center">Connecting UCSC students to faculty & research opportunities. 🎓 🧪</h4>
+      <h4 align="center">Connecting UCSC students to faculty & research opportunities. <span role="img" aria-label="jsx-a11y/accessible-emoji">🎓 🧪</span></h4>
       <p align="center">
         <a href="#the-issue">The Issue</a> •
         <a href="#our-solution">Our Solution</a> •
