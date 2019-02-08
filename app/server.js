@@ -28,15 +28,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 authRoutes(app);
-
+// searchRoutes(app);
 // Bodyparser middleware
 app.use(bodyParser.json());
 
 // Use routes
+app.use('/api/search', search);
 app.use('/api/research_posts', researchPosts);
 app.use('/api/department', department);
 app.use('/api/faculty_members', facultyMember);
-app.use('/api/search', search);
 
 // DB config
 const db = require('./config/keys').mongoURI;

@@ -5,12 +5,17 @@ import axios from 'axios';
 
 class Home extends Component {
     componentDidMount(){
-        console.log(this.props.auth);
         this.getData();
     }
 
     async getData(){
-        const res = await axios.get('/api/search/Default/mantey');
+        const res = await axios.get('/api/search/',
+        {
+            params: {
+            type: 'Default',
+            query: 'mantey'
+        }}
+          );
         console.log(res.data);
     }
     render() {

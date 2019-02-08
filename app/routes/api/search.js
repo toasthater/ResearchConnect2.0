@@ -79,11 +79,12 @@ async function searchTitle(name) {
     return ret;
 }
 
-router.get('/:type/:query', (req, res) => {
-    switch (req.params.type)
+router.get('/', (req, res) => {
+    console.log("in the search function");
+    switch (req.query.type)
     {
         case "Department":
-            searchDepartments(req.params.query)
+            searchDepartments(req.query.query)
             .then((data) => {
                 res.send(data);
             })
@@ -93,7 +94,7 @@ router.get('/:type/:query', (req, res) => {
 
             break;
         case "Professor":
-            searchFaculty(req.params.query)
+            searchFaculty(req.query.query)
             .then((data) => {
                 res.send(data);
             })
@@ -103,7 +104,7 @@ router.get('/:type/:query', (req, res) => {
 
             break;
         case "Title":
-            searchTitle(req.params.query)
+            searchTitle(req.query.query)
             .then((data) => {
                 res.send(data);
             })
@@ -114,9 +115,9 @@ router.get('/:type/:query', (req, res) => {
             break;
         default:
             var promises = [
-                searchDepartments(req.params.query),
-                searchFaculty(req.params.query),
-                searchTitle(req.params.query)
+                searchDepartments(req.query.query),
+                searchFaculty(req.query.query),
+                searchTitle(req.query.query)
             ];
 
             Promise.all(promises).then((data) => {
