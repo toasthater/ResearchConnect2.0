@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER } from './types';
+import { FETCH_USER, SEARCH } from './types';
 
 export const fetchUser = () => async dispatch => {
         const res = await axios.get('/api/current_user');
@@ -25,8 +25,12 @@ export const searchPosts = (type, query) => async dispatch => {
         const res = await axios.get('/api/search/',
         {
             params: {
-            type: type,
-            query: query
+                type: type,
+                query: query
         }});
-        return res.data;
+
+        dispatch({
+            type: SEARCH,
+            payload: res.data
+        });
 };

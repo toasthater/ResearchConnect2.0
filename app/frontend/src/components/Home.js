@@ -5,18 +5,9 @@ import axios from 'axios';
 
 class Home extends Component {
     componentDidMount(){
-        this.getData();
+        
     }
 
-    async getData(){
-        const res = await axios.get('/api/search/',
-        {
-            params: {
-            type: 'Default',
-            query: 'mantey'
-        }});
-        console.log(res.data);
-    }
     render() {
         return(
             <section className="section">

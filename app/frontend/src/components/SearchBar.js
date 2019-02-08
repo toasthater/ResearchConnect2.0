@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../styles/searchbar.scss';
-import { fetchPosts, fetchDepartments, fetchFaculty, searchPosts } from '../actions/index';
-
-
-
+import * as actions from '../actions'
 class SearchBar extends Component {
     dropdownClicked() {
       const dropdown = document.querySelector(".dropdown-items");
@@ -23,14 +20,14 @@ class SearchBar extends Component {
       this.dropdownClicked();
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
       e.preventDefault();
 
       let type = document.querySelector(".dropdown-trigger").innerHTML;
       let query = document.querySelector(".input").value;
-      const data = searchPosts(type, query)();
       
-      data.then(res => console.log(res)).catch(err => console.log(err));
+      await this.props.searchPosts(type, query);
+      console.log(this.props.search);
     }
 
     render() {
@@ -57,4 +54,10 @@ class SearchBar extends Component {
     }
 }
 
-export default connect()(SearchBar);
+const mapStateToProps = state => {
+  return {
+    search: state.search
+  };
+}
+
+export default connect(mapStateToProps, actions)(SearchBar);
