@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import Landing from './Landing';
 import Home from './Home';
 import About from './About';
+import SearchResults from './SearchResults';
 import {
   BrowserRouter as Router,
   Route,
@@ -42,6 +43,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact component={Landing} path="/welcome" />
               <Route exact component={About} path="/about" />
+              <Route exact component={SearchResults} path="/search_results" />
               <Route render={() => { throw new Error({code: 404}); }} />
             </Switch>
           </ErrorBoundary>

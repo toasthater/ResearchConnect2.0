@@ -25,9 +25,8 @@ class SearchBar extends Component {
 
       let type = document.querySelector(".dropdown-trigger").innerHTML;
       let query = document.querySelector(".input").value;
-      
-      await this.props.searchPosts(type, query);
-      console.log(this.props.search);
+
+      window.location = '/search_results?type=' + type + "&query=" + query;
     }
 
     render() {
