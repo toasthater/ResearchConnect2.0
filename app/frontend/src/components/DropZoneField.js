@@ -21,7 +21,7 @@ const DropZoneField = ({
             <div className="dropzone-box" {...getRootProps()}>
               <input {...getInputProps()} />
               {imagefile && imagefile.length > 0 ? (
-                    <div><img src={imagefile[0].preview} alt={imagefile[0].name} /></div>
+                    <div><img className="is-rounded" src={imagefile[0].preview} alt={imagefile[0].name} /></div>
                 ) : (
                     <div className="placeholder-preview">
                     <span className="fa fa-upload fa-5x" />

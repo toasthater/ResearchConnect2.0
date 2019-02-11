@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
-
-class Home extends Component {
-    componentDidMount(){
-        
-    }
-=======
 import Form from './Addpostform';
 
 class Home extends Component {
@@ -28,19 +21,15 @@ class Home extends Component {
         console.log('Submitted')
         this.state.formIsShowing = false
     };
->>>>>>> Add_Post
 
     render() {
         return(
             <section className="section">
-<<<<<<< HEAD
              {this.props.auth ? this.props.auth.isProfessor ? 'You are a professor' : 'You are a student' : 'Data is loading'}
-=======
             <div className="App">
             <button onClick={this.test}>Test</button>
             {this.buttonForm()}
             </div>
->>>>>>> Add_Post
             </section>
         );
     }

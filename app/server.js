@@ -9,8 +9,8 @@ const department = require('./routes/api/department');
 const facultyMember = require('./routes/api/faculty_members');
 const search = require('./routes/api/search');
 const authRoutes = require('./routes/authRoutes');
-require('./models/User');
 const users = require('./routes/api/users');
+require('./models/User');
 require('./models/Student');
 require('./models/FacultyMember');
 require('./models/Department');
@@ -29,7 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 authRoutes(app);
-// searchRoutes(app);
+
 // Bodyparser middleware
 app.use(bodyParser.json());
 
