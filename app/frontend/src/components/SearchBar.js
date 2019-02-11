@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../styles/searchbar.scss';
-import * as actions from '../actions'
-class SearchBar extends Component {
-    dropdownClicked() {
-      const dropdown = document.querySelector(".dropdown-items");
-      if (dropdown.hasAttribute("style"))
-      {
-        dropdown.removeAttribute("style");
-      }
-      else
-      {
-        dropdown.setAttribute("style", "display: none");
-      }
-    }
+import * as actions from '../actions';
+import {Field, reduxForm} from 'redux-form';
 
-    itemClicked(item) {
-      document.querySelector(".dropdown-trigger").innerHTML = item;
-      this.dropdownClicked();
-    }
+class SearchBar extends Component {
+
 
     async handleSubmit(e) {
       e.preventDefault();
@@ -26,38 +13,50 @@ class SearchBar extends Component {
       let type = document.querySelector(".dropdown-trigger").innerHTML;
       let query = document.querySelector(".input").value;
 
-      window.location = '/search_results?type=' + type + "&query=" + query;
+      // window.location = '/search_results?type=' + type + "&query=" + query;
     }
 
     render() {
+        const {handleSubmit} = this.props;
         return(
-            <div>
-              <section className="section">
-                <div className="container">
-                  <div className="control">
-                    <span className="dropdown-trigger" onClick={this.dropdownClicked}>Default</span> 
-                    <ul className="box dropdown-items" style={{display: 'none'}}>
-                      <li className="dropdown-item" onClick={() => this.itemClicked("Default")}>Default</li>
-                      <li className="dropdown-item" onClick={() => this.itemClicked("Department")}>Department</li>
-                      <li className="dropdown-item" onClick={() => this.itemClicked("Professor")}>Professor</li>
-                      <li className="dropdown-item" onClick={() => this.itemClicked("Title")}>Title</li>
-                      <li className="dropdown-item" onClick={() => this.itemClicked("Tags")}>Tags</li>
-                    </ul> 
+              <div className="navbar-item">
+              <form onSubmit={handleSubmit}>
+                <div className="field has-addons">
+                  <p className="control">
+                    <span className="select">
+                      <Field name="type" component="select" className="select">
+                        <option>Default</option>
+                        <option>Department</option>
+                        <option>Professor</option>
+                        <option>Title</option>
+                        <option>Tag</option>
+                      </Field>
+                    </span>
+                  </p>
+                    <p className="control">
+                      <Field
+                        name="query"
+                        component="input"
+                        type="text"
+                        placeholder="Search"
+                        className="input"
+                      />
+                    </p>
+                    <p className="control">
+                      <button type="submit" className="button is-inverted is-link">
+                        Search
+                      </button>
+                    </p>
                   </div>
+                  </form>
                 </div>
-              </section>
-              <form onSubmit={(e) => this.handleSubmit(e)}>
-                <input type="text" className="input" id="searchbar" placeholder="Search" />
-              </form>
-            </div>
+              
         )
     }
 }
 
-const mapStateToProps = state => {
-  return {
-    search: state.search
-  };
-}
+SearchBar = reduxForm ({
+  form: 'search',
+}) (SearchBar);
 
-export default connect(mapStateToProps, actions)(SearchBar);
+export default SearchBar;

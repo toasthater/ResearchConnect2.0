@@ -10,6 +10,14 @@ class NavBar extends Component {
         open: false
     }
 
+    submitSearch = values => {
+      const type = values.type ? values.type : "Default";
+      const query = values.query;
+      if (query)
+        window.location = '/search_results?type=' + type + "&query=" + query;
+      // console.log(JSON.stringify (values));
+    }
+
     toggle = () => this.setState({open: !this.state.isOpen});
     
     renderLoginButton() {
@@ -64,7 +72,7 @@ class NavBar extends Component {
                     About
                   </NavLink>
                 </div>
-                <SearchBar />
+                <SearchBar onSubmit={this.submitSearch} />
                 <div className="navbar-end">
                     <div className="navbar-item">
                         {this.renderLoginButton()}
