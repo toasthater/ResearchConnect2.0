@@ -19,7 +19,7 @@ class ProfessorForm extends Component {
 
 
     render() {
-        const {onSubmit} = this.props;
+        const {onSubmit, name} = this.props;
         return (
             <form onSubmit={onSubmit} >
             
@@ -34,7 +34,7 @@ class ProfessorForm extends Component {
                         name="name"
                         component="input"
                         type="text"
-                        placeholder="Search"
+                        placeholder={name}
                         className="input"
                       />
                     </div>
@@ -46,7 +46,7 @@ class ProfessorForm extends Component {
                         name="bio"
                         component="input"
                         type="text"
-                        placeholder="Search"
+                        placeholder="I was born in the alps.."
                         className="input"
                       />
                     </div>

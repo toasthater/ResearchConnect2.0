@@ -17,7 +17,7 @@ export const fetchUser = () => async dispatch => {
 };
 
 export const updateUser = (id, name, bio, profile_pic) => async dispatch => {
-        dispatch({type: DONE_LOADING, payload: false});
+        // dispatch({type: DONE_LOADING, payload: false});
         const res = await axios.post('/api/user/setup/',
         {
                 id: id,

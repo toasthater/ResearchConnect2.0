@@ -32,7 +32,7 @@ class App extends Component {
           this.props.fetchFacultyMember(this.props.auth.cruzid).then(_ => console.log(this.props.profile));
         }
         else {
-          console.log("Fetching professor..");
+          console.log("Fetching student..");
           this.props.fetchStudent(this.props.auth.cruzid).then(_ => console.log(this.props.profile));
         }
       });
