@@ -1,5 +1,4 @@
 const passport = require('passport');
-const FacultyMember = require('../models/FacultyMember');
 
 
 module.exports = app => {

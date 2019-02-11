@@ -8,6 +8,7 @@ const UserSchema = new Schema({
     email: String,
     name: String,
     cruzid: String,
+    bio: String,
     profile_pic: String
 })
 

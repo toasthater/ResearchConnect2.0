@@ -15,14 +15,6 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.post('/setup', async (req, res) => {
-    const facultymember = new FacultyMember({
-        name: req.body.title,
-        cruzid: req.body.title
-    })
-    facultymember.save().then(research => res.json(research));
-});
-
 router.post('/', (req, res) => {
     const facultymember = new FacultyMember({
         name: req.body.title,

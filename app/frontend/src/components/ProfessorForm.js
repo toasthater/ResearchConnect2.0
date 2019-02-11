@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Field, reduxForm} from 'redux-form';
+import {Field, reduxForm} from 'redux-form';
 import DropZoneField from './DropZoneField';
 
 
@@ -19,9 +19,9 @@ class ProfessorForm extends Component {
 
 
     render() {
-        
+        const {onSubmit} = this.props;
         return (
-            <Form onSubmit={this.props.onSubmit} >
+            <form onSubmit={onSubmit} >
             
             <br/>
 
@@ -69,10 +69,10 @@ class ProfessorForm extends Component {
             </div>
             <div className="field">
                 <div className="control">
-                <button type="submit" className="button is-success">Save</button>
+                <button type="submit" onClick={this.props.onSubmit} className="button is-success">Save</button>
                 </div>
             </div>
-            </Form>
+            </form>
         )
     }
 }
