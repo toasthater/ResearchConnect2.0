@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import Landing from './Landing';
 import Home from './Home';
 import About from './About';
+
 import {
   BrowserRouter as Router,
   Route,
