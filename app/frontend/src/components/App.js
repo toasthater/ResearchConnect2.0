@@ -26,9 +26,15 @@ const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
 class App extends Component {
 
   componentDidMount() {
-      this.props.fetchUser().then(() => {
-        console.log(this.props.auth);
-        console.log("Done loading : " + this.props.doneLoading);
+      this.props.fetchUser().then(_ => {
+        if (this.props.auth.isProfessor) {
+          console.log("Fetching professor..");
+          this.props.fetchFacultyMember(this.props.auth.cruzid).then(_ => console.log(this.props.profile));
+        }
+        else {
+          console.log("Fetching professor..");
+          this.props.fetchStudent(this.props.auth.cruzid).then(_ => console.log(this.props.profile));
+        }
       });
   }
 
@@ -63,8 +69,8 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({auth, doneLoading}){
-  return { auth, doneLoading };
+function mapStateToProps({auth, profile, doneLoading}){
+  return { auth, profile, doneLoading };
 }
 
 export default connect(mapStateToProps, actions)(App);

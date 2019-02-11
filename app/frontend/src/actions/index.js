@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER, DONE_LOADING, SEARCH } from './types';
+import { FETCH_USER, DONE_LOADING, SEARCH, FETCH_FACULTY_MEMBER, FETCH_STUDENT } from './types';
 
 
 export const fetchUser = () => async dispatch => {
@@ -26,10 +26,30 @@ export const fetchDepartments = () => async dispatch => {
         return res.data;
 };
 
-export const fetchFaculty = () => async dispatch => {
-        const res = await axios.get('/api/faculty_members');
-        return res.data;
+export const fetchFacultyMember = cruzid => async dispatch => {
+        const res = await axios.get('/api/faculty_members/',
+        {
+            params: {
+                cruzid: cruzid
+        }});
+        dispatch({
+            type: FETCH_FACULTY_MEMBER,
+            payload: res.data
+        });
 };
+
+export const fetchStudent = cruzid => async dispatch => {
+        const res = await axios.get('/api/students/',
+        {
+            params: {
+                cruzid: cruzid
+        }});
+        dispatch({
+            type: FETCH_STUDENT,
+            payload: res.data
+        });
+};
+
 
 export const searchPosts = (type, query) => async dispatch => {
         const res = await axios.get('/api/search/',

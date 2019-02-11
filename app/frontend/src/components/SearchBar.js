@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import '../styles/searchbar.scss';
-import * as actions from '../actions';
 import {Field, reduxForm} from 'redux-form';
 
 class SearchBar extends Component {
