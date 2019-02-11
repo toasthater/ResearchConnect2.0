@@ -3,8 +3,12 @@ import NavBar from './NavBar';
 import Landing from './Landing';
 import Home from './Home';
 import About from './About';
+<<<<<<< HEAD
 import Spinner from './Spinner';
 import SearchResults from './SearchResults';
+=======
+
+>>>>>>> Add_Post
 import {
   BrowserRouter as Router,
   Route,
