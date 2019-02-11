@@ -12,18 +12,20 @@ class SearchResults extends Component {
     }
 
     async searchPosts(type, query) {
-        let tags = [];
-        let ret = [];
+        //let tags = [];
+        //let ret = [];
         await this.props.searchPosts(type, query);
-        tags = JSON.stringify(this.props.search).split("]");
-        ret = JSON.stringify(this.props.search).split(",");
+        //tags = JSON.stringify(this.props.search).split("]");
+       // ret = JSON.stringify(this.props.search).split(",");
 
-        document.querySelector(".results").innerHTML = "";
+        /*document.querySelector(".results").innerHTML = "";
         document.querySelector(".title").innerHTML = ret[3];
         document.querySelector(".desc").innerHTML = ret[5];
         document.querySelector(".tags").innerHTML = tags[0] + "]";
         document.querySelector(".department").innerHTML = ret[6];
-        document.querySelector(".professor").innerHTML = ret[4];
+        document.querySelector(".professor").innerHTML = ret[4];*/
+
+        document.querySelector(".results").innerHTML = JSON.stringify(this.props.search);
     }
 
     render() {

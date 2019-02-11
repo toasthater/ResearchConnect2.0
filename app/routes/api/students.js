@@ -1,30 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const FacultyMember = require('../../models/FacultyMember');
+const Student = require('../../models/Student');
 
 router.get('/', async (req, res) => {
-    let relevantFaculty = FacultyMember.find({
+    let relevantStudents = Student.find({
             'cruzid': {
                 '$regex': req.query.cruzid,
                 $options: 'i'
             }
         });
-    await relevantFaculty.then(async (facultyMember) => {
-        res.send(facultyMember);
+    await relevantStudents.then(async (student) => {
+        res.send(student);
     });
 });
 
-router.post('/', (req, res) => {
-    const facultymember = new FacultyMember({
-        name: req.body.title,
-        cruzid: req.body.title
-    })
-    facultymember.save().then(research => res.json(research));
-});
-
 router.delete('/:id', (req, res) => {
-    FacultyMember.findById(req.params.id)
+    Student.findById(req.params.id)
         .then(research => research.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json({success: true}));
 });

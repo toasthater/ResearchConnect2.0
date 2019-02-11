@@ -15,18 +15,26 @@ import {
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import ErrorBoundary from './ErrorBoundary';
+import Setup from './Setup';
 
 NavLink.defaultProps.activeClassName = 'is-active';
 
-const PrivateRoute = ({ loggedIn, component, ...rest }) => (
-  <Route {...rest} component={loggedIn ? component : Landing}/>
+const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
+  <Route {...rest} component={loggedIn ? accountSetup ? component : Setup : Landing}/>
 );
 
 class App extends Component {
 
   componentDidMount() {
-      this.props.fetchUser().then(() => {
-        console.log("Done loading : " + this.props.doneLoading);
+      this.props.fetchUser().then(_ => {
+        if (this.props.auth.isProfessor) {
+          console.log("Fetching professor..");
+          this.props.fetchFacultyMember(this.props.auth.cruzid).then(_ => console.log(this.props.profile));
+        }
+        else {
+          console.log("Fetching professor..");
+          this.props.fetchStudent(this.props.auth.cruzid).then(_ => console.log(this.props.profile));
+        }
       });
   }
 
@@ -38,7 +46,7 @@ class App extends Component {
             <NavBar/>
             <ErrorBoundary>
               <Switch>
-                <PrivateRoute exact path="/" component={Home} loggedIn={this.props.auth} />
+                <PrivateRoute exact path="/" component={Home} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
                 <Route exact path="/about" component={About} />
                 <Route exact component={SearchResults} path="/search_results" />
                 {/* This is how you would use a PrivateRoute */}
@@ -61,8 +69,8 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({auth, doneLoading}){
-  return { auth, doneLoading };
+function mapStateToProps({auth, profile, doneLoading}){
+  return { auth, profile, doneLoading };
 }
 
 export default connect(mapStateToProps, actions)(App);

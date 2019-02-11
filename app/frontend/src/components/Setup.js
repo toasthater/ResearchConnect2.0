@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Spinner } from './Spinner';
 
 class Setup extends Component {
 
@@ -11,7 +10,7 @@ class Setup extends Component {
         return (
             <section className="section">
             <form onSubmit={this.handleSubmit} className="container">
-            <h1 className="is-size-1"></h1>
+            <h1 className="is-size-1">Setup Profile</h1>
             <br/>
 
             <div className="columns">
