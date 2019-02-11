@@ -21,6 +21,18 @@ export const fetchPosts = () => async dispatch => {
         return res.data;
 };
 
+export const fetchDepartment = (id) => async dispatch => {
+        const res = await axios.get('/api/department/',
+        {
+                params: {
+                    id: id
+                }});
+
+                dispatch({
+                    payload: res.data
+                });
+};
+
 export const fetchDepartments = () => async dispatch => {
         const res = await axios.get('/api/department');
         return res.data;
