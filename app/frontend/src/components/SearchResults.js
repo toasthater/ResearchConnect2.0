@@ -1,31 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import qs from 'query-string';
 import '../styles/searchresults.scss';
-import { debug } from 'util';
 
 class SearchResults extends Component {
     componentDidMount() {
-        let args = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-        this.searchPosts(args.type, args.query);
-    }
+        let results = this.props.search;
+        if (results === null || results.length === 0)
+        {
+            results = "No results found :(";
+        }
 
-    async searchPosts(type, query) {
-        //let tags = [];
-        //let ret = [];
-        await this.props.searchPosts(type, query);
-        //tags = JSON.stringify(this.props.search).split("]");
-       // ret = JSON.stringify(this.props.search).split(",");
-
-        /*document.querySelector(".results").innerHTML = "";
-        document.querySelector(".title").innerHTML = ret[3];
-        document.querySelector(".desc").innerHTML = ret[5];
-        document.querySelector(".tags").innerHTML = tags[0] + "]";
-        document.querySelector(".department").innerHTML = ret[6];
-        document.querySelector(".professor").innerHTML = ret[4];*/
-
-        document.querySelector(".results").innerHTML = JSON.stringify(this.props.search);
+        document.querySelector(".results").innerHTML = JSON.stringify(results);
     }
 
     render() {
@@ -46,7 +32,7 @@ class SearchResults extends Component {
 
 const mapStateToProps = state => {
     return {
-      search: state.search
+        search: state.search
     };
   }
 

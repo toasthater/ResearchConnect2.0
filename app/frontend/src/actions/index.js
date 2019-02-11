@@ -64,6 +64,8 @@ export const fetchStudent = cruzid => async dispatch => {
 
 
 export const searchPosts = (type, query) => async dispatch => {
+        dispatch({ type: DONE_LOADING, payload: false });
+        
         const res = await axios.get('/api/search/',
         {
             params: {
@@ -75,4 +77,6 @@ export const searchPosts = (type, query) => async dispatch => {
             type: SEARCH,
             payload: res.data
         });
+        
+        dispatch({ type: DONE_LOADING, payload: true });
 };
