@@ -29,7 +29,7 @@ export default class Form extends React.Component {
                     <label class="label">Department</label>
                     <div class="control">
                         <div class="select">
-                            <select>
+                            <select name="department" value={this.state.department} onChange={e => this.change(e)}>
                                 <option>Academic Senate</option>
                                 <option>History of Consciousness</option>
                                 <option>American Studies</option>
