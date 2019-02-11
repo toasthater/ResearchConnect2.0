@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import qs from 'query-string';
 import '../styles/searchresults.scss';
-import { debug } from 'util';
 
 class SearchResults extends Component {
     componentDidMount() {

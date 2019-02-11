@@ -1,14 +1,27 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import {Form, Field, reduxForm} from 'redux-form';
+import DropZoneField from './DropZoneField';
+
 
 class ProfessorForm extends Component {
+    state = { imageFile: [] };
+
+    handleOnDrop = newImageFile => 
+        this.setState({  
+            imageFile: newImageFile.map(image => 
+                Object.assign(image, 
+                    {
+                        preview: URL.createObjectURL(image)
+                    }
+                )
+            ) 
+        });
 
 
     render() {
-        const name = this.props.name;
         
         return (
-            <form onSubmit={this.handleSubmit} >
+            <Form onSubmit={this.props.onSubmit} >
             
             <br/>
 
@@ -17,23 +30,40 @@ class ProfessorForm extends Component {
                 <div className="field">
                     <label className="label">Display Name</label>
                     <div className="control">
-                    <input className="input" type="text" value={name} required onChange={this.handleChange} />
+                    <Field
+                        name="name"
+                        component="input"
+                        type="text"
+                        placeholder="Search"
+                        className="input"
+                      />
                     </div>
                 </div>
                 <div className="field">
                     <label className="label">Biography</label>
                     <div className="control">
-                    <input className="input" type="text" value={name} required onChange={this.handleChange} />
+                    <Field
+                        name="bio"
+                        component="input"
+                        type="text"
+                        placeholder="Search"
+                        className="input"
+                      />
                     </div>
                 </div>            
                 </div>
                 <div className="column is-5 is-offset-1">
                 <div className="field">
                     <label className="label">Profile Picture</label>
-                    <figure className="image shadowed" style={{ height: 256, width: 256, background: 'white' }}>
-                    </figure>
+                    <Field
+                        name="imageToUpload"
+                        component={DropZoneField}
+                        type="file"
+                        imagefile={this.state.imageFile}
+                        handleOnDrop={this.handleOnDrop}
+                        />
                     <br/>
-                    <button className="button">Select Image </button>
+
                 </div>
                 </div>
             </div>
@@ -42,13 +72,13 @@ class ProfessorForm extends Component {
                 <button type="submit" className="button is-success">Save</button>
                 </div>
             </div>
-            </form>
+            </Form>
         )
     }
 }
 
-function mapStateToProps({auth}){
-    return { auth };
-  }
-
-export default connect(mapStateToProps)(ProfessorForm);
+ProfessorForm = reduxForm ({
+    form: 'professor_setup',
+  }) (ProfessorForm);
+  
+  export default ProfessorForm;

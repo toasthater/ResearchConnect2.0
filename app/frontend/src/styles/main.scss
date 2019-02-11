@@ -121,6 +121,26 @@ html {
   
   .image.shadowed {
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  }
+	}
+	
+	.placeholder-preview {
+		text-align: center;
+		background-color: #efebeb;
+		height: 100%;
+		width: 100%;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.dropzone-box {
+		box-align: center;
+		background-color: #efebeb;
+		padding-top: 40px;
+		padding-left: 40px;
+		padding-right: 40px;
+		height: 100%;
+		width: 100%;
+		cursor: pointer;
+	}
   
   
