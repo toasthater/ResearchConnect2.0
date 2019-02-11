@@ -10,6 +10,7 @@ const facultyMember = require('./routes/api/faculty_members');
 const search = require('./routes/api/search');
 const authRoutes = require('./routes/authRoutes');
 require('./models/User');
+const users = require('./routes/api/users');
 require('./models/Student');
 require('./models/FacultyMember');
 require('./models/Department');
@@ -37,6 +38,7 @@ app.use('/api/search', search);
 app.use('/api/research_posts', researchPosts);
 app.use('/api/department', department);
 app.use('/api/faculty_members', facultyMember);
+app.use('/api/user', users);
 
 // DB config
 const db = require('./config/keys').mongoURI;

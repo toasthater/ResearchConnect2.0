@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const googleStrategy = require('passport-google-oauth20');
 
 const User = mongoose.model('users');
+const Student = mongoose.model('students');
 const FacultyMember = mongoose.model('faculty_members');
 
 passport.serializeUser((user, done) => {
@@ -49,6 +50,11 @@ passport.use(
             isSetup: false,
             name: profile.displayName
             }).save();
+        
+        // If the user is a student we need to create a new student account
+        if (!user.isProfessor)
+            await new Student({cruzid: user.cruzid}).save();
+        
         done(null, user)
         }   
     )

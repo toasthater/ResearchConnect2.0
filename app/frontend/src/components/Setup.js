@@ -1,51 +1,35 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import ProfessorForm from './ProfessorForm';
+import StudentForm from './StudentForm';
+import * as actions from '../actions';
 
 class Setup extends Component {
 
+    setupProfessor = values => {
+        // Need to check if they're empty
+        values.preventDefault();
+        console.log(values);
+        const id = this.props.auth._id;
+        const name = values.name ? values.name : this.props.auth.name;
+        const bio = values.bio ? values.bio : "";
+        const profile_pic = values.profile_pic ? values.profile_pic : "";
+        this.props.updateUser(id, name, bio, profile_pic);
+      }
+    
+    setupStudent = values => {
+        console.log(JSON.stringify (values));
+    }
 
-    render() {
-        const name = this.props.name;
-        
+    render() {     
         return (
             <section className="section">
-            <form onSubmit={this.handleSubmit} className="container">
-            <h1 className="is-size-1">Setup Profile</h1>
-            <br/>
-
-            <div className="columns">
-                <div className="column is-6">
-                <div className="field">
-                    <label className="label">Display Name</label>
-                    <div className="control">
-                    <input className="input" type="text" value={name} required onChange={this.handleChange} />
-                    </div>
+                <div className="container">
+                    <h1 className="is-size-1">Setup Profile</h1>
+                    <hr className="is-link"/>
+                    { this.props.auth.isProfessor ? <ProfessorForm name={this.props.auth.name} onSubmit={this.setupProfessor} /> : <StudentForm onSubmit={this.setupStudent}/>}
                 </div>
-
-                <div className="field">
-                    <label className="label">Major</label>
-                    <div className="control">
-                    <input className="input" type="text" defaultValue="N/A" />
-                    </div>
-                </div>            
-                </div>
-                <div className="column is-5 is-offset-1">
-                <div className="field">
-                    <label className="label">Profile Picture</label>
-                    <figure className="image shadowed" style={{ height: 256, width: 256, background: 'white' }}>
-                    </figure>
-                    <br/>
-                    <button className="button">Select Image </button>
-                </div>
-                </div>
-            </div>
-            <div className="field">
-                <div className="control">
-                <button type="submit" className="button is-success">Save</button>
-                </div>
-            </div>
-            </form>
-        </section>
+            </section>
         )
     }
 }
@@ -54,4 +38,4 @@ function mapStateToProps({auth}){
     return { auth };
   }
 
-export default connect(mapStateToProps)(Setup);
+export default connect(mapStateToProps, actions)(Setup);

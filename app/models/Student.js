@@ -3,15 +3,7 @@ const Schema = mongoose.Schema;
 
 // Create schema
 const StudentSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
     cruzid: {
-        type: String,
-        required: true
-    },
-    email: {
         type: String,
         required: true
     },
@@ -19,4 +11,4 @@ const StudentSchema = new Schema({
     resume: String
 });
 
-module.exports = Student = mongoose.model('student', StudentSchema);
+module.exports = Student = mongoose.model('students', StudentSchema);

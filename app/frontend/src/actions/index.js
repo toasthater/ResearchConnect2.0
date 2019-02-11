@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER, DONE_LOADING, SEARCH, FETCH_FACULTY_MEMBER, FETCH_STUDENT } from './types';
+import { FETCH_USER, DONE_LOADING, SEARCH, FETCH_FACULTY_MEMBER, FETCH_STUDENT, SETUP_USER } from './types';
 
 
 export const fetchUser = () => async dispatch => {
@@ -14,6 +14,24 @@ export const fetchUser = () => async dispatch => {
                 dispatch({type: DONE_LOADING, payload: true});
         }
         
+};
+
+export const updateUser = (id, name, bio, profile_pic) => async dispatch => {
+        // dispatch({type: DONE_LOADING, payload: false});
+        const res = await axios.post('/api/user/setup/',
+        {
+                id: id,
+                name: name,
+                bio: bio,
+                profile_pic: profile_pic,
+                isSetup : true
+        });
+
+        dispatch({
+            type: SETUP_USER,
+            payload: res.data
+        });
+        dispatch({type: DONE_LOADING, payload: true});
 };
 
 export const fetchPosts = () => async dispatch => {
@@ -80,3 +98,5 @@ export const searchPosts = (type, query) => async dispatch => {
         
         dispatch({ type: DONE_LOADING, payload: true });
 };
+
+
