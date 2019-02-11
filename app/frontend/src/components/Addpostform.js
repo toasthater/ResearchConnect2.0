@@ -6,8 +6,9 @@ export default class Form extends React.Component {
         title: '',
         tags: '',
         description: '',
-        department: '',
-        deadline: '',
+        department: 'Academic Senate',
+        deadline: new Date(),
+        r_tags: [],
     }
 
     change = (e) => {
@@ -16,27 +17,15 @@ export default class Form extends React.Component {
         })
     };
 
-    getUser() {
-        
-    };
-
-    getDepartment() {
-        
-    };
-
     onSubmit = (e) => {
         e.preventDefault();
-        var r_tags = this.state.tags.split(',');
-        for (var i = 0; i < r_tags.length; i++) {
-            r_tags[i].replace(/\n|\r/g, "");
+        this.state.r_tags = this.state.tags.split(',');
+        for (var i = 0; i < this.state.r_tags.length; i++) {
+            this.state.r_tags[i].replace(/\n|\r/g, "");
+            this.state.r_tags[i] = this.state.r_tags[i].trim();
         }
 
-        axios.post('/api/research_post', (req, res) => {
-            //send stuff
-            res.send(this.state);
-        });
-
-        
+        axios.post('/api/research_posts', { ...this.state });  
 
         console.log(this.state);
         this.setState({
@@ -46,6 +35,8 @@ export default class Form extends React.Component {
             department: '',
             deadline: '',
         })
+
+        this.props.onSubmit()
     };
 
     render() {
