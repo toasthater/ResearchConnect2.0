@@ -6,16 +6,6 @@ import {Field, reduxForm} from 'redux-form';
 
 class SearchBar extends Component {
 
-
-    async handleSubmit(e) {
-      e.preventDefault();
-
-      let type = document.querySelector(".dropdown-trigger").innerHTML;
-      let query = document.querySelector(".input").value;
-
-      // window.location = '/search_results?type=' + type + "&query=" + query;
-    }
-
     render() {
         const {handleSubmit} = this.props;
         return(

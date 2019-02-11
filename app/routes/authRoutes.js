@@ -17,21 +17,22 @@ module.exports = app => {
         });
 
     app.get('/api/current_user', async (req, res) => {
-        if (req.user.isProfessor){
-            let relevantFaculty = FacultyMember.find({
-                'cruzid': {
-                    '$regex': req.user.cruzid,
-                    $options: 'i'
-                }
-            });
-            relevantFaculty.then(async (facultyMember) => {
-                console.log(facultyMember);
-                res.send(req.user);
-            });
-        }
-        else{
-            res.send(req.user);
-        }
+        res.send(req.user);
+        // if (req.user.isProfessor){
+        //     let relevantFaculty = FacultyMember.find({
+        //         'cruzid': {
+        //             '$regex': req.user.cruzid,
+        //             $options: 'i'
+        //         }
+        //     });
+        //     relevantFaculty.then(async (facultyMember) => {
+        //         console.log(facultyMember);
+        //         res.send(req.user);
+        //     });
+        // }
+        // else{
+        //     res.send(req.user);
+        // }
         
         });
 
