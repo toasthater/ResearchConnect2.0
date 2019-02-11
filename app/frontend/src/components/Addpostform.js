@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 
 export default class Form extends React.Component {
@@ -13,7 +14,39 @@ export default class Form extends React.Component {
         this.setState({
             [e.target.name]: e.target.value
         })
-    }
+    };
+
+    getUser() {
+        
+    };
+
+    getDepartment() {
+        
+    };
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        var r_tags = this.state.tags.split(',');
+        for (var i = 0; i < r_tags.length; i++) {
+            r_tags[i].replace(/\n|\r/g, "");
+        }
+
+        axios.post('/api/research_post', (req, res) => {
+            //send stuff
+            res.send(this.state);
+        });
+
+        
+
+        console.log(this.state);
+        this.setState({
+            title: '',
+            tags: '',
+            description: '',
+            department: '',
+            deadline: '',
+        })
+    };
 
     render() {
         return (
@@ -113,7 +146,7 @@ export default class Form extends React.Component {
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link">Submit</button>
+                        <button onClick={e => this.onSubmit(e)} class="button is-link">Submit</button>
                     </div>
                     <div class="control">
                         <button class="button is-text">Cancel</button>
