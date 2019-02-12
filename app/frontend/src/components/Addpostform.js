@@ -19,10 +19,6 @@ class Addpostform extends React.Component {
         })
     };
 
-    getDepartments () {
-        axios.get('/api/departments');
-    }
-
     onSubmit = (e) => {
         e.preventDefault();
         this.state.r_tags = this.state.tags.split(',');
