@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Form from './Addpostform';
+import Addpostform from './Addpostform';
 
 class Home extends Component {
     
@@ -12,7 +12,7 @@ class Home extends Component {
     buttonForm() {
         if (this.props.auth /*&& this.props.auth.isProfessor*/)
             if (this.state.formIsShowing)
-                return (< Form onSubmit={this.onSubmit}/>)
+                return (< Addpostform onSubmit={this.onSubmit}/>)
             else
                 return (<button onClick={() => this.state.formIsShowing = true} class="button is-link">new research</button>)
     }
@@ -24,7 +24,6 @@ class Home extends Component {
     render() {
         return(
             <section className="section">
-             {this.props.auth ? this.props.auth.isProfessor ? 'You are a professor' : 'You are a student' : 'Data is loading'}
             <div className="App">
             <button onClick={this.test}>Test</button>
             {this.buttonForm()}

@@ -1,13 +1,15 @@
 import axios from 'axios';
 import React from 'react';
+import { connect } from 'react-redux';
 
-export default class Form extends React.Component {
+class Addpostform extends React.Component {
     state = {
         title: '',
         tags: '',
         description: '',
         department: 'Academic Senate',
         deadline: new Date(),
+        owner: this.props.auth._id,
         r_tags: [],
     }
 
@@ -16,6 +18,10 @@ export default class Form extends React.Component {
             [e.target.name]: e.target.value
         })
     };
+
+    getDepartments () {
+        axios.get('/api/departments');
+    }
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -32,8 +38,10 @@ export default class Form extends React.Component {
             title: '',
             tags: '',
             description: '',
-            department: '',
-            deadline: '',
+            department: 'Academic Senate',
+            deadline: new Date(),
+            owner: this.props.auth._id,
+            r_tags: [],
         })
 
         this.props.onSubmit()
@@ -147,3 +155,9 @@ export default class Form extends React.Component {
         )
     }
 }
+
+function mapStateToProps({auth}){
+    return { auth };
+}
+
+export default connect(mapStateToProps)(Addpostform);
