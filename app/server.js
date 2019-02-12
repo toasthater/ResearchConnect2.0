@@ -9,7 +9,7 @@ const department = require('./routes/api/department');
 const facultyMember = require('./routes/api/faculty_members');
 const search = require('./routes/api/search');
 const authRoutes = require('./routes/authRoutes');
-const users = require('./routes/api/users');
+const setup = require('./routes/api/setup');
 require('./models/User');
 require('./models/Student');
 require('./models/FacultyMember');
@@ -38,7 +38,8 @@ app.use('/api/search', search);
 app.use('/api/research_posts', researchPosts);
 app.use('/api/department', department);
 app.use('/api/faculty_members', facultyMember);
-app.use('/api/user', users);
+app.use('/api/setup', setup);
+
 
 // DB config
 const db = require('./config/keys').mongoURI;

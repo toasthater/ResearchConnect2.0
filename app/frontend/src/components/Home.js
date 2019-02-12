@@ -18,7 +18,6 @@ class Home extends Component {
     }
 
     onSubmit = () => {
-        console.log('Submitted')
         this.state.formIsShowing = false
     };
 

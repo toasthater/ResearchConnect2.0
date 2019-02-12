@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Field, reduxForm} from 'redux-form';
+import {Form, Field, reduxForm} from 'redux-form';
 import DropZoneField from './DropZoneField';
 
 
-class ProfessorForm extends Component {
+class UserSetupForm extends Component {
     state = { imageFile: [] };
 
     handleOnDrop = newImageFile => 
@@ -19,9 +19,9 @@ class ProfessorForm extends Component {
 
 
     render() {
-        const {onSubmit, name} = this.props;
+        const {handleSubmit} = this.props;
         return (
-            <form onSubmit={onSubmit} >
+            <form onSubmit={handleSubmit} >
             
             <br/>
 
@@ -31,10 +31,10 @@ class ProfessorForm extends Component {
                     <label className="label">Display Name</label>
                     <div className="control">
                     <Field
-                        name="name"
+                        name="setupName"
                         component="input"
                         type="text"
-                        placeholder={name}
+                        placeholder="John Smith"
                         className="input"
                       />
                     </div>
@@ -43,7 +43,7 @@ class ProfessorForm extends Component {
                     <label className="label">Biography</label>
                     <div className="control">
                     <Field
-                        name="bio"
+                        name="setupBio"
                         component="input"
                         type="text"
                         placeholder="I was born in the alps.."
@@ -69,7 +69,7 @@ class ProfessorForm extends Component {
             </div>
             <div className="field">
                 <div className="control">
-                <button type="submit" onClick={this.props.onSubmit} className="button is-success">Save</button>
+                <button className="button is-success">Save</button>
                 </div>
             </div>
             </form>
@@ -77,8 +77,8 @@ class ProfessorForm extends Component {
     }
 }
 
-ProfessorForm = reduxForm ({
-    form: 'professor_setup',
-  }) (ProfessorForm);
+UserSetupForm = reduxForm ({
+    form: 'setup'
+  }) (UserSetupForm);
   
-  export default ProfessorForm;
+  export default UserSetupForm;
