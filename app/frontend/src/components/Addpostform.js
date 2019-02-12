@@ -19,10 +19,6 @@ class Addpostform extends React.Component {
         })
     };
 
-    getDepartments () {
-        axios.get('/api/departments');
-    }
-
     onSubmit = (e) => {
         e.preventDefault();
         this.state.r_tags = this.state.tags.split(',');
@@ -50,17 +46,17 @@ class Addpostform extends React.Component {
     render() {
         return (
             <form>
-                <div class="field">
-                    <label class="label">Title</label>
-                    <div class="control">
-                        <input name="title" class="input" type="text" placeholder="Text input" value={this.state.title} onChange={e => this.change(e)}></input>
+                <div className="field">
+                    <label className="label">Title</label>
+                    <div className="control">
+                        <input name="title" className="input" type="text" placeholder="Text input" value={this.state.title} onChange={e => this.change(e)}></input>
                     </div>
                 </div>
 
-                <div class="field">
-                    <label class="label">Department</label>
-                    <div class="control">
-                        <div class="select">
+                <div className="field">
+                    <label className="label">Department</label>
+                    <div className="control">
+                        <div className="select">
                             <select name="department" value={this.state.department} onChange={e => this.change(e)}>
                                 <option>Academic Senate</option>
                                 <option>History of Consciousness</option>
@@ -122,33 +118,33 @@ class Addpostform extends React.Component {
                     </div>
                 </div>
 
-                <div class="field">
-                    <label class="label">Description</label>
-                    <div class="control">
-                        <textarea name="description" class="textarea" placeholder="Textarea" value={this.state.description} onChange={e => this.change(e)}></textarea>
+                <div className="field">
+                    <label className="label">Description</label>
+                    <div className="control">
+                        <textarea name="description" className="textarea" placeholder="Textarea" value={this.state.description} onChange={e => this.change(e)}></textarea>
                     </div>
                 </div>
 
-                <div class="field">
-                    <label class="label">Tags</label>
-                    <div class="control">
-                        <input name="tags" class="input" type="text" placeholder="Text input" value={this.state.tags} onChange={e => this.change(e)}></input>
+                <div className="field">
+                    <label className="label">Tags</label>
+                    <div className="control">
+                        <input name="tags" className="input" type="text" placeholder="Text input" value={this.state.tags} onChange={e => this.change(e)}></input>
                     </div>
                 </div>
 
-                <div class="field">
-                    <label class="label">Deadline</label>
-                    <div class="control">
-                        <input name="deadline" class="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input>
+                <div className="field">
+                    <label className="label">Deadline</label>
+                    <div className="control">
+                        <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input>
                     </div>
                 </div>
 
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button onClick={e => this.onSubmit(e)} class="button is-link">Submit</button>
+                <div className="field is-grouped">
+                    <div className="control">
+                        <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
                     </div>
-                    <div class="control">
-                        <button class="button is-text">Cancel</button>
+                    <div className="control">
+                        <button className="button is-text">Cancel</button>
                     </div>
                 </div>
             </form>
