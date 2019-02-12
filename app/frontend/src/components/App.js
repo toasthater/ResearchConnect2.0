@@ -20,7 +20,7 @@ import Setup from './Setup';
 NavLink.defaultProps.activeClassName = 'is-active';
 
 const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
-  <Route {...rest} component={loggedIn ? accountSetup ? component : Setup : Landing}/>
+  <Route {...rest} component={loggedIn ? true ? component : Setup : Landing}/>
 );
 
 class App extends Component {
