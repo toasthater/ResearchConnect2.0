@@ -3,12 +3,8 @@ import NavBar from './NavBar';
 import Landing from './Landing';
 import Home from './Home';
 import About from './About';
-<<<<<<< HEAD
 import Spinner from './Spinner';
 import SearchResults from './SearchResults';
-=======
-
->>>>>>> Add_Post
 import {
   BrowserRouter as Router,
   Route,
@@ -24,7 +20,7 @@ import Setup from './Setup';
 NavLink.defaultProps.activeClassName = 'is-active';
 
 const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
-  <Route {...rest} component={loggedIn ? accountSetup ? component : Setup : Landing}/>
+  <Route {...rest} component={loggedIn ? true ? component : Setup : Landing}/>
 );
 
 class App extends Component {

@@ -20,20 +20,12 @@ router.post('/', (req, res) => {
     console.log(req.body)
     const researchPost = new Research({
         title: req.body.title,
-        owner: "5c4ab55a21e1383889614ec6", // Junecue Suh, Pat Mantey
-<<<<<<< HEAD
-        tags: ["pure", "research"], // [linear, algebra], ["pure, research"]
-        description: "I sponser this project", // I am math teacher, I sponser this project
-        department: "5c4ab51421e1383889614c7a", // Mathematics, CE
-        status: "Open",
-        deadline: new Date(2020, 2, 8)
-=======
+        owner: req.body.owner, // Junecue Suh, Pat Mantey
         tags: req.body.r_tags, // [linear, algebra], ["pure, research"]
         description: req.body.description, // I am math teacher, I sponser this project
         department: "5c4ab51421e1383889614c7a", // Mathematics, CE
         status: "Open",
         deadline: req.body.deadline
->>>>>>> Add_Post
     });
 
     researchPost.save().then(research => res.json(research));
