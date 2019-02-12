@@ -135,7 +135,7 @@ router.get('/', (req, res) => {
             });
             
             break;
-        case "Tags":
+        case "Tag":
             searchTags(req.query.query)
             .then((data) => {
                 res.send(data);
