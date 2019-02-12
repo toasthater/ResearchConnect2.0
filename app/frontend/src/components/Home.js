@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
-import Form from './Addpostform';
-=======
 import Addpostform from './Addpostform';
->>>>>>> owner_addpost
 
 class Home extends Component {
     
@@ -29,11 +25,6 @@ class Home extends Component {
     render() {
         return(
             <section className="section">
-<<<<<<< HEAD
-             {this.props.auth ? this.props.auth.isProfessor ? 'You are a professor' : 'You are a student' : 'Data is loading'}
-=======
-
->>>>>>> owner_addpost
             <div className="App">
             <button onClick={this.test}>Test</button>
             {this.buttonForm()}

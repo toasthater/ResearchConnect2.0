@@ -20,11 +20,7 @@ router.post('/', (req, res) => {
     console.log(req.body);
     const researchPost = new Research({
         title: req.body.title,
-<<<<<<< HEAD
-        owner: "5c4ab55a21e1383889614ec6", // Junecue Suh, Pat Mantey
-=======
         owner: req.body.owner, // Junecue Suh, Pat Mantey
->>>>>>> owner_addpost
         tags: req.body.r_tags, // [linear, algebra], ["pure, research"]
         description: req.body.description, // I am math teacher, I sponser this project
         department: "5c4ab51421e1383889614c7a", // Mathematics, CE
