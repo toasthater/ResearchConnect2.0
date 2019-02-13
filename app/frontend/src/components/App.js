@@ -40,7 +40,7 @@ class App extends Component {
 
   render() {
     return (
-      this.props.doneLoading ? (
+      this.props.loadState !== 0 ? (
         <Router>
           <>
             <NavBar/>
@@ -64,13 +64,17 @@ class App extends Component {
           }} />
           </>
         </Router>
-      ) : <Spinner fullPage/>
+      ) : (this.props.loadState === 1 ? <Spinner fullPage /> : (
+      <>
+        <NavBar />
+        <Spinner fullPage />
+      </>))
     );
   }
 }
 
-function mapStateToProps({auth, profile, doneLoading}){
-  return { auth, profile, doneLoading };
+function mapStateToProps({auth, profile, loadState}){
+  return { auth, profile, loadState };
 }
 
 export default connect(mapStateToProps, actions)(App);

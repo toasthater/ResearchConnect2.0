@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER, DONE_LOADING, SEARCH, FETCH_FACULTY_MEMBER, FETCH_STUDENT, SETUP_USER } from './types';
-
+import { FETCH_USER, DONE_LOADING, PARTIAL_LOADING, SEARCH, FETCH_FACULTY_MEMBER, FETCH_STUDENT, SETUP_USER } from './types';
 
 export const fetchUser = () => async dispatch => {
         try {
@@ -82,7 +81,7 @@ export const fetchStudent = cruzid => async dispatch => {
 
 
 export const searchPosts = (type, query) => async dispatch => {
-        dispatch({ type: DONE_LOADING, payload: false });
+        dispatch({ type: PARTIAL_LOADING, payload: false });
         
         const res = await axios.get('/api/search/',
         {
@@ -91,12 +90,10 @@ export const searchPosts = (type, query) => async dispatch => {
                 query: query
         }});
 
+        dispatch({ type: PARTIAL_LOADING, payload: true });
+
         dispatch({
             type: SEARCH,
             payload: res.data
         });
-        
-        dispatch({ type: DONE_LOADING, payload: true });
 };
-
-
