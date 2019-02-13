@@ -1,16 +1,16 @@
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
+import TagsInput from 'react-tagsinput'
 
 class Addpostform extends React.Component {
     state = {
         title: '',
-        tags: '',
+        tags: [],
         description: '',
         department: 'Academic Senate',
         deadline: new Date(),
         owner: this.props.auth._id,
-        r_tags: [],
     }
 
     change = (e) => {
@@ -32,12 +32,11 @@ class Addpostform extends React.Component {
         console.log(this.state);
         this.setState({
             title: '',
-            tags: '',
+            tags: [],
             description: '',
             department: 'Academic Senate',
             deadline: new Date(),
             owner: this.props.auth._id,
-            r_tags: [],
         })
 
         this.props.onSubmit()
@@ -128,7 +127,7 @@ class Addpostform extends React.Component {
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                        <input name="tags" className="input" type="text" placeholder="Text input" value={this.state.tags} onChange={e => this.change(e)}></input>
+                        <TagsInput value={this.state.tags} onChange={e => this.change(e)} />
                     </div>
                 </div>
 
@@ -144,7 +143,7 @@ class Addpostform extends React.Component {
                         <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
                     </div>
                     <div className="control">
-                        <button className="button is-text">Cancel</button>
+                        <button onClick={this.toggleForm} className="button is-text">Cancel</button>
                     </div>
                 </div>
             </form>
