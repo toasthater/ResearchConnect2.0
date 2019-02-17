@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import brandingImg from '../assets/logo.svg';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
 import * as actions from '../actions';
 
 import SearchBar from './SearchBar';
 
 class NavBar extends Component {
     state = {
-        open: false,
-        redirect: false
+        open: false
     }
 
     async submitSearch(values) {
@@ -19,8 +17,10 @@ class NavBar extends Component {
       
       if (type && query)
       {
-        await this.setState({ redirect: true });
-        await this.props.searchPosts(type, query);
+        await this.props.searchPosts(type, query)
+        .then(_ => {
+          this.props.history.push('/search_results');
+        });
       }
     }
 
@@ -57,16 +57,9 @@ class NavBar extends Component {
 
     render() {
         const { open } = this.state;
-        const { redirect } = this.state;
-
-        if (redirect)
-        {
-          this.setState({ redirect: false });
-        }
 
         return(
             <nav className={`navbar is-fixed-top ${!this.props.auth ? 'is-transparent' : 'is-link'}`}>
-            {redirect ? <Redirect to={'/search_results'} /> : ""}
             <div className="container">
               <div className="navbar-brand">
                 <Link className="navbar-item " to="/">
@@ -85,7 +78,7 @@ class NavBar extends Component {
                     About
                   </NavLink>
                 </div>
-                <SearchBar onSubmit={(values) => this.submitSearch(values)} />
+                <SearchBar onSubmit={(values) => { this.submitSearch(values) }} />
                 <div className="navbar-end">
                     <div className="navbar-item">
                         {this.renderLoginButton()}
@@ -101,5 +94,4 @@ function mapStateToProps({ auth, search }){
   return { auth, search };
 }
 
-export default connect(mapStateToProps, actions)(NavBar);
-
+export default withRouter(connect(mapStateToProps, actions)(NavBar));

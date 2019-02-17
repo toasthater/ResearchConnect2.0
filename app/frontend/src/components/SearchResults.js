@@ -5,6 +5,10 @@ import '../styles/searchresults.scss';
 
 class SearchResults extends Component {
     componentDidMount() {
+        this.setState({ search: [] });
+    }
+
+    componentDidUpdate() {
         let results = this.props.search;
         if (results === null || results.length === 0)
         {
