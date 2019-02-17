@@ -7,7 +7,7 @@ class SearchBar extends Component {
         const {handleSubmit} = this.props;
         return(
               <div className="navbar-item">
-              <form onSubmit={handleSubmit}>
+              <form name="search" onSubmit={handleSubmit}>
                 <div className="field has-addons">
                   <p className="control">
                     <span className="select">

@@ -1,7 +1,27 @@
 import React, { Component } from 'react';
-import {Form, Field, reduxForm} from 'redux-form';
+import { Field, reduxForm} from 'redux-form';
 import DropZoneField from './DropZoneField';
 
+
+const validate = values => {
+    const errors = {}
+    if (!values.displayName) {
+        errors.displayName = 'Required'
+    } else if (values.displayName.length < 2) {
+        errors.displayName = 'Minimum be 2 characters or more'
+    }
+    return errors
+}
+
+const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
+    <div className="field">
+        <label className="label">{label}</label>
+        <div className="control">
+        <input {...input} placeholder={label} type={type} className="input" />
+        {touched && ((error && <p className="help is-danger">{error}</p>) || (warning && <p className="help is-warning">{warning}</p>))}
+        </div>
+    </div>
+  )
 
 class UserSetupForm extends Component {
     state = { imageFile: [] };
@@ -15,70 +35,47 @@ class UserSetupForm extends Component {
                     }
                 )
             ) 
-        });
+    });
 
 
     render() {
-        const {handleSubmit} = this.props;
+        const { handleSubmit, pristine, submitting } = this.props;
         return (
-            <form onSubmit={handleSubmit} >
-            
-            <br/>
+            <form name="userSetupForm" onSubmit={ handleSubmit } >
+                <br />
+                <div className="columns">
+                    <div className="column is-6">
+                    <Field name="displayName" component={renderField} type="text" label="Display Name" />
+                    <Field name="setupBio" component={renderField} type="text" label="Biography" />                      
+                    </div>
+                    <div className="column is-5 is-offset-1">
+                    <div className="field">
+                        <label className="label">Profile Picture</label>
+                        <Field
+                            name="imageToUpload"
+                            component={DropZoneField}
+                            type="file"
+                            imagefile={this.state.imageFile}
+                            handleOnDrop={this.handleOnDrop}
+                            />
+                        <br/>
 
-            <div className="columns">
-                <div className="column is-6">
-                <div className="field">
-                    <label className="label">Display Name</label>
-                    <div className="control">
-                    <Field
-                        name="setupName"
-                        component="input"
-                        type="text"
-                        placeholder="John Smith"
-                        className="input"
-                      />
+                    </div>
                     </div>
                 </div>
                 <div className="field">
-                    <label className="label">Biography</label>
                     <div className="control">
-                    <Field
-                        name="setupBio"
-                        component="input"
-                        type="text"
-                        placeholder="I was born in the alps.."
-                        className="input"
-                      />
+                    <button onClick={handleSubmit} className="button is-success" disabled={pristine || submitting}>Save</button>
                     </div>
-                </div>            
                 </div>
-                <div className="column is-5 is-offset-1">
-                <div className="field">
-                    <label className="label">Profile Picture</label>
-                    <Field
-                        name="imageToUpload"
-                        component={DropZoneField}
-                        type="file"
-                        imagefile={this.state.imageFile}
-                        handleOnDrop={this.handleOnDrop}
-                        />
-                    <br/>
-
-                </div>
-                </div>
-            </div>
-            <div className="field">
-                <div className="control">
-                <button className="button is-success">Save</button>
-                </div>
-            </div>
             </form>
         )
     }
 }
 
+
 UserSetupForm = reduxForm ({
-    form: 'setup'
+    form: 'userSetupForm'
   }) (UserSetupForm);
-  
-  export default UserSetupForm;
+
+export default UserSetupForm;
