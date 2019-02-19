@@ -68,6 +68,22 @@ class AddPostForm extends React.Component {
         this.props.onSubmit()
     };
 
+    onCancel = (e) => {
+        e.preventDefault();
+        this.setState({
+            title: '',
+            tags: '',
+            tags2: [],
+            description: '',
+            department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
+            deadline: new Date(),
+            owner: this.props.auth._id,
+            r_tags: []
+        })
+
+        this.props.onSubmit()
+    };
+
     render() {
         return (
             <form>
@@ -96,7 +112,7 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                        {/* <TagsInput name="tags2" value={this.state.tags2} onChange={e => this.change(e)} /> */}
+                        { <TagsInput name="tags2" value={this.state.tags2} onChange={e => this.change(e)} /> }
                         <input name="tags" className="input" type="text" placeholder="Text input" value={this.state.tags} onChange={e => this.change(e)}></input>
                     </div>
                 </div>
@@ -117,7 +133,7 @@ class AddPostForm extends React.Component {
                         <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
                     </div>
                     <div className="control">
-                        <button onClick={this.toggleForm} className="button is-text">Cancel</button>
+                        <button onClick={e => this.onCancel(e)} className="button is-text">Cancel</button>
                     </div>
                 </div>
             </form>
