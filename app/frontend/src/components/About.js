@@ -2,12 +2,10 @@ import React from 'react';
 
 import logoImg from '../assets/logo.svg';
 
-
 export default () => (
   <div className="container">
     <br />
     <h1 className="is-size-1">About</h1>
-
     <div className="content">
       <h1 align="center">
         <br />

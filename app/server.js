@@ -8,8 +8,10 @@ const researchPosts = require('./routes/api/research_posts');
 const department = require('./routes/api/department');
 const facultyMember = require('./routes/api/faculty_members');
 const search = require('./routes/api/search');
+const resume = require('./routes/api/resume');
 const authRoutes = require('./routes/authRoutes');
 const users = require('./routes/api/users');
+const cloudinary = require('cloudinary');
 require('./models/User');
 require('./models/Student');
 require('./models/FacultyMember');
@@ -39,9 +41,10 @@ app.use('/api/research_posts', researchPosts);
 app.use('/api/department', department);
 app.use('/api/faculty_members', facultyMember);
 app.use('/api/user', users);
+app.use('/api/resume', resume);
 
 // DB config
-const db = require('./config/keys').mongoURI;
+const db = keys.mongoURI;
 
 // Connect to Mongo
 mongoose
@@ -49,6 +52,11 @@ mongoose
     .then(() => console.log("MongoDB connected...."))
     .catch(err => console.log(err));
 
+cloudinary.config({
+    cloud_name: keys.cloudinary.name,
+    api_key: keys.cloudinary.api_key,
+    api_secret: keys.cloudinary.api_secret
+});
 
 const port = process.env.port || 5000;
 

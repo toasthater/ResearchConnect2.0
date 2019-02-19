@@ -5,6 +5,7 @@ import Home from './Home';
 import About from './About';
 import Spinner from './Spinner';
 import SearchResults from './SearchResults';
+import Main from './resume_test';
 import {
   BrowserRouter as Router,
   Route,
@@ -49,6 +50,7 @@ class App extends Component {
                 <PrivateRoute exact path="/" component={Home} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
                 <Route exact path="/about" component={About} />
                 <Route exact component={SearchResults} path="/search_results" />
+                <Route exact component={Main} path="/test" />
                 {/* This is how you would use a PrivateRoute */}
                 {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
                 <Route render={() => { throw new Error({code: 404}); }} />
