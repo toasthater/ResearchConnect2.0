@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
         owner: req.body.owner, // Junecue Suh, Pat Mantey
         tags: req.body.r_tags, // [linear, algebra], ["pure, research"]
         description: req.body.description, // I am math teacher, I sponser this project
-        department: "5c4ab51421e1383889614c7a", // Mathematics, CE
+        department: req.body.department.value, // Mathematics, CE
         status: "Open",
         deadline: req.body.deadline
     });

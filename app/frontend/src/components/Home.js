@@ -5,27 +5,28 @@ import AddPostForm from './AddPostForm';
 class Home extends Component {
     
     state = {
-        formIsShowing: true //false
+        formIsShowing: false,
     }
-    test = () => {this.state.formIsShowing = !this.state.formIsShowing; console.log(this.state);};
+
+    toggleForm = () => {this.state.formIsShowing = !this.state.formIsShowing; this.forceUpdate()}
 
     buttonForm() {
         if (this.props.auth /*&& this.props.auth.isProfessor*/)
             if (this.state.formIsShowing)
                 return (< AddPostForm onSubmit={this.onSubmit}/>)
             else
-                return (<button onClick={() => this.state.formIsShowing = true} class="button is-link">new research</button>)
+                return (<button onClick={this.toggleForm} className="button is-link">new research</button>)
     }
 
     onSubmit = () => {
         this.state.formIsShowing = false
+        this.forceUpdate()
     };
 
     render() {
         return(
             <section className="section">
             <div className="App">
-            <button onClick={this.test}>Test</button>
             {this.buttonForm()}
             </div>
             </section>
