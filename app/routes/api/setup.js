@@ -14,17 +14,22 @@ const User = require('../../models/User');
 // });
 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     console.log(req.body);
-    User.findOneAndUpdate({_id:req.user._id}, {$set: {name: req.body.name, bio: req.body.bio, isSetup: true}}, (err, user) =>   {
-        if (err) {
-            console.log("Something wrong when updating data!");
-            res.send(null);
-        }
+    try {
+        const user = await User.findOneAndUpdate({_id:req.user._id}, {$set: {name: req.body.name, bio: req.body.bio, isSetup: true}}, (err, user) =>   {
+            if (err) {
+                console.log("Something wrong when updating data!");
+                res.send(null);
+            }
+        });
+        res.send(user);
 
-        console.log(user);
-        res.send({user})
-    });
+    }
+    catch {
+
+    }
+    
 });
 
 module.exports = router;

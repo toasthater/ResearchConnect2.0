@@ -35,7 +35,7 @@ export const updateUser = (id, name, bio, profile_pic) => async dispatch => {
     type: SETUP_USER,
     payload: res.data
   });
-  dispatch({ type: PARTIAL_LOADING, payload: false });
+  dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
 export const fetchPosts = () => async dispatch => {
