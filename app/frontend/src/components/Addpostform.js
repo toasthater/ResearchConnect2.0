@@ -1,9 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
 import Calendar from 'react-calendar';
-=======
 import TagsInput from 'react-tagsinput';
 import Select from 'react-select';
 
@@ -20,7 +18,6 @@ function populateList(list){
         departmentList.push({ label: name, value: id})
     }
 }
->>>>>>> post_tags
 
 class AddPostForm extends React.Component {
     state = {
@@ -40,15 +37,11 @@ class AddPostForm extends React.Component {
         })
     };
 
-<<<<<<< HEAD
-    onChange = deadline => this.setState({ deadline })
-=======
     changeDept = (e) => {
         this.setState({
             department: e
         })
     };
->>>>>>> post_tags
 
     onSubmit = (e) => {
         e.preventDefault();
