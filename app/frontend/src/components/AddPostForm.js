@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Calendar from 'react-calendar';
 import TagsInput from 'react-tagsinput';
 import Select from 'react-select';
+import Tags from './Tags';
 
 
 var rawDepartmentList;
@@ -112,8 +113,7 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                        { <TagsInput name="tags2" value={this.state.tags2} onChange={e => this.change(e)} /> }
-                        <input name="tags" className="input" type="text" placeholder="Text input" value={this.state.tags} onChange={e => this.change(e)}></input>
+                       <Tags />
                     </div>
                 </div>
 
