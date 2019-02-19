@@ -5,14 +5,14 @@ import * as actions from '../actions';
 
 class Setup extends Component {
 
-    submit = values => {
+    handleSubmit = values => {
         // Need to check if they're empty
-        // values.preventDefault();
         const id = this.props.auth._id;
-        const name = values.name ? values.name : this.props.auth.name;
-        const bio = values.bio ? values.bio : "";
+        const name = values.displayName ? values.displayName : this.props.auth.name;
+        const bio = values.setupBio ? values.setupBio : "";
         const profile_pic = values.profile_pic ? values.profile_pic : "";
-        // this.props.updateUser(id, name, bio, profile_pic);
+        
+        this.props.updateUser(id, name, bio, profile_pic);
       }
 
 
@@ -22,7 +22,7 @@ class Setup extends Component {
                 <div className="container">
                     <h1 className="is-size-1">Setup Profile</h1>
                     <hr className="is-link"/>
-                    <UserSetupForm handleSubmit={(values) => this.submit(values)} />
+                    <UserSetupForm onSubmit={this.handleSubmit} />
                 </div>
             </section>
         )

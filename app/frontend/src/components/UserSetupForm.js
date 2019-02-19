@@ -24,6 +24,12 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
   )
 
 class UserSetupForm extends Component {
+    constructor(props) {
+        super(props)
+      
+        this.handleSubmit = props.handleSubmit.bind(this)
+      }
+
     state = { imageFile: [] };
 
     handleOnDrop = newImageFile => 
@@ -41,7 +47,7 @@ class UserSetupForm extends Component {
     render() {
         const { handleSubmit, pristine, submitting } = this.props;
         return (
-            <form name="userSetupForm" onSubmit={ handleSubmit } >
+            <form name="userSetupForm" onSubmit={ handleSubmit(this.props.onSubmit) } id="userSetupForm">
                 <br />
                 <div className="columns">
                     <div className="column is-6">
