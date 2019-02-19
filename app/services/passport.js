@@ -1,61 +1,73 @@
-const passport = require('passport');
-const keys = require('../config/keys');
-const mongoose = require('mongoose');
-const googleStrategy = require('passport-google-oauth20');
+const passport = require("passport");
+const keys = require("../config/keys");
+const mongoose = require("mongoose");
+const googleStrategy = require("passport-google-oauth20");
 
-const User = mongoose.model('users');
-const Student = mongoose.model('students');
-const FacultyMember = mongoose.model('faculty_members');
+const User = mongoose.model("users");
+const Student = mongoose.model("students");
+const FacultyMember = mongoose.model("faculty_members");
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+  done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-    User.findById(id)
-        .then(user => {
-            done(null, user);
-        })
+  User.findById(id).then(user => {
+    done(null, user);
+  });
 });
 
 // Passport setup
 passport.use(
-    new googleStrategy(
+  new googleStrategy(
     {
-        clientID: keys.googleClientID,
-        clientSecret: keys.googleClientSecret,
-        callbackURL: '/auth/google/callback'
-    }, 
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: "/auth/google/callback"
+    },
     async (accessToken, refreshToken, profile, done) => {
-        //We need to save the accessToken & info to DB
-        const existingUser = await User.findOne({googleId: profile.id});
-        
-        if (existingUser) {
-            // We already have a record with unique profile.id
-            return done(null, existingUser);
-        }
+      //We need to save the accessToken & info to DB
+      const existingUser = await User.findOne({ googleId: profile.id });
 
-        // Get cruzid from email
-        const profile_cruzid = profile.emails[0].value.split('@')[0];
+      if (existingUser) {
+        // We already have a record with unique profile.id
+        return done(null, existingUser);
+      }
 
-        // Check if person with this cruzid exists in faculty
-        const existingFacultyMember = await FacultyMember.findOne({cruzid: profile_cruzid});
+      // Get cruzid from email
+      const profile_cruzid = profile.emails[0].value.split("@")[0];
 
-        // User logging in for first time - save to db
-        const user = await new User({
-            googleId: profile.id,
-            email: profile.emails[0].value,
-            cruzid: profile_cruzid,
-            isProfessor: existingFacultyMember ? true : false,
-            isSetup: false,
-            name: profile.displayName
-            }).save();
-        
-        // If the user is a student we need to create a new student account
-        if (!user.isProfessor)
-            await new Student({cruzid: user.cruzid}).save();
-        
-        done(null, user)
-        }   
-    )
+      // Check if person with this cruzid exists in faculty
+      const existingFacultyMember = await FacultyMember.findOne({
+        cruzid: profile_cruzid
+      });
+
+      // User logging in for first time - save to db
+      const user = await new User({
+        googleId: profile.id,
+        email: profile.emails[0].value,
+        cruzid: profile_cruzid,
+        isProfessor: existingFacultyMember ? true : false,
+        isSetup: false,
+        name: profile.displayName
+      }).save();
+
+      // If the user is a student we need to create a new student account
+      if (!user.isProfessor)
+        await new Student({
+          cruzid: user.cruzid,
+          name: user.name,
+          major: "csssXXX",
+          resume: "my_resume.pdf"
+        })
+          .save()
+          .then(console.log("SAVING NEW STUDENT"));
+      else
+        await new Professor({ cruzid: user.cruzid, name: user.name })
+          .save()
+          .then(console.log("SAVING NEW PROFESSOR"));
+
+      done(null, user);
+    }
+  )
 );
