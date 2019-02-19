@@ -5,7 +5,7 @@ import Addpostform from './Addpostform';
 class Home extends Component {
     
     state = {
-        formIsShowing: false
+        formIsShowing: false,
     }
 
     toggleForm = () => {this.state.formIsShowing = !this.state.formIsShowing; this.forceUpdate()}
@@ -15,7 +15,7 @@ class Home extends Component {
             if (this.state.formIsShowing)
                 return (< Addpostform onSubmit={this.onSubmit}/>)
             else
-                return (<button onClick={this.toggleForm} class="button is-link">new research</button>)
+                return (<button onClick={this.toggleForm} className="button is-link">new research</button>)
     }
 
     onSubmit = () => {
