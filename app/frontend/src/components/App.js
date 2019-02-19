@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import ErrorBoundary from "./ErrorBoundary";
 import Setup from "./Setup";
+import PageNotFound from "./ErrorPage";
 
 NavLink.defaultProps.activeClassName = "is-active";
 
@@ -62,11 +63,7 @@ class App extends Component {
               <Route exact component={SearchResults} path="/search_results" />
               {/* This is how you would use a PrivateRoute */}
               {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
-              <Route
-                render={() => {
-                  throw new Error({ code: 404 });
-                }}
-              />
+              <Route component={PageNotFound}/>
               {this.props.auth ? <></> : <Redirect from="/*" to="/" />}
             </Switch>
           </ErrorBoundary>
