@@ -80,7 +80,7 @@ class Addpostform extends React.Component {
                 <div className="field">
                     <label className="label">Department</label>
                     <div className="control">
-                        <div className="select">
+                        <div className="Select">
                             <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)} />                        
                         </div>
                     </div>
