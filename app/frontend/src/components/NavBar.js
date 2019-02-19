@@ -41,7 +41,7 @@ class NavBar extends Component {
                 {this.props.auth.name}
               </NavLink>
               <div className="navbar-dropdown is-right is-boxed">
-                <Link className="navbar-item" to="/account">
+                <Link className="navbar-item" to="/profile">
                   Account
                 </Link>
                 <hr className="navbar-divider" />

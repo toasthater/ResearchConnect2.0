@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
 
-class Addpostform extends React.Component {
+class AddPostForm extends React.Component {
     state = {
         title: '',
         tags: '',
@@ -156,4 +156,4 @@ function mapStateToProps({auth}){
     return { auth };
 }
 
-export default connect(mapStateToProps)(Addpostform);
+export default connect(mapStateToProps)(AddPostForm);

@@ -2,16 +2,6 @@ const express = require('express');
 const router = express.Router();
 const User = require('../../models/User');
 
-// router.get('/', async (req, res) => {
-//     User.findById(req.query.id)
-//     .then(user => res.send({user}))
-//     .catch(err => res.status(404).json({success: true}));
-// });
-
-// router.post('/setup', async (req, res) => {
-//     console.log('--------it gets the right function----------');
-
-// });
 
 
 router.post('/', async (req, res) => {
