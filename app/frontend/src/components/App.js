@@ -5,7 +5,7 @@ import Home from "./Home";
 import About from "./About";
 import Profile from "./Profile";
 import Spinner from "./Spinner";
-import studentForm from "./StudentForm";
+// import studentForm from "./StudentForm";
 import SearchResults from "./SearchResults";
 import {
   BrowserRouter as Router,
@@ -31,15 +31,13 @@ class App extends Component {
       if (this.props.auth.isProfessor) {
         console.log("Fetching professor..");
         this.props
-          .fetchStudent(this.props.auth.cruzid)
-          .then(_ => console.log(this.props.profile))
-          .then(_ => console.log(this.props));
+          .fetchFacultyMember(this.props.auth.cruzid)
+          .then(_ => console.log(this.props.profile));
       } else {
         console.log("Fetching student..");
         this.props
           .fetchStudent(this.props.auth.cruzid)
-          .then(_ => console.log(this.props.profile))
-          .then(_ => console.log(this.props));
+          .then(_ => console.log(this.props.profile));
       }
     });
   }
@@ -60,7 +58,7 @@ class App extends Component {
               />
               <Route exact path="/about" component={About} />
               <Route exact path="/profile" component={Profile} />
-              <Route exact path="/studentForm" component={studentForm} />
+              {/* <Route exact path="/studentForm" component={studentForm} /> */}
               <Route exact component={SearchResults} path="/search_results" />
               {/* This is how you would use a PrivateRoute */}
               {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}

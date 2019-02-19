@@ -8,11 +8,10 @@ const researchPosts = require('./routes/api/research_posts');
 const department = require('./routes/api/department');
 const facultyMember = require('./routes/api/faculty_members');
 const search = require('./routes/api/search');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require("./routes/authRoutes");
 const setup = require('./routes/api/setup');
 const studentMember = require("./routes/api/students");
-const authRoutes = require("./routes/authRoutes");
-const users = require("./routes/api/users");
+
 require('./models/User');
 require('./models/Student');
 require('./models/FacultyMember');
@@ -43,7 +42,7 @@ app.use("/api/search", search);
 app.use("/api/research_posts", researchPosts);
 app.use("/api/department", department);
 app.use("/api/faculty_members", facultyMember);
-app.use("/api/user", users);
+// app.use("/api/user", users);
 app.use("/api/students", studentMember);
 app.use('/api/setup', setup);
 
