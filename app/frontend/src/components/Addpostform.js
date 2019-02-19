@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
+import Calendar from 'react-calendar';
 
 class AddPostForm extends React.Component {
     state = {
@@ -18,6 +19,8 @@ class AddPostForm extends React.Component {
             [e.target.name]: e.target.value
         })
     };
+
+    onChange = deadline => this.setState({ deadline })
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -135,7 +138,11 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Deadline</label>
                     <div className="control">
-                        <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input>
+                        <Calendar
+                            onChange={this.onChange}
+                            value={this.state.date}
+                        />
+                        {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
                     </div>
                 </div>
 
