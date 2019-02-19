@@ -57,15 +57,13 @@ passport.use(
         await new Student({
           cruzid: user.cruzid,
           name: user.name,
-          major: "csssXXX",
-          resume: "my_resume.pdf"
+          major: "",
+          resume: ""
         })
-          .save()
-          .then(console.log("SAVING NEW STUDENT"));
+          .save();
       else
         await new Professor({ cruzid: user.cruzid, name: user.name })
-          .save()
-          .then(console.log("SAVING NEW PROFESSOR"));
+          .save();
 
       done(null, user);
     }

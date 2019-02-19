@@ -58,7 +58,7 @@ class Profile extends Component {
           </div>
 
           <div className="column">
-            <Popup
+            {/* <Popup
               trigger={
                 <p className="button" align="center">
                   Edit Profile
@@ -76,7 +76,7 @@ class Profile extends Component {
                 <p>Major:</p>
                 <input />
               </div>
-            </Popup>
+            </Popup> */}
           </div>
         </section>
       </div>

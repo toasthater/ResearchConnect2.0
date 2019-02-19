@@ -30,15 +30,10 @@ class App extends Component {
   componentDidMount() {
     this.props.fetchUser().then(_ => {
       if (this.props.auth.isProfessor) {
-        console.log("Fetching professor..");
-        this.props
-          .fetchFacultyMember(this.props.auth.cruzid)
-          .then(_ => console.log(this.props.profile));
+        this.props.fetchFacultyMember(this.props.auth.cruzid);
       } else {
-        console.log("Fetching student..");
-        this.props
-          .fetchStudent(this.props.auth.cruzid)
-          .then(_ => console.log(this.props.profile));
+        console.log(this.props.auth);
+        this.props.fetchStudent(this.props.auth.cruzid);
       }
     });
   }

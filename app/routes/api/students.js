@@ -5,9 +5,24 @@ const Student = require("../../models/Student");
 
 //router.get("/:cruzid", async (req, res) =>
 router.get("/", async (req, res) => {
-  Student.findOne({ cruzid: req.query.cruzid })
-    .then(students => res.send(students))
-    .catch(console.log);
+  if (req.query.cruzid !== undefined)
+  {
+      let relevantStudents = Student.find({
+              'cruzid': {
+                  '$regex': req.query.cruzid,
+                  $options: 'i'
+              }
+          });
+      await relevantStudents.then(async (student) => {
+          res.send(student);
+      });
+  }
+  else if (req.query.id !== undefined)
+  {
+      Student.findById(req.query.id)
+      .then(student => res.send(student))
+      .catch(err => res.status(404).json({success: true}));
+  }
 });
 
 router.post("/", async (req, res) => {

@@ -4,12 +4,12 @@ import {
   DONE_LOADING,
   PARTIAL_LOADING,
   SEARCH,
-  FETCH_FACULTY_MEMBER,
-  FETCH_STUDENT,
+  FETCH_PROFILE,
   SETUP_USER
 } from "./types";
 
 export const fetchUser = () => async dispatch => {
+  dispatch({ type: DONE_LOADING, payload: false });
   try {
     const res = await axios.get("/api/current_user");
     dispatch({ type: FETCH_USER, payload: res.data });
@@ -67,7 +67,7 @@ export const fetchFacultyMember = cruzid => async dispatch => {
     }
   });
   dispatch({
-    type: FETCH_FACULTY_MEMBER,
+    type: FETCH_PROFILE,
     payload: res.data
   });
 };
@@ -80,7 +80,7 @@ export const fetchStudent = cruzid => async dispatch => {
   });
 
   dispatch({
-    type: FETCH_STUDENT,
+    type: FETCH_PROFILE,
     payload: res.data
   });
 };
