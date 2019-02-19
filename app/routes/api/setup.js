@@ -16,7 +16,7 @@ const User = require('../../models/User');
 
 router.post('/', (req, res) => {
     console.log(req.body);
-    User.findOneAndUpdate({_id:req.user._id}, {$set: {name: req.body.name, bio: req.body.bio, setup: true}}, (err, user) =>   {
+    User.findOneAndUpdate({_id:req.user._id}, {$set: {name: req.body.name, bio: req.body.bio, isSetup: true}}, (err, user) =>   {
         if (err) {
             console.log("Something wrong when updating data!");
             res.send(null);
