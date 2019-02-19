@@ -21,7 +21,7 @@ export const fetchUser = () => async dispatch => {
 };
 
 export const updateUser = (id, name, bio, profile_pic) => async dispatch => {
-        // dispatch({type: DONE_LOADING, payload: false});
+    dispatch({ type: PARTIAL_LOADING, payload: false });
         const res = await axios.post('/api/setup/',
         {
                 id: id,
@@ -35,7 +35,7 @@ export const updateUser = (id, name, bio, profile_pic) => async dispatch => {
     type: SETUP_USER,
     payload: res.data
   });
-  dispatch({ type: DONE_LOADING, payload: true });
+  dispatch({ type: PARTIAL_LOADING, payload: false });
 };
 
 export const fetchPosts = () => async dispatch => {

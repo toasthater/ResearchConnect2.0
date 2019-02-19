@@ -29,7 +29,6 @@ class NavBar extends Component {
     renderLoginButton() {
       switch (this.props.auth) {
         case null:
-          console.log('goes in right case');
           return;
         case false:
           return (
@@ -78,7 +77,7 @@ class NavBar extends Component {
                     About
                   </NavLink>
                 </div>
-                <SearchBar onSubmit={(values) => { this.submitSearch(values) }} />
+                {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values) }} />}
                 <div className="navbar-end">
                     <div className="navbar-item">
                         {this.renderLoginButton()}
