@@ -95,10 +95,12 @@ export const searchPosts = (type, query) => async dispatch => {
     }
   });
 
-  dispatch({ type: PARTIAL_LOADING, payload: true });
-
   dispatch({
     type: SEARCH,
     payload: res.data
   });
+
+  dispatch({ type: PARTIAL_LOADING, payload: true });
+
+  
 };

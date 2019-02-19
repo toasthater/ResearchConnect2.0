@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import '../styles/searchresults.scss';
 import axios from 'axios';
 
 class SearchResults extends Component {
     componentDidMount() {
+        console.log("Component mounted");
         this.setState({ search: [] });
     }
 
