@@ -4,15 +4,24 @@ const router = express.Router();
 const FacultyMember = require('../../models/FacultyMember');
 
 router.get('/', async (req, res) => {
-    let relevantFaculty = FacultyMember.find({
-            'cruzid': {
-                '$regex': req.query.cruzid,
-                $options: 'i'
-            }
+    if (req.query.cruzid !== undefined)
+    {
+        let relevantFaculty = FacultyMember.find({
+                'cruzid': {
+                    '$regex': req.query.cruzid,
+                    $options: 'i'
+                }
+            });
+        await relevantFaculty.then(async (facultyMember) => {
+            res.send(facultyMember);
         });
-    await relevantFaculty.then(async (facultyMember) => {
-        res.send(facultyMember);
-    });
+    }
+    else if (req.query.id !== undefined)
+    {
+        FacultyMember.findById(req.query.id)
+        .then(faculty => res.send({faculty}))
+        .catch(err => res.status(404).json({success: true}));
+    }
 });
 
 router.post('/', (req, res) => {
