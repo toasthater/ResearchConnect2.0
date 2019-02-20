@@ -7,7 +7,7 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength15 = maxLength(15)
 const name = value =>
-  value && maxLength15 && /^[a-zA-Z ]+$/.test(value) ?
+  value && maxLength15 && !/^[a-zA-Z ]+$/.test(value) ?
   'Invalid Name' : undefined
 
 const renderTextArea = ({input, label, meta: { touched, error, warning }}) => (
@@ -46,7 +46,7 @@ class UserSetupForm extends Component {
                 <div className="columns">
                     <div className="column is-6">
                     <Field name="displayName" component={renderField} type="text" label="Display Name" validate={[ required, name ]} />
-                    <Field name="setupBio" component={renderTextArea} type="text" label="Biography" />                      
+                    <Field name="setupBio" component={renderField} type="text" label="Summary" />                      
                     </div>
                     <div className="column is-5 is-offset-1">
                     <div className="field">
