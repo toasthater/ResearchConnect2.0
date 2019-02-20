@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import { Field, reduxForm} from 'redux-form';
 import DropZoneField from './DropZoneField';
 
+const required = value => value ? undefined : 'Required'
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength15 = maxLength(15)
+const name = value =>
+  value && maxLength15 && /^[a-zA-Z ]+$/.test(value) ?
+  'Invalid Name' : undefined
 
-const validate = values => {
-    const errors = {}
-    if (!values.displayName) {
-        errors.displayName = 'Required'
-    } else if (values.displayName.length < 2) {
-        errors.displayName = 'Minimum be 2 characters or more'
-    }
-    return errors
-}
+const renderTextArea = ({input, label, meta: { touched, error, warning }}) => (
+    <div className="field">
+        <label className="label">{label}</label>
+        <div className="control">
+            <textarea {...input} placeholder="Content" rows="5" cols="40" className="textarea"/>
+            {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+        </div>
+    </div>
+);
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
     <div className="field">
@@ -30,19 +37,6 @@ class UserSetupForm extends Component {
         this.handleSubmit = props.handleSubmit.bind(this)
       }
 
-    state = { imageFile: [] };
-
-    handleOnDrop = newImageFile => 
-        this.setState({  
-            imageFile: newImageFile.map(image => 
-                Object.assign(image, 
-                    {
-                        preview: URL.createObjectURL(image)
-                    }
-                )
-            ) 
-    });
-
 
     render() {
         const { handleSubmit, pristine, submitting } = this.props;
@@ -51,18 +45,16 @@ class UserSetupForm extends Component {
                 <br />
                 <div className="columns">
                     <div className="column is-6">
-                    <Field name="displayName" component={renderField} type="text" label="Display Name" />
-                    <Field name="setupBio" component={renderField} type="text" label="Biography" />                      
+                    <Field name="displayName" component={renderField} type="text" label="Display Name" validate={[ required, name ]} />
+                    <Field name="setupBio" component={renderTextArea} type="text" label="Biography" />                      
                     </div>
                     <div className="column is-5 is-offset-1">
                     <div className="field">
                         <label className="label">Profile Picture</label>
                         <Field
-                            name="imageToUpload"
+                            name="files"
                             component={DropZoneField}
                             type="file"
-                            imagefile={this.state.imageFile}
-                            handleOnDrop={this.handleOnDrop}
                             />
                         <br/>
 

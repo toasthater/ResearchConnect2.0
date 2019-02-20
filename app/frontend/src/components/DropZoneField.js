@@ -1,59 +1,66 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ReactDropzone from "react-dropzone";
 
-const DropZoneField = ({
-  handleOnDrop,
-  input,
-  imagefile,
-  meta: { error, touched }
-}) => (
-  <div className="image shadowed" style={{ height: 256, width: 256, background: 'white' }}>
-    <ReactDropzone
-      accept="image/jpeg, image/png"
-      className="upload-container"
-      onDrop={handleOnDrop}
-      multiple={false}
-      onChange={file => input.onChange(file)}
-    >
-        {({getRootProps, getInputProps, isDragActive}) => {
-          return (
-            <div className="dropzone-box" {...getRootProps()}>
-              <input {...getInputProps()} />
-              {imagefile && imagefile.length > 0 ? (
-                    <div><img className="is-rounded" src={imagefile[0].preview} alt={imagefile[0].name} /></div>
-                ) : (
-                    <div className="placeholder-preview">
-                    <span className="fa fa-upload fa-5x" />
-                    <br/>
-                    <p>Drop or select an image.</p>
-                </div>
-                )}
-            </div>
-          )
-        }}
-    </ReactDropzone>
-    {touched && error && <div className="error">{error}</div>}
-  </div>
-);
+class DropZoneField extends Component {
 
-DropZoneField.propTypes = {
-  handleOnDrop: PropTypes.func.isRequired,
-  input: PropTypes.shape({
-    name: PropTypes.string,
-    onBlur: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onDragStart: PropTypes.func.isRequired,
-    onDrop: PropTypes.func.isRequired,
-    onFocus: PropTypes.func.isRequired,
-    value: PropTypes.shape({
-      preview: PropTypes.string
-    })
-  }),
-  imagefile: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-  label: PropTypes.string,
-  touched: PropTypes.bool,
-  error: PropTypes.string
-};
+    onDrop = (acceptedFiles, rejectedFiles) => {
+      const { onChange } = this.props.input
+      const files = this.props.input.value || []
+      acceptedFiles.map(
+        (file) => files.push(
+          {
+            preview: URL.createObjectURL(file),
+            name: file.name,
+            size: file.size,
+            progress: file.progress,
+            type: 'accepted'
+          }
+        )
+      )
+      rejectedFiles.map(
+        (file) => files.push({
+          preview: file.preview,
+          name: file.name,
+          size: file.size,
+          progress: file.progress,
+          type: 'rejected'
+        })
+      )
+      console.log(files)
+      onChange(files)
+      this.forceUpdate()
+    }
+
+    render ()
+      {
+        const files = this.props.input.value
+        return (
+          <div className="image shadowed" style={{ height: 256, width: 256, background: 'white' }}>
+          <ReactDropzone
+                accept="image/jpeg, image/png"
+                className="upload-container"
+                onDrop={this.onDrop}
+                multiple={false}>
+              {({getRootProps, getInputProps, isDragActive}) => {
+                return (
+                  <div className="dropzone-box" {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    {files && files.length > 0 ? (
+                          <div><img className="is-rounded" src={files[0].preview} alt={files[0].name} /></div>
+                      ) : (
+                          <div className="placeholder-preview">
+                          <span className="fa fa-upload fa-5x" />
+                          <br/>
+                          <p>Drop or select an image.</p>
+                      </div>
+                      )}
+                  </div>
+                )
+              }}
+          </ReactDropzone>
+        </div>
+      )}
+      }
 
 export default DropZoneField;

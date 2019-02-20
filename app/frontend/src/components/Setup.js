@@ -7,10 +7,11 @@ class Setup extends Component {
 
     handleSubmit = values => {
         // Need to check if they're empty
+        console.log(values.imageToUpload);
         const id = this.props.auth._id;
         const name = values.displayName ? values.displayName : this.props.auth.name;
         const bio = values.setupBio ? values.setupBio : "";
-        const profile_pic = values.profile_pic ? values.profile_pic : "";
+        const profile_pic = values.profile_pic ? values.imageToUpload : "";
         
         this.props.updateUser(id, name, bio, profile_pic);
       }
