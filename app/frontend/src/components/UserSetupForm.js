@@ -3,9 +3,12 @@ import { Field, reduxForm} from 'redux-form';
 import DropZoneField from './DropZoneField';
 
 const required = value => value ? undefined : 'Required'
+
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
+  
 const maxLength15 = maxLength(15)
+
 const name = value =>
   value && maxLength15 && !/^[a-zA-Z ]+$/.test(value) ?
   'Invalid Name' : undefined

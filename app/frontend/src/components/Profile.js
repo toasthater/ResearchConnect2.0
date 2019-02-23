@@ -2,10 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import profileImg from "../assets/profile.png";
 import Popup from "reactjs-popup";
+import ResumeForm from './ResumeForm';
+import * as actions from '../actions';
 
 class Profile extends Component {
   editProfile() {
     return <p>Hello</p>;
+  }
+
+  uploadResume(resume) {
+    console.log(resume);
+    this.props.uploadResume(resume);
   }
 
   render() {
@@ -49,7 +56,7 @@ class Profile extends Component {
           <div className="column">
             <div className="box">
               <p>Upload Resume:</p>
-              <a className="button">Choose File</a>
+              <ResumeForm onSubmit={data => this.uploadResume(data.file)} />
               <br />
               <br />
               <p>Current Resume:</p>
@@ -88,4 +95,4 @@ function mapStateToProps({ profile, auth }) {
   return { profile, auth };
 }
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps, actions)(Profile);

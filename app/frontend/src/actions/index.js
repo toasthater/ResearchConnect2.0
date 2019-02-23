@@ -5,7 +5,8 @@ import {
   PARTIAL_LOADING,
   SEARCH,
   FETCH_PROFILE,
-  SETUP_USER
+  SETUP_USER,
+  UPDATE_RESUME
 } from "./types";
 
 export const fetchUser = () => async dispatch => {
@@ -22,21 +23,43 @@ export const fetchUser = () => async dispatch => {
 
 export const updateUser = (id, name, bio, profile_pic) => async dispatch => {
     dispatch({ type: PARTIAL_LOADING, payload: false });
-        const res = await axios.post('/api/setup/',
-        {
-                id: id,
-                name: name,
-                bio: bio,
-                profile_pic: profile_pic,
-                isSetup : true
-        });
+    const res = await axios.post('/api/setup/', {
+      id: id,
+      name: name,
+      bio: bio,
+      profile_pic: profile_pic,
+      isSetup : true
+    });
+
+    dispatch({
+      type: SETUP_USER,
+      payload: res.data
+    });
+    dispatch({ type: PARTIAL_LOADING, payload: true });
+};
+
+export const uploadResume = (resume) => async dispatch => {
+  dispatch({ type: PARTIAL_LOADING, payload: false });
+
+  const formData = new FormData();
+  formData.append("file", resume);
+
+  const res = await axios({
+    method: 'post',
+    url: '/api/resume/',
+    data: formData,
+    config: { headers: {'Content-Type': 'multipart/form-data' }}
+  });
+
+  console.log(res.data);
 
   dispatch({
-    type: SETUP_USER,
+    type: UPDATE_RESUME,
     payload: res.data
   });
-  dispatch({ type: PARTIAL_LOADING, payload: true });
-};
+
+  dispatch({type: PARTIAL_LOADING, payload: true });
+}
 
 export const fetchPosts = () => async dispatch => {
   const res = await axios.get("/api/research_posts");
@@ -101,6 +124,4 @@ export const searchPosts = (type, query) => async dispatch => {
   });
 
   dispatch({ type: PARTIAL_LOADING, payload: true });
-
-  
 };
