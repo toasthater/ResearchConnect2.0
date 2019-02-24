@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     name: String,
     cruzid: String,
     bio: String,
-    profile_pic: String
+    profile_pic: String,
+    resume: String
 })
 
 module.exports = User = mongoose.model('users', UserSchema);

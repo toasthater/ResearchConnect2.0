@@ -1,10 +1,9 @@
 const express = require('express');
-const cloudinary = require('cloudinary');
+const cloudinary = require('../../cloudinary-setup');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-
-cloudinary.config(require('../../config/keys').cloudinary);
+const User = require('../../models/User');
 
 const router = express.Router();
 
@@ -12,7 +11,29 @@ router.post('/', (req, res) => {
     req.busboy.on('file', (fieldname, file, filename, name, encoding, mimetype) => {
       let tmpPath = path.join(os.tmpdir(), req.user.id + ".pdf");
       file.pipe(fs.createWriteStream(tmpPath));
-      cloudinary.v2.uploader.upload(tmpPath, {}, err => { res.send("Done") });
+      const upload = cloudinary.v2.uploader.upload(tmpPath, {
+        public_id: req.user.id,
+        unique_filename: false,
+        overwrite: true
+      }, err => { 
+        if (err) {
+          console.log(err);
+        }
+      });
+
+      upload.then(data => {
+        User.findByIdAndUpdate(req.user.id, { $set: { resume: data.url }}, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.send("Error uploading resume");
+          } else {
+            res.send("Done");
+          }
+        });
+      }).catch(err => {
+        console.log(err);
+        res.send("Error uploading resume");
+      });
     });
 
     req.pipe(req.busboy);
