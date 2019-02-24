@@ -5,7 +5,6 @@ const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const busboy = require('connect-busboy');
-const cloudinary = require('cloudinary');
 const researchPosts = require('./routes/api/research_posts');
 const department = require('./routes/api/department');
 const facultyMember = require('./routes/api/faculty_members');
@@ -54,9 +53,6 @@ app.use("/api/resume", resume);
 
 // DB config
 const db = require("./config/keys").mongoURI;
-
-// Cloudinary config
-cloudinary.config(keys.cloudinary);
 
 // Connect to Mongo
 mongoose

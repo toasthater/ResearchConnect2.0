@@ -11,7 +11,6 @@ class Profile extends Component {
   }
 
   uploadResume(resume) {
-    console.log(resume);
     this.props.uploadResume(resume);
   }
 
@@ -36,7 +35,7 @@ class Profile extends Component {
             </div>
           </div>
 
-          <div className="column is-2" align="center">
+          <div className="column" align="center">
             <div className="box" style={{ background: "#17864F" }}>
               {this.props.auth.major}
             </div>
