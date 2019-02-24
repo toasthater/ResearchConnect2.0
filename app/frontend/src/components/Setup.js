@@ -6,14 +6,14 @@ import * as actions from '../actions';
 class Setup extends Component {
 
     handleSubmit = values => {
-        // Need to check if they're empty
-        console.log(values.imageToUpload);
-        const id = this.props.auth._id;
-        const name = values.displayName ? values.displayName : this.props.auth.name;
-        const bio = values.setupBio ? values.setupBio : "";
-        const profile_pic = values.profile_pic ? values.imageToUpload : "";
+        const body = {
+            'id' : this.props.auth._id,
+            'name' : values.displayName,
+            'bio' : values.setupBio,
+            'file' : values.files[0].file
+        }
         
-        this.props.updateUser(id, name, bio, profile_pic);
+        this.props.updateUser(body);
       }
 
 
