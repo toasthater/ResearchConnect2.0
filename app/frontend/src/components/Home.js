@@ -1,26 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AddPostForm from './AddPostForm';
+import axios from 'axios';
 
 class Home extends Component {
 
     handleSubmit = values => {
         const title = values.title ? values.title: '';
+        const owner = this.props.auth._id;
         const tags = values.tags ? values.tags: [];
         const description = values.description ? values.description: '';
-        const department = values.department ? values.department : {label: "Academic Senate", value: "5c4ab51421e1383889614c73"};
+        const department = values.department ? values.department : "5c4ab51421e1383889614c73";
         const deadline = values.deadline ? values.deadline: new Date();
-        const owner = this.props.auth._id;
 
-        this.state.formIsShowing = false
-        this.forceUpdate()
-        
-        //this.props.updateUser(id, name, bio, profile_pic);
+        var submission = {
+            title: title ? title:'',
+            owner: owner ? owner: '',
+            tags: tags ? tags: '',
+            description: description ? description: '',
+            department: department ? department: '',
+            deadline: deadline ? deadline: ''
+        }
+        if (submission.title != '')
+            axios.post('/api/research_posts', {...submission});  
+        this.onSubmit()
       }
     
     state = {
         formIsShowing: false,
     }
+
+    onSubmit = () => {
+        this.state.formIsShowing = false
+        this.forceUpdate()
+    };
+
 
     toggleForm = () => {this.state.formIsShowing = !this.state.formIsShowing; this.forceUpdate()}
 

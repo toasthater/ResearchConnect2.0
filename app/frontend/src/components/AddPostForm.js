@@ -9,7 +9,6 @@ import DropZoneField from './DropZoneField';
 import moment from 'moment'
 
 
-
 var rawDepartmentList;
 const departmentList = [];
 axios.get('/api/department').then(function(response){rawDepartmentList = response.data; populateList(rawDepartmentList)});
@@ -71,20 +70,17 @@ class AddPostForm extends Component {
         })
     };
 
-    onSubmit = (e) => {
+    onCancel = (e) => {
         e.preventDefault();
-
-        
-
-        console.log(this.state);
-
         this.props.onSubmit()
     };
 
 
+
     render() {
+        const { handleSubmit, pristine, submitting, reset } = this.props;
         return (
-            <form>
+            <form onSubmit={ handleSubmit(this.props.onSubmit) } id="addPostForm">
                 <div className="field">
                     <label className="label">Title</label>
                     <div className="control">
@@ -97,7 +93,6 @@ class AddPostForm extends Component {
                     <div className="control">
                         <div className="Select">
                             <Field name="department" options={departmentList} component={RenderSelectInput} />
-
                         </div>
                     </div>
                 </div>
@@ -128,10 +123,10 @@ class AddPostForm extends Component {
 
                 <div className="field is-grouped">
                     <div className="control">
-                        <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                        <button onClick={handleSubmit} className="button is-link">Submit</button>
                     </div>
                     <div className="control">
-                        <button onClick={e => this.onCancel(e)} className="button is-text">Cancel</button>
+                        <button onClick={reset} className="button is-text">Cancel</button>
                     </div>
                 </div>
             </form>
