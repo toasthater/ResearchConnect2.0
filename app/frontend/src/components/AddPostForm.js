@@ -22,24 +22,33 @@ function populateList(list){
     }
 }
 
-const RenderSelectInput = ({input, options, name, id}) => (
+const renderSelectInput = ({input, options, name, id}) => (
     <Select 
-         {...input}
-         id={id} 
-         name={name} 
-         options={options}
-         value={input.value}
-         onChange={(value) => input.onChange(value.value)}
-         onBlur={(value) => input.onBlur(value.value)}
+        {...input}
+        id={id} 
+        name={name} 
+        options={options}
+        value={input.value}
+        onChange={(value) => input.onChange(value.value)}
+        onBlur={(value) => input.onBlur(value.value)}
     />
 );
 
 const renderCalendar = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
     <div>
-          <Calendar {...input} dateForm="MM/DD/YYYY" selected={input.value ? moment(input.value) : null} />
-          {touched && error && <span>{error}</span>}
+        <Calendar {...input} dateForm="MM/DD/YYYY" selected={input.value ? moment(input.value) : null} />
+        {touched && error && <span>{error}</span>}
     </div>
-  );
+);
+
+const renderTags = ({input, name}) => (
+    <Tags 
+        {...input}
+        value={input.value}
+        onChange={(value) => input.onChange(value)}
+        onBlur={(value) => input.onBlur(value)}
+    />
+);
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
     <div className="field">
@@ -49,7 +58,7 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
         {touched && ((error && <p className="help is-danger">{error}</p>) || (warning && <p className="help is-warning">{warning}</p>))}
         </div>
     </div>
-  );
+);
 
 class AddPostForm extends Component {
     constructor(props) {
@@ -73,7 +82,7 @@ class AddPostForm extends Component {
                     <label className="label">Department</label>
                     <div className="control">
                         <div className="Select">
-                            <Field name="department" options={departmentList} component={RenderSelectInput} />
+                            <Field name="department" options={departmentList} component={renderSelectInput} />
                         </div>
                     </div>
                 </div>
@@ -87,11 +96,7 @@ class AddPostForm extends Component {
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                    <Field name="tags" component={props => 
-                        <Tags 
-                        currentValue={{tags: props.tags}}
-                        thingsChanged={param => props.onChange(param.tags)}/>} 
-                        />
+                    <Field name="tags" component={renderTags}/>
                     </div>
                 </div>
 
