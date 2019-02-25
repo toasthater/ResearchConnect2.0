@@ -23,7 +23,18 @@ export const fetchUser = () => async dispatch => {
 
 export const updateUser = (body) => async dispatch => {
     dispatch({ type: PARTIAL_LOADING, payload: false });
-    const res = await axios.post('/api/setup/', body);
+    const formData = new FormData();
+    formData.append("name", body.name);
+    formData.append("bio", body.bio);
+    if (body.files != null)
+      formData.append("file", body.files);
+    
+    const res = await axios({
+      method: 'post',
+      url: '/api/setup/',
+      data: formData,
+      config: { headers: {'Content-Type': 'multipart/form-data' }}
+    });
     dispatch({ type: SETUP_USER, payload: res.data});
     dispatch({ type: PARTIAL_LOADING, payload: true });
 };

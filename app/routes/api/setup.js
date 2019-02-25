@@ -1,44 +1,76 @@
 const express = require('express');
-var cloudinary = require('cloudinary').v2;
-const router = express.Router();
 const User = require('../../models/User');
-// const axios =  require('axios');
-const multer = require('multer');
-let upload = multer();
-
-cloudinary.config(require("../../config/keys").cloudinary);
-
-// var upload = multer({ dest : '../../data/profile_pictures'}).single('userPhoto');
+const cloudinary = require('../../cloudinary-setup');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const router = express.Router();
 
 
 
-router.post('/', upload.fields([]), async (req, res) => {
-    try {
-        console.log(`Body: \n ${JSON.stringify(req.body, null, 2)}`);
-        if (req.body.file !== undefined){                                        
-            const file = await cloudinary.uploader.upload(
-                req.body.file,
-                { 
-                    tags: "gotemps",
-                    resource_type: "auto" 
-                }, 
-                (error, result) => {
-                    console.log(error, result);
-                })
-            console.log("Url of the file is  " + file.url);
-        }
+router.post('/', async (req, res) => {
+    try {        
+        console.log("In function!");  
+        var formData = {};
+        done_fields = false;
+        done_file = false;
+        edited_user = null;
+        req.busboy.on('field', async (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) => {
+          formData[fieldname] = val;
+          console.log('Field [' + fieldname + ']: value: ' + val);
+          if (formData['name'] !== undefined && formData['bio'] !== undefined){
+            await User.findByIdAndUpdate(req.user.id, {$set: {name: formData['name'], bio: formData['bio'], isSetup: true}}, 
+              (err, user) =>   {
+              if (err) {
+                  console.log("Something wrong when updating data!");
+                  res.send(null);
+              }
+              else {
+                edited_user = user;
+                done_fields = true;
+                if (done_fields && done_file)
+                  res.send(edited_user);
+              }
+          });
+          }
+        });   
+        req.busboy.on('file', async (fieldname, file, filename, name, encoding, mimetype) => {
+            let tmpPath = path.join(os.tmpdir(), req.user.id + "_" + filename);
+            file.pipe(fs.createWriteStream(tmpPath));
+            const upload = cloudinary.v2.uploader.upload(tmpPath, {
+              public_id: req.user.id,
+              unique_filename: false,
+              overwrite: true
+            }, err => { 
+              if (err) {
+                console.log(err);
+              }
+            });
+      
+            upload.then(data => {
+              User.findByIdAndUpdate(req.user.id, { $set: { profile_pic: data.url }}, 
+                (err, user) =>   {
+                  if (err) {
+                      console.log("Something wrong when updating data!");
+                      res.send(null);
+                  }
+                  else {
+                    edited_user = user;
+                    done_file = true;
+                    if (done_fields && done_file)
+                      res.send(edited_user);
+                  }
+                });
+            }).catch(err => {
+              console.log(err);
+            });
+          });
+      
+          req.pipe(req.busboy);
+        
                                                                          
         // console.log("Public id of the file is  " + file.public_id);                                 
         // console.log("Url of the file is  " + file.url);
-        const user = await User.findOneAndUpdate({_id:req.user._id}, {$set: {name: req.body.name, bio: req.body.bio, isSetup: true}}, 
-            (err, user) =>   {
-            if (err) {
-                console.log("Something wrong when updating data!");
-                res.send(null);
-            }
-        });
-        res.send(user);
-        
 
     }
     catch {(err) => {

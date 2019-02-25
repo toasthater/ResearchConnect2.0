@@ -10,7 +10,7 @@ class Setup extends Component {
             'id' : this.props.auth._id,
             'name' : values.displayName,
             'bio' : values.setupBio,
-            'file' : values.files[0].file
+            'files' : values.files ? values.files[0].file : null
         }
         
         this.props.updateUser(body);
