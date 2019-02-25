@@ -20,7 +20,7 @@ class Profile extends Component {
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
             <br />
-            <img src={profileImg} alt="ResearchConnect" width={200} />
+            <img className="is-rounded" src={this.props.auth.profile_pic ? this.props.auth.profile_pic : profileImg} alt={this.props.auth.name} width={200} />
             <br />
             <br />
           </h1>
