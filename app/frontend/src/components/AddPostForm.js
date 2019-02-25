@@ -1,10 +1,12 @@
 import axios from 'axios';
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Calendar from 'react-calendar';
-import TagsInput from 'react-tagsinput';
 import Select from 'react-select';
 import Tags from './Tags';
+import { Field, reduxForm} from 'redux-form';
+import DropZoneField from './DropZoneField';
+
 
 
 var rawDepartmentList;
@@ -20,16 +22,21 @@ function populateList(list){
     }
 }
 
-class AddPostForm extends React.Component {
-    state = {
-        title: '',
-        tags: '',
-        tags2: [],
-        description: '',
-        department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
-        deadline: new Date(),
-        owner: this.props.auth._id,
-        r_tags: []
+const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
+    <div className="field">
+        <label className="label">{label}</label>
+        <div className="control">
+        <input {...input} placeholder={label} type={type} className="input" />
+        {touched && ((error && <p className="help is-danger">{error}</p>) || (warning && <p className="help is-warning">{warning}</p>))}
+        </div>
+    </div>
+  )
+
+class AddPostForm extends Component {
+    constructor(props) {
+        super(props)
+      
+        this.handleSubmit = props.handleSubmit.bind(this)
     }
 
     change = (e) => {
@@ -46,44 +53,14 @@ class AddPostForm extends React.Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.state.r_tags = this.state.tags.split(',');
-        for (var i = 0; i < this.state.r_tags.length; i++) {
-            this.state.r_tags[i].replace(/\n|\r/g, "");
-            this.state.r_tags[i] = this.state.r_tags[i].trim();
-        }
 
-        axios.post('/api/research_posts', { ...this.state });  
+        
 
         console.log(this.state);
-        this.setState({
-            title: '',
-            tags: '',
-            tags2: [],
-            description: '',
-            department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
-            deadline: new Date(),
-            owner: this.props.auth._id,
-            r_tags: []
-        })
 
         this.props.onSubmit()
     };
 
-    onCancel = (e) => {
-        e.preventDefault();
-        this.setState({
-            title: '',
-            tags: '',
-            tags2: [],
-            description: '',
-            department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
-            deadline: new Date(),
-            owner: this.props.auth._id,
-            r_tags: []
-        })
-
-        this.props.onSubmit()
-    };
 
     render() {
         return (
@@ -91,7 +68,7 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Title</label>
                     <div className="control">
-                        <input name="title" className="input" type="text" placeholder="Text input" value={this.state.title} onChange={e => this.change(e)}></input>
+                        <Field name="title" component={renderField} type="text" placeholder="Text input"/>
                     </div>
                 </div>
 
@@ -99,30 +76,37 @@ class AddPostForm extends React.Component {
                     <label className="label">Department</label>
                     <div className="control">
                         <div className="Select">
-                            <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)} />                        
+                            <Field name="department" options={departmentList} component="Select">
+                            <option value="">Select a Department</option>
+                            {departmentList.map(departmentOption => <option value={departmentOption} key={departmentOption.label}></option>)}</Field>
                         </div>
                     </div>
                 </div>
                 <div className="field">
                     <label className="label">Description</label>
                     <div className="control">
-                        <textarea name="description" className="textarea" placeholder="Textarea" value={this.state.description} onChange={e => this.change(e)}></textarea>
+                        <Field name="description" component={renderField} type="text" placeholder="Textarea"/>
                     </div>
                 </div>
 
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                       <Tags />
+                    <Field name="tags" component={props => 
+                        <Tags 
+                        currentValue={{tags: props.tags}}
+                        thingsChanged={param => props.onChange(param.tags)}/>} 
+                        />
                     </div>
                 </div>
 
                 <div className="field">
                     <label className="label">Deadline</label>
                     <div className="control">
-                        <Calendar
-                            onChange={this.onChange}
-                            value={this.state.date}
+                        <Field name="deadline" component={props => 
+                        <Calendar 
+                        currentValue={{deadline: props.deadline}}
+                        thingsChanged={param => props.onChange(param.deadline)}/>} 
                         />
                         {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
                     </div>
@@ -141,8 +125,8 @@ class AddPostForm extends React.Component {
     }
 }
 
-function mapStateToProps({auth}){
-    return { auth };
-}
+AddPostForm = reduxForm ({
+    form: 'addPostForm'
+  }) (AddPostForm);
 
-export default connect(mapStateToProps)(AddPostForm);
+export default AddPostForm;
