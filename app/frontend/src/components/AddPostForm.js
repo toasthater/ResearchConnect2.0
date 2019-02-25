@@ -6,6 +6,7 @@ import Select from 'react-select';
 import Tags from './Tags';
 import { Field, reduxForm} from 'redux-form';
 import DropZoneField from './DropZoneField';
+import moment from 'moment'
 
 
 
@@ -32,7 +33,14 @@ const RenderSelectInput = ({input, options, name, id}) => (
          onChange={(value) => input.onChange(value.value)}
          onBlur={(value) => input.onBlur(value.value)}
     />
-)
+);
+
+const renderCalendar = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
+    <div>
+          <Calendar {...input} dateForm="MM/DD/YYYY" selected={input.value ? moment(input.value) : null} />
+          {touched && error && <span>{error}</span>}
+    </div>
+  );
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
     <div className="field">
@@ -42,7 +50,7 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
         {touched && ((error && <p className="help is-danger">{error}</p>) || (warning && <p className="help is-warning">{warning}</p>))}
         </div>
     </div>
-  )
+  );
 
 class AddPostForm extends Component {
     constructor(props) {
@@ -114,12 +122,7 @@ class AddPostForm extends Component {
                 <div className="field">
                     <label className="label">Deadline</label>
                     <div className="control">
-                        <Field name="deadline" component={props => 
-                        <Calendar 
-                        currentValue={{val: props.value}}
-                        thingsChanged={param => props.onChange(param.val)}/>} 
-                        />
-                        {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
+                        <Field name="deadline" component={renderCalendar}/>
                     </div>
                 </div>
 
