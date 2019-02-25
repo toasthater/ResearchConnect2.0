@@ -58,25 +58,6 @@ class AddPostForm extends Component {
         this.handleSubmit = props.handleSubmit.bind(this)
     }
 
-    change = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    };
-
-    changeDept = (e) => {
-        this.setState({
-            department: e
-        })
-    };
-
-    onCancel = (e) => {
-        e.preventDefault();
-        this.props.onSubmit()
-    };
-
-
-
     render() {
         const { handleSubmit, pristine, submitting, reset } = this.props;
         return (
