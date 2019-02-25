@@ -22,6 +22,18 @@ function populateList(list){
     }
 }
 
+const RenderSelectInput = ({input, options, name, id}) => (
+    <Select 
+         {...input}
+         id={id} 
+         name={name} 
+         options={options}
+         value={input.value}
+         onChange={(value) => input.onChange(value.value)}
+         onBlur={(value) => input.onBlur(value.value)}
+    />
+)
+
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
     <div className="field">
         <label className="label">{label}</label>
@@ -76,9 +88,8 @@ class AddPostForm extends Component {
                     <label className="label">Department</label>
                     <div className="control">
                         <div className="Select">
-                            <Field name="department" options={departmentList} component="Select">
-                            <option value="">Select a Department</option>
-                            {departmentList.map(departmentOption => <option value={departmentOption} key={departmentOption.label}></option>)}</Field>
+                            <Field name="department" options={departmentList} component={RenderSelectInput} />
+
                         </div>
                     </div>
                 </div>
@@ -105,8 +116,8 @@ class AddPostForm extends Component {
                     <div className="control">
                         <Field name="deadline" component={props => 
                         <Calendar 
-                        currentValue={{deadline: props.deadline}}
-                        thingsChanged={param => props.onChange(param.deadline)}/>} 
+                        currentValue={{val: props.value}}
+                        thingsChanged={param => props.onChange(param.val)}/>} 
                         />
                         {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
                     </div>
