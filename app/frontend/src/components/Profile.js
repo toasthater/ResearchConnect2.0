@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import profileImg from "../assets/profile.png";
-import Popup from "reactjs-popup";
 import ResumeForm from './ResumeForm';
 import * as actions from '../actions';
 

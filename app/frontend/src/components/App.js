@@ -31,7 +31,7 @@ class App extends Component {
       if (this.props.auth.isProfessor) {
         this.props.fetchFacultyMember(this.props.auth.cruzid);
       } else {
-        console.log(this.props.auth);
+        // console.log(this.props.auth);
         this.props.fetchStudent(this.props.auth.cruzid);
       }
     });
