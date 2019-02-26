@@ -9,7 +9,6 @@ import Spinner from "./Spinner";
 // import studentForm from "./StudentForm";
 import SearchResults from "./SearchResults";
 import {
-  BrowserRouter as Router,
   Route,
   Switch,
   NavLink,
@@ -33,7 +32,7 @@ class App extends Component {
       if (this.props.auth.isProfessor) {
         this.props.fetchFacultyMember(this.props.auth.cruzid);
       } else {
-        console.log(this.props.auth);
+        // console.log(this.props.auth);
         this.props.fetchStudent(this.props.auth.cruzid);
       }
     });

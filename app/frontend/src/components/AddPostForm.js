@@ -2,7 +2,6 @@ import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
 import Calendar from 'react-calendar';
-import TagsInput from 'react-tagsinput';
 import Select from 'react-select';
 import Tags from './Tags';
 
@@ -46,11 +45,13 @@ class AddPostForm extends React.Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.state.r_tags = this.state.tags.split(',');
-        for (var i = 0; i < this.state.r_tags.length; i++) {
-            this.state.r_tags[i].replace(/\n|\r/g, "");
-            this.state.r_tags[i] = this.state.r_tags[i].trim();
+       
+        let tags = this.state.tags.split(',');
+        for (var i = 0; i < tags.length; i++) {
+            tags[i].replace(/\n|\r/g, "");
+            tags[i] = tags[i].trim();
         }
+        this.setState({r_tags: tags})
 
         axios.post('/api/research_posts', { ...this.state });  
 

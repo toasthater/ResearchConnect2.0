@@ -44,6 +44,9 @@ class NavBar extends Component {
                 <Link className="navbar-item" to="/profile">
                   Account
                 </Link>
+                <Link className="navbar-item" to="/settings">
+                  Settings
+                </Link>
                 <hr className="navbar-divider" />
                 <a className="navbar-item" href="/api/logout">
                   Logout

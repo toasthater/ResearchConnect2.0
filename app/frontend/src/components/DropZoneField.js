@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import ReactDropzone from "react-dropzone";
 
 class DropZoneField extends Component {
@@ -10,11 +9,14 @@ class DropZoneField extends Component {
       acceptedFiles.map(
         (file) => files.push(
           {
+            file: file,
             preview: URL.createObjectURL(file),
             name: file.name,
             size: file.size,
             progress: file.progress,
-            type: 'accepted'
+            type: file.type,
+            lastModified: file.lastModified,
+            lastModifiedDate: file.lastModifiedDate
           }
         )
       )

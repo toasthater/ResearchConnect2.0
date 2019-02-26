@@ -13,15 +13,15 @@ const name = value =>
   value && maxLength15 && !/^[a-zA-Z ]+$/.test(value) ?
   'Invalid Name' : undefined
 
-const renderTextArea = ({input, label, meta: { touched, error, warning }}) => (
-    <div className="field">
-        <label className="label">{label}</label>
-        <div className="control">
-            <textarea {...input} placeholder="Content" rows="5" cols="40" className="textarea"/>
-            {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-);
+// const renderTextArea = ({input, label, meta: { touched, error, warning }}) => (
+//     <div className="field">
+//         <label className="label">{label}</label>
+//         <div className="control">
+//             <textarea {...input} placeholder="Content" rows="5" cols="40" className="textarea"/>
+//             {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+//         </div>
+//     </div>
+// );
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
     <div className="field">
