@@ -26,6 +26,7 @@ export const updateUser = (body) => async dispatch => {
     const formData = new FormData();
     formData.append("name", body.name);
     formData.append("bio", body.bio);
+    formData.append("filename", body.filename);
     if (body.files != null)
       formData.append("file", body.files);
     
