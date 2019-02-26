@@ -8,7 +8,6 @@ import Spinner from "./Spinner";
 // import studentForm from "./StudentForm";
 import SearchResults from "./SearchResults";
 import {
-  BrowserRouter as Router,
   Route,
   Switch,
   NavLink,

@@ -8,7 +8,10 @@ class Home extends Component {
         formIsShowing: false,
     }
 
-    toggleForm = () => {this.state.formIsShowing = !this.state.formIsShowing; this.forceUpdate()}
+    toggleForm = () => {
+        this.setState({formIsShowing: !this.state.formIsShowing});
+        this.forceUpdate()
+    }
 
     buttonForm() {
         if (this.props.auth /*&& this.props.auth.isProfessor*/)
@@ -19,7 +22,7 @@ class Home extends Component {
     }
 
     onSubmit = () => {
-        this.state.formIsShowing = false
+        this.setState({formIsShowing: false});
         this.forceUpdate()
     };
 
