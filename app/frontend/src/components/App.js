@@ -4,6 +4,7 @@ import Landing from "./Landing";
 import Home from "./Home";
 import About from "./About";
 import Profile from "./Profile";
+import ResearchPost from "./ResearchPost";
 import Spinner from "./Spinner";
 // import studentForm from "./StudentForm";
 import SearchResults from "./SearchResults";
@@ -55,6 +56,7 @@ class App extends Component {
               <PrivateRoute exact path="/profile" component={Profile} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
               {/* <Route exact path="/studentForm" component={studentForm} /> */}
               <PrivateRoute exact path="/search_results" component={SearchResults} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
+              <PrivateRoute exact path="/post" component={ResearchPost} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
               {/* This is how you would use a PrivateRoute */}
               {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
               <Route component={PageNotFound}/>

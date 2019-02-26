@@ -19,8 +19,18 @@ router.get('/', async (req, res) => {
     else if (req.query.id !== undefined)
     {
         FacultyMember.findById(req.query.id)
-        .then(faculty => res.send({faculty}))
+        .then(faculty => {
+            if (faculty !== null) {
+                res.send(faculty);
+            } else {
+                res.send({ faculty : { name : "Invalid Faculty ID" }});
+            }
+        })
         .catch(err => res.status(404).json({success: true}));
+    } else {
+        FacultyMember.find()
+          .sort({ date : -1  })
+          .then(faculty => res.json(faculty));
     }
 });
 

@@ -6,7 +6,9 @@ import {
   SEARCH,
   FETCH_PROFILE,
   SETUP_USER,
-  UPDATE_RESUME
+  UPDATE_RESUME,
+  FETCH_POST,
+  FETCH_DEPARTMENT
 } from "./types";
 
 export const fetchUser = () => async dispatch => {
@@ -61,6 +63,19 @@ export const uploadResume = (resume) => async dispatch => {
   dispatch({type: PARTIAL_LOADING, payload: true });
 }
 
+export const fetchPost = id => async dispatch => {
+  dispatch({ type: PARTIAL_LOADING, payload: false });
+
+  const res = await axios.get("/api/research_posts/", {
+    params: {
+      id: id
+    }
+  });
+
+  dispatch({ type: PARTIAL_LOADING, payload: true });
+  dispatch({ type: FETCH_POST, payload: res.data });
+};
+
 export const fetchPosts = () => async dispatch => {
   const res = await axios.get("/api/research_posts");
   return res.data;
@@ -73,9 +88,7 @@ export const fetchDepartment = id => async dispatch => {
     }
   });
 
-  dispatch({
-    payload: res.data
-  });
+  dispatch({ type: FETCH_DEPARTMENT, payload: res.data });
 };
 
 export const fetchDepartments = () => async dispatch => {
@@ -89,6 +102,19 @@ export const fetchFacultyMember = cruzid => async dispatch => {
       cruzid: cruzid
     }
   });
+  dispatch({
+    type: FETCH_PROFILE,
+    payload: res.data
+  });
+};
+
+export const fetchFacultyMemberByID = id => async dispatch => {
+  const res = await axios.get("/api/faculty_members/", {
+    params: {
+      id: id
+    }
+  });
+
   dispatch({
     type: FETCH_PROFILE,
     payload: res.data

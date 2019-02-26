@@ -8,9 +8,20 @@ const Research = require('../../models/Research');
 // @desc  Get all research posts
 // @access Public
 router.get('/', (req, res) => {
+  if (req.query.id) {
+    Research.findById(req.query.id, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send(new Research());
+      } else {
+          res.send(result);
+      }
+    });
+  } else {
     Research.find()
-        .sort({ date : -1  })
-        .then(research_posts => res.json(research_posts))
+      .sort({ date : -1  })
+      .then(research_posts => res.json(research_posts));
+  }
 });
 
 // @route POST api/research_posts

@@ -4,7 +4,6 @@ const router = express.Router();
 const Department = require('../../models/Department');
 
 router.get('/', (req, res) => {
-
     if (req.query.id === undefined)
     {
         Department.find()
