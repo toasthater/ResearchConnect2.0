@@ -8,7 +8,7 @@ const BACKSPACE_KEY = 8;
 class Tags extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tags: ["reactjs", "html", "css"], value: "" };
+    this.state = { tags: [], value: "" };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);

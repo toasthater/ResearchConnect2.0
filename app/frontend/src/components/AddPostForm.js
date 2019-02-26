@@ -20,15 +20,20 @@ function populateList(list){
 }
 
 class AddPostForm extends React.Component {
-    state = {
-        title: '',
-        tags: '',
-        tags2: [],
-        description: '',
-        department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
-        deadline: new Date(),
-        owner: this.props.auth._id,
-        r_tags: []
+    constructor(props) {
+        super(props);
+        this.state = {
+            title: '',
+            tags: '',
+            tags2: [],
+            description: '',
+            department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
+            deadline: new Date(),
+            owner: this.props.auth._id,
+            r_tags: []
+        }
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     change = (e) => {
@@ -43,6 +48,10 @@ class AddPostForm extends React.Component {
         })
     };
 
+    handleInputChange(tag) {
+        this.setState(state => ({ tags2: [...state.tags2, tag] }));
+    }
+
     onSubmit = (e) => {
         e.preventDefault();
        
@@ -53,7 +62,10 @@ class AddPostForm extends React.Component {
         }
         this.setState({r_tags: tags})
 
-        axios.post('/api/research_posts', { ...this.state });  
+        if(this.state.title != '')
+            axios.post('/api/research_posts', { ...this.state });
+        else
+            console.log("Title empty");
 
         console.log(this.state);
         this.setState({
@@ -114,7 +126,11 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                       <Tags />
+                       <Tags name="tags2"
+                       handleChange={this.handleChange}
+                       value={this.state.tags2}
+                       onSubmit={this.handleSubmit}
+                       />
                     </div>
                 </div>
 
