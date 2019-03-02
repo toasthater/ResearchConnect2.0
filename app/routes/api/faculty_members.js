@@ -36,8 +36,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', (req, res) => {
     const facultymember = new FacultyMember({
-        name: req.body.title,
-        cruzid: req.body.title
+        name: req.body.name,
+        cruzid: req.body.cruzid
     })
     facultymember.save().then(research => res.json(research));
 });

@@ -19,7 +19,7 @@ function populateList(list){
     }
 }
 
-class AddPostForm extends React.Component {
+class AddPostForm extends React.Component { 
     state = {
         title: '',
         tags: '',
@@ -27,7 +27,7 @@ class AddPostForm extends React.Component {
         description: '',
         department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
         deadline: new Date(),
-        owner: this.props.auth._id,
+        owner: this.props.auth.cruzid,
         r_tags: []
     }
 
@@ -63,7 +63,7 @@ class AddPostForm extends React.Component {
             description: '',
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
-            owner: this.props.auth._id,
+            owner: this.props.auth.cruzid,
             r_tags: []
         })
 
@@ -79,7 +79,7 @@ class AddPostForm extends React.Component {
             description: '',
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
-            owner: this.props.auth._id,
+            owner: this.props.auth.cruzid,
             r_tags: []
         })
 
