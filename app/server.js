@@ -50,6 +50,7 @@ app.use("/api/faculty_members", facultyMember);
 app.use("/api/students", studentMember);
 app.use('/api/setup', setup);
 app.use("/api/resume", resume);
+app.use("/api/apply", require("./routes/api/applications"));
 
 // DB config
 const db = require("./config/keys").mongoURI;

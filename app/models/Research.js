@@ -27,6 +27,11 @@ const ResearchSchema = new Schema({
     deadline: {
         type: Date,
         required: true
+    },
+    applicants: {
+        type: [String],
+        require: true,
+        default: []
     }
 });
 

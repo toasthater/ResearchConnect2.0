@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import qs from "query-string";
+import axios from 'axios';
 
 class ResearchPost extends Component {
   async componentDidMount() {
@@ -10,9 +11,7 @@ class ResearchPost extends Component {
       this.getPost();
     } else {
       await this.props.fetchFacultyMemberByID(this.props.post.owner);
-      console.log("Got faculty");
       await this.props.fetchDepartment(this.props.post.department);
-      console.log("Got department");
       this.forceUpdate();
     }
   }
@@ -24,9 +23,20 @@ class ResearchPost extends Component {
       console.log(err);
     });
   }
+
+  async handleSubmit(e) {
+    if (this.props.auth.isProfessor) {
+
+    } else {
+      const args = qs.parse(this.props.location.search);
+      const val = await axios.post("/api/apply", { postID:  args.id, applicant: this.props.auth._id });
+
+      console.log(val);
+      alert(val.data);
+    }
+  }
   
   render() {
-    console.log(this.props);
     return ((this.props.post !== null && this.props.profile !== null && this.props.department !== null && this.props.department.department != null) ? (
       <div className="hero is-light">
         <section className="container" style={{ width: 768 }}>
@@ -58,6 +68,7 @@ class ResearchPost extends Component {
               {this.props.department.department.name}
             </div>
           </div>
+          <button className="button is-success" onClick={() => this.handleSubmit()}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>
         </section>
       </div>) : ""
     );
