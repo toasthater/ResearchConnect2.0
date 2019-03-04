@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 
-class editProfile extends Component {
+class EditProfile extends Component {
   state = {
     cruzid: this.props.auth.cruzid,
     name: "",
@@ -115,9 +115,9 @@ function mapStateToProps({ auth, profile }) {
   return { auth, profile };
 }
 
-editProfile = connect(
+EditProfile = connect(
   mapStateToProps,
   actions
-)(editProfile);
+)(EditProfile);
 
-export default editProfile;
+export default EditProfile;

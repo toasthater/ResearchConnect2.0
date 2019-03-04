@@ -37,11 +37,11 @@ class NavBar extends Component {
         default:
           return (
             <div className="navbar-item has-dropdown is-hoverable">
-              <NavLink className="navbar-link" to="/account">
+              <NavLink className="navbar-link" to={"/profile/" + this.props.auth.cruzid}>
                 {this.props.auth.name}
               </NavLink>
               <div className="navbar-dropdown is-right is-boxed">
-                <Link className="navbar-item" to="/profile">
+                <Link className="navbar-item" to={"/profile/" + this.props.auth.cruzid}>
                   Account
                 </Link>
                 <Link className="navbar-item" to="/settings">

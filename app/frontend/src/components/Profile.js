@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import ResumeForm from "./ResumeForm";
-import editProfile from "./editProfile";
+import EditProfile from "./EditProfile";
 
 //import otherProfiles from "./otherProfiles.js";
 
@@ -23,7 +23,6 @@ class Profile extends Component {
   render() {
     return (
       <div className="hero is-light">
-        <editProfile>H</editProfile>
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
             <br />

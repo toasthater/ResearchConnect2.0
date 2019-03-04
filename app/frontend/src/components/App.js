@@ -6,7 +6,7 @@ import About from "./About";
 import Profile from "./Profile";
 import ResearchPost from "./ResearchPost";
 import Spinner from "./Spinner";
-import editProfile from "./editProfile";
+import EditProfile from "./EditProfile";
 import SearchResults from "./SearchResults";
 import { Route, Switch, NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -58,7 +58,7 @@ class App extends Component {
             <PrivateRoute
               exact
               path="/profile/:cruzid/edit"
-              component={editProfile}
+              component={EditProfile}
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}
             />

@@ -4,6 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const User = require('../../models/User');
+const Student = require('../../models/Student');
 
 const router = express.Router();
 
@@ -27,7 +28,17 @@ router.post('/', (req, res) => {
             console.log(err);
             res.send("Error uploading resume");
           } else {
-            res.send("Done");
+            let relevantStudent = Student.findOne({
+              'cruzid': {
+                  '$regex': result.cruzid,
+                  $options: 'i'
+              }
+            });
+
+            relevantStudent.then(student => {
+              student.resume = data.url;
+              student.save().then(() => res.send("Done uploading resume"));
+            });
           }
         });
       }).catch(err => {
