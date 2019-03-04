@@ -3,6 +3,7 @@ const router = express.Router();
 
 //Research post model
 const Research = require('../../models/Research');
+const FacultyMember = require('../../models/FacultyMember');
 
 // @route GET api/research_posts
 // @desc  Get all research posts
@@ -28,18 +29,26 @@ router.get('/', (req, res) => {
 // @desc  Create a research post
 // @access Public
 router.post('/', (req, res) => {
-    console.log(req.body);
-    const researchPost = new Research({
-        title: req.body.title,
-        owner: req.body.owner, // Junecue Suh, Pat Mantey
-        tags: req.body.r_tags, // [linear, algebra], ["pure, research"]
-        description: req.body.description, // I am math teacher, I sponser this project
-        department: req.body.department.value, // Mathematics, CE
-        status: "Open",
-        deadline: req.body.deadline
+    let relevantFaculty = FacultyMember.findOne({
+        'cruzid': {
+            '$regex': req.body.owner.toLowerCase(),
+            $options: 'i'
+        }
     });
 
+    relevantFaculty.then(data => {
+      const researchPost = new Research({
+        title: req.body.title,
+        owner: data._id,
+        tags: req.body.r_tags,
+        description: req.body.description,
+        department: req.body.department.value,
+        status: "Open",
+        deadline: req.body.deadline
+      });
+
     researchPost.save().then(research => res.json(research));
+    });
 });
 
 // @route DELETE api/research_posts/:id

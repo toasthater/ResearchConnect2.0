@@ -27,7 +27,7 @@ class ResearchPost extends Component {
   
   render() {
     console.log(this.props);
-    return ((this.props.post !== null && this.props.profile !== null && this.props.profile.faculty != null && this.props.department !== null && this.props.department.department != null) ? (
+    return ((this.props.post !== null && this.props.profile !== null && this.props.department !== null && this.props.department.department != null) ? (
       <div className="hero is-light">
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
@@ -49,7 +49,7 @@ class ResearchPost extends Component {
 
           <div className="column" align="center">
             <div className="box" style={{ background: "#17864F" }}>
-              {this.props.profile.faculty.name}
+              {this.props.profile.name}
             </div>
           </div>
 

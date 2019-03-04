@@ -62,7 +62,7 @@ passport.use(
         })
           .save();
       else
-        await new Professor({ cruzid: user.cruzid, name: user.name })
+        await new FacultyMember({ cruzid: user.cruzid, name: user.name })
           .save();
 
       done(null, user);
