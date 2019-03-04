@@ -11,7 +11,9 @@ const StudentSchema = new Schema({
   email: String,
   major: String,
   bio: String,
-  resume: String
+  resume: String,
+  isProfessor: Boolean,
+  isEditing: Boolean
 });
 
 module.exports = Student = mongoose.model("students", StudentSchema);
