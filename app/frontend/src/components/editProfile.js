@@ -3,52 +3,110 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 
 class editProfile extends Component {
-  handleEdit = e => {
+  state = {
+    cruzid: this.props.auth.cruzid,
+    name: "",
+    email: "",
+    major: "",
+    bio: ""
+  };
+
+  changeName = event => {
+    this.setState({ name: event.target.value });
+  };
+
+  changeEmail = event => {
+    this.setState({ email: event.target.value });
+  };
+
+  changeMajor = event => {
+    this.setState({ major: event.target.value });
+  };
+
+  changeBio = event => {
+    this.setState({ bio: event.target.value });
+  };
+
+  handleSubmit(event) {
+    alert(
+      "An update was submitted: " + this.state.name + " and " + this.state.email
+    );
+    event.preventDefault();
+  }
+
+  onSubmit = e => {
     e.preventDefault();
-    const newUsername = this.getUsername.value;
-    const newEmail = this.getEmail.value;
-    const data = {
+
+    let newProfile = {
       cruzid: this.props.auth.cruzid,
-      name: newUsername,
-      email: newEmail
+      name: this.state.name,
+      email: this.state.email,
+      major: this.state.major,
+      bio: this.state.bio
     };
 
-    this.send(data);
-
-    this.props.updateProfile(data);
-
-    /*this.props.dispatch({
-      type: "UPDATE_PROFILE",
-      _id: this.props.auth.id,
-      data: data
-    });*/
+    this.props.updateProfile(newProfile);
   };
 
   render() {
     return (
-      <div className="box">
-        <form onSubmit={this.handleEdit}>
+      <form onSubmit={this.onSubmit}>
+        <div className="box">
+          <h1>Name:</h1>
           <input
             required
+            name="name"
             type="text"
-            ref={input => (this.getUsername = input)}
-            defaultValue={this.props.auth.name}
+            value={this.state.name}
             placeholder="Enter Name"
+            onChange={e => this.changeName(e)}
           />
           <br />
           <br />
+          <h2>Email:</h2>
+          <input
+            name="email"
+            type="text"
+            value={this.state.email}
+            placeholder="Enter Email"
+            onChange={e => this.changeEmail(e)}
+          />
+          <br />
+          <br />
+          <h3>Major:</h3>
+          <input
+            name="major"
+            type="text"
+            value={this.state.major}
+            placeholder="Enter Major"
+            onChange={e => this.changeMajor(e)}
+          />
+          <br />
+          <br />
+          <h4>Bio:</h4>
           <textarea
             required
-            ref={input => (this.getEmail = input)}
-            defaultValue={this.props.auth.email}
-            cols="28"
-            placeholder="Enter Email"
+            name="bio"
+            type="text"
+            rows="5"
+            value={this.state.bio}
+            placeholder="Enter Bio"
+            onChange={e => this.changeBio(e)}
           />
           <br />
           <br />
-          <button onClick={() => this.props.handleEdit()}>Edit</button>
-        </form>
-      </div>
+          <input type="submit" value="Submit" />
+          <br />
+          <br />
+          Name: {this.state.name}
+          <br />
+          Email: {this.state.email}
+          <br />
+          Major: {this.state.major}
+          <br />
+          Bio: {this.state.bio}
+        </div>
+      </form>
     );
   }
 }

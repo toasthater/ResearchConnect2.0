@@ -161,18 +161,20 @@ export const fetchProfile = cruzid => async dispatch => {
 export const updateProfile = profile => async dispatch => {
   dispatch({ type: LOAD_PROFILE, payload: false });
 
-  let res = await axios.post("/api/students/", {
-    profile,
+  let res = await axios.post("/api/students/", profile, {
     params: {
       cruzid: profile.cruzid
-    }
+    },
+    email: profile.email
   });
 
-  /*const res = await axios.post("/api/students/?cruzid=" + profile.body.cruzid, {
-    name: profile.query.name,
-    email: profile.query.email,
-    major: profile.query.major,
-    bio: profile.query.bio
+  /*const res = await axios.post("/api/students/?cruzid=" + profile.cruzid, {
+    params: {
+      cruzid: profile.cruzid
+    },
+
+    name: profile.name,
+    email: profile.email
   });*/
 
   dispatch({

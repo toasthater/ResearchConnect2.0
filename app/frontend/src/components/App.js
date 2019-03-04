@@ -7,7 +7,6 @@ import Profile from "./Profile";
 import ResearchPost from "./ResearchPost";
 import Spinner from "./Spinner";
 import editProfile from "./editProfile";
-
 import SearchResults from "./SearchResults";
 import { Route, Switch, NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
