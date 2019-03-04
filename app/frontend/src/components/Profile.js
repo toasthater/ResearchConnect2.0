@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import profileImg from "../assets/profile.png";
-import ResumeForm from './ResumeForm';
-import * as actions from '../actions';
+import * as actions from "../actions";
+import ResumeForm from "./ResumeForm";
+import editProfile from "./editProfile";
+
+//import otherProfiles from "./otherProfiles.js";
 
 class Profile extends Component {
-  editProfile() {
-    return <p>Hello</p>;
+  componentDidUpdate() {
+    console.log(this.props);
+  }
+
+  handleEditProfile() {
+    //return <Redirect from="/*" to="/home" />;
   }
 
   uploadResume(resume) {
@@ -16,37 +23,72 @@ class Profile extends Component {
   render() {
     return (
       <div className="hero is-light">
+        <editProfile>H</editProfile>
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
             <br />
-            <img className="is-rounded" src={this.props.auth.profile_pic ? this.props.auth.profile_pic : profileImg} alt={this.props.auth.name} width={200} />
+            <img
+              className="is-rounded"
+              src={
+                this.props.auth.profile_pic
+                  ? this.props.auth.profile_pic
+                  : profileImg
+              }
+              alt={this.props.auth.name}
+              width={200}
+            />
             <br />
             <br />
           </h1>
 
           <div className="column" align="center">
             <div className="box" style={{ background: "#2EEF8F" }}>
-              {this.props.auth.name}
+              {this.props.profile != null && (
+                <form> {this.props.profile.name} </form>
+              )}
             </div>
 
             <div className="box" style={{ background: "#2EEF8F" }}>
-              {this.props.auth.email}
+              {this.props.profile != null && (
+                <h1>
+                  {" "}
+                  {this.props.profile.email ? (
+                    <p>{this.props.profile.email}</p>
+                  ) : (
+                    <p>No Email Listed</p>
+                  )}{" "}
+                </h1>
+              )}
             </div>
           </div>
 
           <div className="column" align="center">
             <div className="box" style={{ background: "#17864F" }}>
-              {this.props.auth.major}
+              {this.props.profile != null && (
+                <h1>
+                  {" "}
+                  {this.props.profile.major ? (
+                    <p>{this.props.profile.major}</p>
+                  ) : (
+                    <p>No Major Listed</p>
+                  )}{" "}
+                </h1>
+              )}
             </div>
           </div>
 
           <div className="column" align="left">
             <div className="box">
-              Bio:{" "}
-              {this.props.auth.bio ? (
-                <p>{this.props.auth.bio}</p>
-              ) : (
-                <p>No Available Bio</p>
+              Bio:
+              {this.props.profile != null && (
+                <div>
+                  {" "}
+                  {this.props.profile.bio ? (
+                    <p>{this.props.profile.bio}</p>
+                  ) : (
+                    <p>No Available Bio</p>
+                  )}{" "}
+                </div>
               )}
             </div>
           </div>
@@ -57,40 +99,38 @@ class Profile extends Component {
               <ResumeForm onSubmit={data => this.uploadResume(data.file)} />
               <br />
               <br />
+              <a className="button">Download Resume</a>
+              <br />
+              <br />
               <p>Current Resume:</p>
-              <p>{this.props.auth.resume}</p>
-            </div>
-          </div>
-
-          <div className="column">
-            {/* <Popup
-              trigger={
-                <p className="button" align="center">
-                  Edit Profile
-                </p>
-              }
-              modal="true"
-              lockScroll="false"
-            >
               <div>
-                <p>Edit Profile:</p>
-                <p>Name:</p>
-                <input />
-                <p>Email:</p>
-                <input />
-                <p>Major:</p>
-                <input />
+                {this.props.profile != null && (
+                  <h1>
+                    {" "}
+                    {this.props.profile.resume ? (
+                      <p>{this.props.profile.resume}</p>
+                    ) : (
+                      <p>No Resume Listed</p>
+                    )}{" "}
+                  </h1>
+                )}
               </div>
-            </Popup> */}
+            </div>
           </div>
         </section>
       </div>
     );
+    //} else {
+    //  return <div>Loading...</div>;
+    //}
   }
 }
 
-function mapStateToProps({ profile, auth }) {
-  return { profile, auth };
+function mapStateToProps({ auth, profile }) {
+  return { auth, profile };
 }
 
-export default connect(mapStateToProps, actions)(Profile);
+export default connect(
+  mapStateToProps,
+  actions
+)(Profile);

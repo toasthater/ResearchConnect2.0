@@ -6,14 +6,10 @@ import About from "./About";
 import Profile from "./Profile";
 import ResearchPost from "./ResearchPost";
 import Spinner from "./Spinner";
-// import studentForm from "./StudentForm";
+import editProfile from "./editProfile";
+
 import SearchResults from "./SearchResults";
-import {
-  Route,
-  Switch,
-  NavLink,
-  Redirect
-} from "react-router-dom";
+import { Route, Switch, NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import ErrorBoundary from "./ErrorBoundary";
@@ -23,57 +19,84 @@ import PageNotFound from "./ErrorPage";
 NavLink.defaultProps.activeClassName = "is-active";
 
 const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
-  <Route {...rest} component={loggedIn ? accountSetup ? component : Setup : Landing}/>
+  <Route
+    {...rest}
+    component={loggedIn ? (accountSetup ? component : Setup) : Landing}
+  />
 );
 
 class App extends Component {
   componentDidMount() {
+    let cruzid = this.props.location.pathname;
+    cruzid = cruzid.replace("/profile/", "");
+
     this.props.fetchUser().then(_ => {
-      if (this.props.auth.isProfessor) {
-        this.props.fetchFacultyMember(this.props.auth.cruzid);
-      } else {
-        // console.log(this.props.auth);
-        this.props.fetchStudent(this.props.auth.cruzid);
-      }
+      this.props.fetchProfile(cruzid);
     });
   }
 
   render() {
     return this.props.loadState === 0 ? (
-        <>
-          <NavBar />
-          <ErrorBoundary>
-            <Switch>
-              <PrivateRoute
-                exact
-                path="/"
-                component={Home}
-                loggedIn={this.props.auth}
-                accountSetup={this.props.auth.isSetup}
-              />
-              <Route exact path="/about" component={About}  />
-              <PrivateRoute exact path="/profile" component={Profile} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
-              {/* <Route exact path="/studentForm" component={studentForm} /> */}
-              <PrivateRoute exact path="/search_results" component={SearchResults} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
-              <PrivateRoute exact path="/post" component={ResearchPost} loggedIn={this.props.auth} accountSetup={this.props.auth.isSetup} />
-              {/* This is how you would use a PrivateRoute */}
-              {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
-              <Route component={PageNotFound}/>
-              {this.props.auth ? <></> : <Redirect from="/*" to="/" />}
-            </Switch>
-          </ErrorBoundary>
-          <Route
-            render={({ history }) => {
-              // Auto-update service worker on route change
-              history.listen(() => {
-                if (window.swUpdate === true) {
-                  console.log("Reloading");
-                  window.location.reload();}
-              });
-              return null;
-            }}
-          />
-        </>
+      <>
+        <NavBar />
+        <ErrorBoundary>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/"
+              component={Home}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
+            />
+            <Route exact path="/about" component={About} />
+            <PrivateRoute
+              exact
+              path="/profile/:cruzid"
+              component={Profile}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
+            />
+            <PrivateRoute
+              exact
+              path="/profile/:cruzid/edit"
+              component={editProfile}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
+            />
+            {/* <Route exact path="/studentForm" component={studentForm} /> */}
+            <PrivateRoute
+              exact
+              path="/search_results"
+              component={SearchResults}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
+            />
+            <PrivateRoute
+              exact
+              path="/post"
+              component={ResearchPost}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
+            />
+            {/* This is how you would use a PrivateRoute */}
+            {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
+            <Route component={PageNotFound} />
+            {this.props.auth ? <></> : <Redirect from="/*" to="/" />}
+          </Switch>
+        </ErrorBoundary>
+        <Route
+          render={({ history }) => {
+            // Auto-update service worker on route change
+            history.listen(() => {
+              if (window.swUpdate === true) {
+                console.log("Reloading");
+                window.location.reload();
+              }
+            });
+            return null;
+          }}
+        />
+      </>
     ) : this.props.loadState === 1 ? (
       <Spinner fullPage />
     ) : (

@@ -1,5 +1,4 @@
-import {  DONE_LOADING, PARTIAL_LOADING } from '../actions/types';
-
+import { DONE_LOADING, PARTIAL_LOADING, LOAD_PROFILE } from "../actions/types";
 
 // Full loading done : 0
 // Full loading not done : 1
@@ -7,12 +6,14 @@ import {  DONE_LOADING, PARTIAL_LOADING } from '../actions/types';
 // Partial loading not done : 2
 
 export default function(state = null, action) {
-    switch (action.type) {
-        case DONE_LOADING:
-            return action.payload ? 0 : 1;
-        case PARTIAL_LOADING:
-            return action.payload ? 0 : 2;
-        default:
-            return state;
-    } 
+  switch (action.type) {
+    case DONE_LOADING:
+      return action.payload ? 0 : 1;
+    case LOAD_PROFILE:
+      return action.payload ? 0 : 1;
+    case PARTIAL_LOADING:
+      return action.payload ? 0 : 2;
+    default:
+      return state;
+  }
 }
