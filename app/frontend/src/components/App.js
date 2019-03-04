@@ -8,6 +8,7 @@ import ResearchPost from "./ResearchPost";
 import Spinner from "./Spinner";
 import EditProfile from "./EditProfile";
 import SearchResults from "./SearchResults";
+import Applicants from "./Applicants";
 import { Route, Switch, NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
@@ -26,12 +27,16 @@ const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
 
 class App extends Component {
   componentDidMount() {
-    let cruzid = this.props.location.pathname;
-    cruzid = cruzid.replace("/profile/", "");
-
-    this.props.fetchUser().then(_ => {
-      this.props.fetchProfile(cruzid);
-    });
+    if (this.props.location.pathname.includes("/profile/")) {
+      let cruzid = this.props.location.pathname;
+      cruzid = cruzid.replace("/profile/", "");
+      
+      this.props.fetchUser().then(_ => {
+        this.props.fetchProfile(cruzid);
+      });
+    } else {
+      this.props.fetchUser();
+    }
   }
 
   render() {
@@ -74,6 +79,13 @@ class App extends Component {
               exact
               path="/post"
               component={ResearchPost}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
+            />
+            <PrivateRoute
+              exact
+              path="/applicants"
+              component={Applicants}
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}
             />

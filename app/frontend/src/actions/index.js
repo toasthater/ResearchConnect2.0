@@ -66,8 +66,11 @@ export const uploadResume = resume => async dispatch => {
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
-export const fetchPost = id => async dispatch => {
-  dispatch({ type: PARTIAL_LOADING, payload: false });
+export const fetchPost = (id, spinner) => async dispatch => {
+  
+  if (spinner) {
+    dispatch({ type: PARTIAL_LOADING, payload: false });
+  }
 
   const res = await axios.get("/api/research_posts/", {
     params: {
@@ -75,7 +78,10 @@ export const fetchPost = id => async dispatch => {
     }
   });
 
-  dispatch({ type: PARTIAL_LOADING, payload: true });
+  if (spinner) {
+    dispatch({ type: PARTIAL_LOADING, payload: true });
+  }
+  
   dispatch({ type: FETCH_POST, payload: res.data });
 };
 

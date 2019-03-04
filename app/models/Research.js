@@ -29,7 +29,7 @@ const ResearchSchema = new Schema({
         required: true
     },
     applicants: {
-        type: [String],
+        type: [Schema.Types.ObjectId],
         require: true,
         default: []
     }

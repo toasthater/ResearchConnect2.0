@@ -25,10 +25,10 @@ class ResearchPost extends Component {
   }
 
   async handleSubmit(e) {
+    const args = qs.parse(this.props.location.search);
     if (this.props.auth.isProfessor) {
-
+      this.props.history.push('/applicants?id=' + args.id);
     } else {
-      const args = qs.parse(this.props.location.search);
       const val = await axios.post("/api/apply", { postID:  args.id, applicant: this.props.auth._id });
 
       console.log(val);
