@@ -164,8 +164,7 @@ export const updateProfile = profile => async dispatch => {
   let res = await axios.post("/api/students/", profile, {
     params: {
       cruzid: profile.cruzid
-    },
-    email: profile.email
+    }
   });
 
   /*const res = await axios.post("/api/students/?cruzid=" + profile.cruzid, {
@@ -175,6 +174,18 @@ export const updateProfile = profile => async dispatch => {
 
     name: profile.name,
     email: profile.email
+  let res = await axios.post("/api/students/", {
+    profile,
+    params: {
+      cruzid: profile.cruzid
+    }
+  });
+
+  /*const res = await axios.post("/api/students/?cruzid=" + profile.body.cruzid, {
+    name: profile.query.name,
+    email: profile.query.email,
+    major: profile.query.major,
+    bio: profile.query.bio
   });*/
 
   dispatch({
