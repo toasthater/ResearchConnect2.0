@@ -8,7 +8,9 @@ import {
   SETUP_USER,
   UPDATE_RESUME,
   FETCH_POST,
-  FETCH_DEPARTMENT
+  FETCH_DEPARTMENT,
+  LOAD_PROFILE,
+  UPDATE_PROFILE
 } from "./types";
 
 export const fetchUser = () => async dispatch => {
@@ -23,36 +25,35 @@ export const fetchUser = () => async dispatch => {
   }
 };
 
-export const updateUser = (body) => async dispatch => {
-    dispatch({ type: PARTIAL_LOADING, payload: false });
-    const formData = new FormData();
-    formData.append("name", body.name);
-    formData.append("bio", body.bio);
-    formData.append("filename", body.filename);
-    if (body.files != null)
-      formData.append("file", body.files);
-    
-    const res = await axios({
-      method: 'post',
-      url: '/api/setup/',
-      data: formData,
-      config: { headers: {'Content-Type': 'multipart/form-data' }}
-    });
-    dispatch({ type: SETUP_USER, payload: res.data});
-    dispatch({ type: PARTIAL_LOADING, payload: true });
+export const updateUser = body => async dispatch => {
+  dispatch({ type: PARTIAL_LOADING, payload: false });
+  const formData = new FormData();
+  formData.append("name", body.name);
+  formData.append("bio", body.bio);
+  formData.append("filename", body.filename);
+  if (body.files != null) formData.append("file", body.files);
+
+  const res = await axios({
+    method: "post",
+    url: "/api/setup/",
+    data: formData,
+    config: { headers: { "Content-Type": "multipart/form-data" } }
+  });
+  dispatch({ type: SETUP_USER, payload: res.data });
+  dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
-export const uploadResume = (resume) => async dispatch => {
+export const uploadResume = resume => async dispatch => {
   dispatch({ type: PARTIAL_LOADING, payload: false });
 
   const formData = new FormData();
   formData.append("file", resume);
 
   const res = await axios({
-    method: 'post',
-    url: '/api/resume/',
+    method: "post",
+    url: "/api/resume/",
     data: formData,
-    config: { headers: {'Content-Type': 'multipart/form-data' }}
+    config: { headers: { "Content-Type": "multipart/form-data" } }
   });
 
   console.log(res.data);
@@ -62,8 +63,8 @@ export const uploadResume = (resume) => async dispatch => {
     payload: res.data
   });
 
-  dispatch({type: PARTIAL_LOADING, payload: true });
-}
+  dispatch({ type: PARTIAL_LOADING, payload: true });
+};
 
 export const fetchPost = id => async dispatch => {
   dispatch({ type: PARTIAL_LOADING, payload: false });
@@ -134,6 +135,51 @@ export const fetchStudent = cruzid => async dispatch => {
     type: FETCH_PROFILE,
     payload: res.data
   });
+};
+
+export const fetchProfile = cruzid => async dispatch => {
+  //dispatch({ type: LOAD_PROFILE, payload: true });
+
+  let res = await axios.get("/api/students/", {
+    params: {
+      cruzid: cruzid
+    }
+  });
+
+  if (res.data.name == null) {
+    res = await axios.get("/api/faculty_members/", {
+      params: {
+        cruzid: cruzid
+      }
+    });
+  }
+
+  dispatch({ type: FETCH_PROFILE, payload: res.data });
+  //dispatch({ type: LOAD_PROFILE, payload: false });
+};
+
+export const updateProfile = profile => async dispatch => {
+  dispatch({ type: LOAD_PROFILE, payload: false });
+
+  let res = await axios.post("/api/students/", {
+    profile,
+    params: {
+      cruzid: profile.cruzid
+    }
+  });
+
+  /*const res = await axios.post("/api/students/?cruzid=" + profile.body.cruzid, {
+    name: profile.query.name,
+    email: profile.query.email,
+    major: profile.query.major,
+    bio: profile.query.bio
+  });*/
+
+  dispatch({
+    type: UPDATE_PROFILE,
+    payload: res.data
+  });
+  dispatch({ type: LOAD_PROFILE, payload: true });
 };
 
 export const searchPosts = (type, query) => async dispatch => {
