@@ -27,16 +27,10 @@ const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
 
 class App extends Component {
   componentDidMount() {
-    if (this.props.location.pathname.includes("/profile/")) {
-      let cruzid = this.props.location.pathname;
-      cruzid = cruzid.replace("/profile/", "");
       
       this.props.fetchUser().then(_ => {
-        this.props.fetchProfile(cruzid);
+        this.props.fetchProfile(this.props.auth.cruzid);
       });
-    } else {
-      this.props.fetchUser();
-    }
   }
 
   render() {
