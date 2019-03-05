@@ -12,8 +12,8 @@ const StudentSchema = new Schema({
   major: String,
   bio: String,
   resume: String,
-  isProfessor: Boolean,
-  isEditing: Boolean
+  following: [String],
+  followers: [String]
 });
 
 module.exports = Student = mongoose.model("students", StudentSchema);

@@ -12,14 +12,17 @@ class Profile extends Component {
     super(props);
     if (this.props.match.params.cruzid === this.props.auth.cruzid){
       this.state = {
+        cruzid: this.props.match.params.cruzid,
         profileLoaded: true,
         profile: this.props.auth
       };
     }
     else {
       this.state = {
+        cruzid: this.props.match.params.cruzid,
         profileLoaded: false,
-        profile: null
+        profile: null,
+        following: false
       };
     }
     
@@ -30,7 +33,7 @@ class Profile extends Component {
           cruzid: this.props.match.params.cruzid
         }
       })
-      .then(response => {this.setState({profileLoaded: true, profile: response.data}); console.log(this.state)})
+      .then(response => this.setState({profileLoaded: true, profile: response.data}))
       .catch(error => console.log(error) );
     }
   }
@@ -48,34 +51,35 @@ class Profile extends Component {
     this.props.uploadResume(resume);
   }
 
+  toggleFollow = _ => {
+    this.setState({following: !this.state.following});
+  }
+
   render() {
+    const myProfile = this.state.cruzid === this.props.auth.cruzid;
     return (
       <div>
       {this.state.profileLoaded && this.state.profile && (<div className="hero is-light">
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
             <br />
-            <img
-              className="is-rounded"
-              src={
-                this.state.profile
-                  ? this.state.profile.profile_pic
-                  : profileImg
-              }
+            <div><img className="is-rounded" src={this.state.profile.profile_pic ? this.state.profile.profile_pic : profileImg }
               alt={this.state.profile.name}
               width={200}
-            />
+            /></div>
             <br />
             <br />
           </h1>
 
           <div className="column" align="center">
+           {!myProfile && (<div><button class={"button is-link " + (this.state.following ? "" : "is-inverted")} onClick={this.toggleFollow}>
+            { this.state.following ? "Following" : "Follow"}</button>
+            <br /><br /></div>)}
             <div className="box" style={{ background: "#2EEF8F" }}>
               {this.state.profile != null && (
-                <form> {this.state.profile.name} </form>
+                <p> {this.state.profile.name} </p>
               )}
             </div>
-
             <div className="box" style={{ background: "#2EEF8F" }}>
               {this.state.profile != null && (
                 <h1>
@@ -121,30 +125,15 @@ class Profile extends Component {
             </div>
           </div>
 
-          <div className="column">
-            <div className="box">
-              <p>Upload Resume:</p>
-              <ResumeForm onSubmit={data => this.uploadResume(data.file)} />
-              <br />
-              <br />
-              <a className="button">Download Resume</a>
-              <br />
-              <br />
-              <p>Current Resume:</p>
-              <div>
-                {this.state.profile != null && (
-                  <h1>
-                    {" "}
-                    {this.state.profile.resume ? (
-                      <p>{this.state.profile.resume}</p>
-                    ) : (
-                      <p>No Resume Listed</p>
-                    )}{" "}
-                  </h1>
-                )}
-              </div>
+          <div className="column" align="center">
+          {myProfile &&(<div className="box">
+              <div><p>Upload Resume:</p>
+              <ResumeForm onSubmit={data => this.uploadResume(data.file)} /></div>
             </div>
+            )}
+            <a className="button is-info">Download Resume</a>
           </div>
+          
         </section>
       </div>)}
       </div>

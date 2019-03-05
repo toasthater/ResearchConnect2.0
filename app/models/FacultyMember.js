@@ -19,7 +19,8 @@ const FacultyMemberSchema = new Schema({
     type: String,
     required: false
   },
-  isProfessor: Boolean
+  following: [String],
+  followers: [String]
 });
 
 module.exports = FacultyMember = mongoose.model(
