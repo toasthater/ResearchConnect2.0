@@ -81,24 +81,22 @@ class Profile extends Component {
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
             <br />
-            <div><img className="is-rounded" src={this.state.profile.profile_pic ? this.state.profile.profile_pic : profileImg }
+            <div align="center"><figure class="image is-128x128" ><img className="is-rounded" src={this.state.profile.profile_pic ? this.state.profile.profile_pic : profileImg }
               alt={this.state.profile.name}
               width={200}
-            /></div>
-            <br />
-            <br />
+            /></figure></div>
           </h1>
 
           <div className="column" align="center">
            {!myProfile && (<div><button className={"button is-link " + (this.state.following ? "" : "is-inverted")} disabled={this.state.isFollowDisabled} onClick={this.toggleFollow}>
             { this.state.following ? "Following" : "Follow"}</button>
             <br /><br /></div>)}
-            <div className="box" style={{ background: "#2EEF8F" }}>
+            <div className="box is-danger" >
               {this.state.profile != null && (
                 <p> {this.state.profile.name} </p>
               )}
             </div>
-            <div className="box" style={{ background: "#2EEF8F" }}>
+            <div className="box">
               {this.state.profile != null && (
                 <h1>
                   {" "}
@@ -113,7 +111,7 @@ class Profile extends Component {
           </div>
 
           <div className="column" align="center">
-            <div className="box" style={{ background: "#17864F" }}>
+            <div className="box">
               {this.state.profile != null && (
                 <h1>
                   {" "}
