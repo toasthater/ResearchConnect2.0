@@ -49,7 +49,11 @@ class Tags extends React.Component {
     this.setState({
       tags: [...tags, tag],
       value: ""
-    });
+    },  () => {
+      this.props.tagsChange(this.state.tags);
+  });
+
+    
   }
 
   editPrevTag() {

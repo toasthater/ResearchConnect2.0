@@ -81,7 +81,7 @@ class Profile extends Component {
         <section className="container" style={{ width: 768 }}>
           <h1 align="center">
             <br />
-            <div align="center"><figure class="image is-128x128" ><img className="is-rounded" src={this.state.profile.profile_pic ? this.state.profile.profile_pic : profileImg }
+            <div align="center"><figure className="image is-128x128" ><img className="is-rounded" src={this.state.profile.profile_pic ? this.state.profile.profile_pic : profileImg }
               alt={this.state.profile.name}
               width={200}
             /></figure></div>

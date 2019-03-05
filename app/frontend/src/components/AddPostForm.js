@@ -86,6 +86,14 @@ class AddPostForm extends React.Component {
         this.props.onSubmit()
     };
 
+    tagsChange = (new_tags) => {
+        console.log(new_tags)
+        this.setState({tags2: new_tags},  () => {
+            console.log(this.state.tags2);
+        });
+        
+    }
+
     render() {
         return (
             <form>
@@ -114,7 +122,7 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Tags</label>
                     <div className="control">
-                       <Tags />
+                       <Tags tagsChange={this.tagsChange} />
                     </div>
                 </div>
 
