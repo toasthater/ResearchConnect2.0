@@ -10,7 +10,9 @@ const UserSchema = new Schema({
     cruzid: String,
     bio: String,
     profile_pic: String,
-    resume: String
+    resume: String,
+    following: [String],
+    followers: [String]
 })
 
 module.exports = User = mongoose.model('users', UserSchema);

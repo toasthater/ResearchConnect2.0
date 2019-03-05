@@ -22,7 +22,8 @@ class Profile extends Component {
         cruzid: this.props.match.params.cruzid,
         profileLoaded: false,
         profile: null,
-        following: false
+        following: false,
+        isFollowDisabled: false
       };
     }
     
@@ -33,7 +34,12 @@ class Profile extends Component {
           cruzid: this.props.match.params.cruzid
         }
       })
-      .then(response => this.setState({profileLoaded: true, profile: response.data}))
+      .then(response => this.setState(
+        {profileLoaded: true, 
+          profile: response.data, 
+          isFollowDisabled: false,
+          following: this.props.auth.following &&  this.props.auth.following.includes(this.props.match.params.cruzid)
+        }))
       .catch(error => console.log(error) );
     }
   }
@@ -52,7 +58,19 @@ class Profile extends Component {
   }
 
   toggleFollow = _ => {
+    const following  = this.state.following;
+    this.setState({isFollowDisabled: false});
     this.setState({following: !this.state.following});
+
+    axios.post('/api/follow', {
+      cruzid: this.props.match.params.cruzid,
+      following: following
+    })
+    .then(_ => this.setState({isFollowDisabled: false}))
+    .catch(error => {
+      console.log(error);
+      this.setState({following: following});  
+    });
   }
 
   render() {
@@ -72,7 +90,7 @@ class Profile extends Component {
           </h1>
 
           <div className="column" align="center">
-           {!myProfile && (<div><button class={"button is-link " + (this.state.following ? "" : "is-inverted")} onClick={this.toggleFollow}>
+           {!myProfile && (<div><button className={"button is-link " + (this.state.following ? "" : "is-inverted")} disabled={this.state.isFollowDisabled} onClick={this.toggleFollow}>
             { this.state.following ? "Following" : "Follow"}</button>
             <br /><br /></div>)}
             <div className="box" style={{ background: "#2EEF8F" }}>
@@ -131,7 +149,7 @@ class Profile extends Component {
               <ResumeForm onSubmit={data => this.uploadResume(data.file)} /></div>
             </div>
             )}
-            <a className="button is-info">Download Resume</a>
+            {this.state.profile.resume &&(<div><a  href={this.state.profile.resume} className="button is-info">Download Resume</a></div>)}
           </div>
           
         </section>

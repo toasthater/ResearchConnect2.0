@@ -12,6 +12,7 @@ const search = require('./routes/api/search');
 const authRoutes = require("./routes/authRoutes");
 const setup = require('./routes/api/setup');
 const users = require('./routes/api/users');
+const follow = require('./routes/api/follow');
 const studentMember = require("./routes/api/students");
 const resume = require("./routes/api/resume");
 
@@ -45,6 +46,7 @@ app.use(bodyParser.json());
 // Use routes
 app.use("/api/search", search);
 app.use("/api/users", users);
+app.use("/api/follow", follow);
 app.use("/api/research_posts", researchPosts);
 app.use("/api/department", department);
 app.use("/api/faculty_members", facultyMember);
