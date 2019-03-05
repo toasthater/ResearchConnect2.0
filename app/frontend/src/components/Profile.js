@@ -147,7 +147,7 @@ class Profile extends Component {
               <ResumeForm onSubmit={data => this.uploadResume(data.file)} /></div>
             </div>
             )}
-            {this.state.profile.resume &&(<div><a  href={this.state.profile.resume} className="button is-info">Download Resume</a></div>)}
+            {this.state.profile.resume &&(<div><a  href={this.state.profile.resume} className="button is-info" target="_blank" download={this.state.profile.name+"_Resume.pdf"}>Download Resume</a></div>)}
           </div>
           
         </section>
