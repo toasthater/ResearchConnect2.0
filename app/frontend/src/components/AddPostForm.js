@@ -22,13 +22,11 @@ function populateList(list){
 class AddPostForm extends React.Component { 
     state = {
         title: '',
-        tags: '',
-        tags2: [],
+        tags: [],
         description: '',
         department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
         deadline: new Date(),
         owner: this.props.auth.cruzid,
-        r_tags: []
     }
 
     change = (e) => {
@@ -45,26 +43,16 @@ class AddPostForm extends React.Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-       
-        let tags = this.state.tags.split(',');
-        for (var i = 0; i < tags.length; i++) {
-            tags[i].replace(/\n|\r/g, "");
-            tags[i] = tags[i].trim();
-        }
-        this.setState({r_tags: tags})
-
         axios.post('/api/research_posts', { ...this.state });  
 
         console.log(this.state);
         this.setState({
             title: '',
-            tags: '',
-            tags2: [],
+            tags: [],
             description: '',
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
             owner: this.props.auth.cruzid,
-            r_tags: []
         })
 
         this.props.onSubmit()
@@ -74,13 +62,11 @@ class AddPostForm extends React.Component {
         e.preventDefault();
         this.setState({
             title: '',
-            tags: '',
-            tags2: [],
+            tags: [],
             description: '',
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
             owner: this.props.auth.cruzid,
-            r_tags: []
         })
 
         this.props.onSubmit()
@@ -88,8 +74,8 @@ class AddPostForm extends React.Component {
 
     tagsChange = (new_tags) => {
         console.log(new_tags)
-        this.setState({tags2: new_tags},  () => {
-            console.log(this.state.tags2);
+        this.setState({tags: new_tags},  () => {
+            console.log(this.state.tags);
         });
         
     }
