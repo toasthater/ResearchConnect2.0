@@ -54,7 +54,7 @@ class PostCard extends PureComponent {
                             <div className="card-img-top">
                                 <div className="circle">
                                     <div>
-                                        <img src={this.selectPostImage(post.type)} alt="" class="post-icon" />
+                                        <img src={this.selectPostImage(post.type)} alt="" className="post-icon" />
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@ class PostCard extends PureComponent {
                             </div>
                             
                             <div className="content">
-                                <span class="tag is-primary is-medium is-pink-bc is-centered">Computer Science</span>
+                                <span className="tag is-primary is-medium is-pink-bc is-centered">Computer Science</span>
                                 <br /><br />
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
                                 <br /><br />
