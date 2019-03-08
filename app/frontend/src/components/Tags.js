@@ -68,10 +68,10 @@ class Tags extends React.Component {
     const { tags, value } = this.state;
     return (
       <div className="form">
-        <div className="tags">
+        <div className="tags_in">
           <ul>
             {tags.map((tag, i) => (
-              <li key={tag + i} className="tag">
+              <li key={tag + i} className="tag_in">
                 {tag}
               </li>
             ))}

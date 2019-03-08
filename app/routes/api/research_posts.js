@@ -19,8 +19,8 @@ router.get('/', (req, res) => {
       }
     });
   } else {
-    Research.find()
-      .sort({ date : -1  })
+    Research.find({})
+      .sort({ date : -1  }).limit(9)
       .then(research_posts => res.json(research_posts));
   }
 });

@@ -1,10 +1,11 @@
-  .tags {
+  .tags_in {
     background: #fff;
     padding: 5px;
     overflow: hidden;
   }
   
-  .tag {
+
+  .tag_in {
     color: #fff;
     font-weight: bold;
     background: #3498db;
@@ -19,6 +20,8 @@
       cursor: pointer;
     }
   }
+
+
   
   .tag-input {
     padding: 5px 10px;
