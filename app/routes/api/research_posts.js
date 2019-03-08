@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
       const researchPost = new Research({
         title: req.body.title,
         owner: data._id,
-        tags: req.body.r_tags,
+        tags: req.body.tags,
         description: req.body.description,
         department: req.body.department.value,
         status: "Open",
