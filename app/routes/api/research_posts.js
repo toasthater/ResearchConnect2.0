@@ -4,6 +4,9 @@ const router = express.Router();
 //Research post model
 const Research = require('../../models/Research');
 const FacultyMember = require('../../models/FacultyMember');
+const Department = require('../../models/Department');
+const Application = require('../../models/Application');
+const User = require('../../models/User');
 
 // @route GET api/research_posts
 // @desc  Get all research posts
@@ -14,6 +17,51 @@ router.get('/', (req, res) => {
       if (err) {
         console.log(err);
         res.send(new Research());
+      } else if (req.query.fill) {
+        FacultyMember.findById(result.owner, (err, owner) => {
+          if (err) {
+            console.log(err);
+            res.send(new Research());
+          } else {
+            Department.findById(result.department, (err, department) => {
+              if (err) {
+                console.log(err);
+                res.send(new Research());
+              } else {
+                result.owner = owner;
+                result.department = department;
+                
+                if (result.applicants === null || result.applicants.length === 0) {
+                  res.send(result);
+                  return;
+                }
+
+                for (let i = 0; i < result.applicants.length; i++) {
+                  Application.findById(result.applicants[i], (err, applicant) => {
+                    if (err) {
+                      console.log(err);
+                      res.send(new Research());
+                    } else {
+                      User.findById(applicant.student, (err, student) => {
+                        if (err) {
+                          console.log(err);
+                          res.send(new Research());
+                        } else {
+                          result.applicants[i] = applicant.toJSON();
+                          result.applicants[i].student = student;
+
+                          if (i === result.applicants.length - 1) {
+                            res.send(result);
+                          }
+                        }
+                      });
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
       } else {
           res.send(result);
       }
