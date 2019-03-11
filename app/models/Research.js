@@ -17,6 +17,7 @@ const ResearchSchema = new Schema({
         default: Date.now
     },
     tags: [String],
+    summary: String,
     description: String,
     department: { 
         type: Schema.Types.ObjectId, 

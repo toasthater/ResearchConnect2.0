@@ -23,6 +23,7 @@ class AddPostForm extends React.Component {
     state = {
         title: '',
         tags: [],
+        summary: '',
         description: '',
         department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
         deadline: new Date(),
@@ -49,6 +50,7 @@ class AddPostForm extends React.Component {
         this.setState({
             title: '',
             tags: [],
+            summary: '',
             description: '',
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
@@ -63,6 +65,7 @@ class AddPostForm extends React.Component {
         this.setState({
             title: '',
             tags: [],
+            summary: '',
             description: '',
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
@@ -86,7 +89,7 @@ class AddPostForm extends React.Component {
                 <div className="field">
                     <label className="label">Title</label>
                     <div className="control">
-                        <input name="title" className="input" type="text" placeholder="Text input" value={this.state.title} onChange={e => this.change(e)}></input>
+                        <input name="title" className="input" type="text" placeholder="Title" value={this.state.title} onChange={e => this.change(e)}></input>
                     </div>
                 </div>
 
@@ -98,10 +101,18 @@ class AddPostForm extends React.Component {
                         </div>
                     </div>
                 </div>
+
+                <div className="field">
+                    <label className="label">Summary</label>
+                    <div className="control">
+                        <textarea name="summary" className="textarea" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)}></textarea>
+                    </div>
+                </div>
+
                 <div className="field">
                     <label className="label">Description</label>
                     <div className="control">
-                        <textarea name="description" className="textarea" placeholder="Textarea" value={this.state.description} onChange={e => this.change(e)}></textarea>
+                        <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)}></textarea>
                     </div>
                 </div>
 

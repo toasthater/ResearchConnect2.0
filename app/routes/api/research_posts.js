@@ -41,6 +41,7 @@ router.post('/', (req, res) => {
         title: req.body.title,
         owner: data._id,
         tags: req.body.tags,
+        summary: req.body.summary,
         description: req.body.description,
         department: req.body.department.value,
         status: "Open",
