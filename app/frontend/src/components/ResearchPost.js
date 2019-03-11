@@ -55,15 +55,11 @@ class ResearchPost extends Component {
             </div>
 
             <div className="box" style={{ background: "#2EEF8F" }}>
-<<<<<<< HEAD
               {this.props.post.summary}
             </div>
 
             <div className="box" style={{ background: "#2EEF8F" }}>
               {this.props.post.description}
-=======
-              {this.state.post.description}
->>>>>>> applications
             </div>
           </div>
 
