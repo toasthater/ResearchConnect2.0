@@ -82,6 +82,9 @@ class NavBar extends Component {
                 </div>
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values) }} />}
                 <div className="navbar-end">
+                    <NavLink className="navbar-item" to="/new">
+                      New Research
+                    </NavLink>
                     <div className="navbar-item">
                         {this.renderLoginButton()}
                     </div>
