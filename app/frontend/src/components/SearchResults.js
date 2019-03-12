@@ -2,44 +2,44 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import axios from 'axios';
+import PostCard from './PostCard';
 
 class SearchResults extends Component {
     componentDidMount() {
-        console.log("Component mounted");
         this.setState({ search: [] });
     }
 
     async componentDidUpdate() {
-        let results = this.props.search;
-        if (results === null || results.length === 0)
-        {
-            results = "No results found :(";
-        }
-        else
-        {
-            const department = await axios.get('/api/department?id=' + results[0].department);
-            const faculty = await axios.get('/api/faculty_members?id=' + results[0].owner);
+        console.log(this.props.search);
+    }
 
-            document.querySelector(".results").innerHTML = "";
-            document.querySelector("#title").innerHTML = results[0].title;
-            document.querySelector("#desc").innerHTML = results[0].description;
-            document.querySelector("#tags").innerHTML = JSON.stringify(results[0].tags);
-            document.querySelector("#department").innerHTML = department.data.department.name;
-            document.querySelector("#professor").innerHTML = faculty.data.faculty.name;
+    formatPost() {
+        var posts = this.props.search;
+
+        if (posts == undefined) {
+            return (
+                <div className="flex-container"></div>
+            );
         }
+
+        return (
+        <div className="flex-container">
+            {posts.map(post => (<PostCard  key={post._id} post={{
+                id: post._id,
+                type: post.department.type,
+                name: post.title,
+                professor: post.owner.name,
+                tags: post.tags,
+                summary: post.summary,
+                department: post.department.name
+            }} />))}
+        </div>)
     }
 
     render() {
         return(
             <div id="search_results_container">
-                <div className="box">
-                    <dl className="results">Loading...</dl>
-                    <p className="research_item light_green_box" id="title"></p>
-                    <p className="research_item" id="desc"></p>
-                    <p className="research_item" id="tags"></p>
-                    <p className="research_item" id="department"></p>
-                    <p className="research_item" id="professor"></p>
-                </div>
+                {this.formatPost()}
             </div>
         );
     }

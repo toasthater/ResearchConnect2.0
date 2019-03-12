@@ -5,6 +5,7 @@ import * as actions from "../actions";
 import qs from "query-string";
 import axios from 'axios';
 import Spinner from './Spinner';
+import DepartmentImage from './DepartmentImage';
 
 class ResearchPost extends Component {
   state = {
@@ -40,37 +41,34 @@ class ResearchPost extends Component {
   
   render() {
     return  (this.state.post !== null ? (
-      <div className="hero is-light">
+      <div className="hero">
         <section className="container" style={{ width: 768 }}>
-          <h1 align="center">
-            <br />
-            <img src={profileImg} alt="ResearchConnect" width={200} />
-            <br />
-            <br />
-          </h1>
-
           <div className="column" align="center">
-            <div className="box" style={{ background: "#2EEF8F" }}>
+            <div className="box" style={{ background: "#2A363F" }}>
+              <DepartmentImage type={this.state.post.department.type} />
+            </div>
+            
+            <div className="box" style={{ background: "#DDDDDD" }}>
               {this.state.post.title}
             </div>
 
-            <div className="box" style={{ background: "#2EEF8F" }}>
+            <div className="box" style={{ background: "#DDDDDD" }}>
               {this.state.post.summary}
             </div>
 
-            <div className="box" style={{ background: "#2EEF8F" }}>
+            <div className="box" style={{ background: "#DDDDDD" }}>
               {this.state.post.description}
             </div>
           </div>
 
           <div className="column" align="center">
-            <div className="box" style={{ background: "#17864F" }}>
+            <div className="box" style={{ background: "#DDDDDD" }}>
               {this.state.post.owner.name}
             </div>
           </div>
 
-          <div className="column" align="left">
-            <div className="box">
+          <div className="column" align="center">
+            <div className="box" style={{ background: "#DDDDDD" }}>
               {this.state.post.department.name}
             </div>
           </div>

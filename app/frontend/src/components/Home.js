@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AddPostForm from './AddPostForm';
 import axios from 'axios';
 import PostCard from './PostCard';
 
@@ -12,22 +11,24 @@ class Home extends Component {
             posts: []
         }
 
-        axios.get("/api/research_posts/")
+        axios.get("/api/research_posts?fill=true")
           .then(response => {this.setState({posts: response.data}); console.log(response.data)})
-          .catch(error => console.log(error) );
+          .catch(error => console.log(error));
     }
 
-    formatPost = (posts) => {
-        var posts = [
-            { id: 20, name: 'Captain Piett', tags: ['lol', 'what', 'this', 'is'], type: 1, professor: "Dr. Narges Norouzi" },
-            { id: 24, name: 'General Veers', tags: ['lol', 'sick', 'this', 'is'], type: 2, professor: "Dr. Luca De Alfaro"  },
-            { id: 56, name: 'Admiral Ozzel', tags: ['lol', 'what', 'lmao', 'is'], type: 3, professor: "Dr. Frankenstein"  },
-            { id: 88, name: 'Commander Jerjerrod', tags: ['lol', 'yo', 'tag', 'moo'], type: 4, professor: "Dr. Ira Pohl" },
-            { id: 89, name: 'Another Post', tags: ['lol', 'yo', 'tag', 'moo'], type: 5, professor: "Dr. Yang Liu" }
-          ];
+    formatPost() {
+        var posts = this.state.posts;
         return (
         <div className="flex-container">
-            {posts.map(post => (<PostCard  key={post.id} post={post} />))}
+            {posts.map(post => (<PostCard  key={post._id} post={{
+                id: post._id,
+                type: post.department.type,
+                name: post.title,
+                professor: post.owner.name,
+                tags: post.tags,
+                summary: post.summary,
+                department: post.department.name
+            }} />))}
         </div>)
     }
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fillResearchPost = require('./fillResearchHelper');
 
 // Schemas
 const Research = require('../../models/Research');
@@ -31,6 +32,10 @@ async function searchDepartments(name) {
         });
     });
 
+    for (let i = 0; i < ret.length; i++) {
+        ret[i] = await fillResearchPost(ret[i]);
+    }
+
     return ret;
 };
 
@@ -59,6 +64,10 @@ async function searchFaculty(name) {
         });
     });
 
+    for (let i = 0; i < ret.length; i++) {
+        ret[i] = await fillResearchPost(ret[i]);
+    }
+
     return ret;
 }
 
@@ -75,6 +84,10 @@ async function searchTitle(name) {
     await relevantPosts.then((data) => {
         ret = data;
     });
+
+    for (let i = 0; i < ret.length; i++) {
+        ret[i] = await fillResearchPost(ret[i]);
+    }
 
     return ret;
 }
@@ -95,7 +108,7 @@ async function searchTags(name){
         {
             if(name.toString().localeCompare(posts[i].tags[j].toString()) === 0)
             {
-                relevantPosts.push(posts[i]);
+                relevantPosts.push(await fillResearchPost(posts[i]));
             }
         }
     }
