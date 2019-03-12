@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import qs from "query-string";
 import axios from 'axios';
@@ -44,12 +43,12 @@ class ResearchPost extends Component {
       <div className="hero">
         <section className="container" style={{ width: 768 }}>
           <div className="column" align="center">
-            <div className="box" style={{ background: "#2A363F" }}>
-              <DepartmentImage type={this.state.post.department.type} />
+            <div className="circle-img">
+                <DepartmentImage  type={this.state.post.department.type}/>
             </div>
             
             <div className="box" style={{ background: "#DDDDDD" }}>
-              {this.state.post.title}
+              <div className="is-title">{this.state.post.title}</div>
             </div>
 
             <div className="box" style={{ background: "#DDDDDD" }}>
@@ -71,9 +70,11 @@ class ResearchPost extends Component {
             <div className="box" style={{ background: "#DDDDDD" }}>
               {this.state.post.department.name}
             </div>
-          </div>
-          {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
+            <br />
+            {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
           (<button className="button is-success" onClick={() => this.handleSubmit()}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>) : ""}
+          </div>
+          
         </section>
       </div>) : <Spinner fullPage />
     );

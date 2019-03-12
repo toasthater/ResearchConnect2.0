@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
-import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import qs from "query-string";
 import axios from 'axios';
 import Spinner from './Spinner';
 
 class Applicants extends Component {
-  state = {
-    post: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      post: null
+    };
+  }
+  
 
   async componentDidMount() {
     const args = qs.parse(this.props.location.search);
@@ -35,7 +38,11 @@ class Applicants extends Component {
 
     for (let i = 0; i < this.state.post.applicants.length; i++) {
       if (this.state.post.applicants[i]._id === applicationID) {
-        this.state.post.applicants[i].status = accept ? "accepted" : "denied";
+        var post = this.state.post;
+        post.applicants[i].status = accept ? "accepted" : "denied";
+        this.setState({
+          post: post
+        });
       }
     }
 

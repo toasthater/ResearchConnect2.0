@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import axios from 'axios';
 import PostCard from './PostCard';
 
 class SearchResults extends Component {
@@ -16,7 +15,7 @@ class SearchResults extends Component {
     formatPost() {
         var posts = this.props.search;
 
-        if (posts == undefined) {
+        if (posts === undefined) {
             return (
                 <div className="flex-container"></div>
             );

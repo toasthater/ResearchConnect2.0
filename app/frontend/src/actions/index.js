@@ -218,3 +218,11 @@ export const searchPosts = (type, query) => async dispatch => {
 
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
+
+export const startPartialLoading = () => async dispatch => {
+  dispatch({ type: PARTIAL_LOADING, payload: false });
+}
+
+export const stopPartialLoading = () => async dispatch => {
+  dispatch({ type: PARTIAL_LOADING, payload: true });
+}

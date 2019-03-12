@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AddPostForm from './AddPostForm';
-import axios from 'axios';
 
 
 class NewResearch extends Component {

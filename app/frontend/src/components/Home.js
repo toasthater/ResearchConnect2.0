@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as actions from '../actions';
 import axios from 'axios';
 import PostCard from './PostCard';
 
@@ -7,13 +8,16 @@ class Home extends Component {
     
     constructor(props) {
         super(props);
+        
         this.state = {
             posts: []
         }
+    }
 
+    componentDidMount() {
         axios.get("/api/research_posts?fill=true")
-          .then(response => {this.setState({posts: response.data}); console.log(response.data)})
-          .catch(error => console.log(error));
+        .then(response => {this.setState({posts: response.data});})
+        .catch(error => console.log(error));
     }
 
     formatPost() {
@@ -49,4 +53,4 @@ function mapStateToProps({auth}){
     return { auth };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, actions)(Home);

@@ -42,7 +42,7 @@ const selectPostImage = (type) => {
 }
 
 const DepartmentImage = ({ type }) => (
-    <img src={selectPostImage(type)} alt="" className="post-icon" />
+    <img src={selectPostImage(type)} alt="" className="post-icon"  />
 );
 
 export default DepartmentImage;
