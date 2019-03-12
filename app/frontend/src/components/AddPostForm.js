@@ -139,7 +139,7 @@ class AddPostForm extends React.Component {
                         <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
                     </div>
                     <div className="control">
-                        <button onClick={e => this.onCancel(e)} className="button is-text">Cancel</button>
+                        <button onClick={e => this.onCancel(e)} className="button is-link">Cancel</button>
                     </div>
                 </div>
             </form>

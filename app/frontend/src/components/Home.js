@@ -9,7 +9,6 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            formIsShowing: false,
             posts: []
         }
 
@@ -17,24 +16,6 @@ class Home extends Component {
           .then(response => {this.setState({posts: response.data}); console.log(response.data)})
           .catch(error => console.log(error) );
     }
-
-    toggleForm = () => {
-        this.setState({formIsShowing: !this.state.formIsShowing});
-        this.forceUpdate()
-    }
-
-    buttonForm() {
-        if (this.props.auth /*&& this.props.auth.isProfessor*/)
-            if (this.state.formIsShowing)
-                return (< AddPostForm onSubmit={this.onSubmit}/>)
-            else
-                return (<button onClick={this.toggleForm} className="button is-link">new research</button>)
-    }
-
-    onSubmit = () => {
-        this.setState({formIsShowing: false});
-        this.forceUpdate()
-    };
 
     formatPost = (posts) => {
         var posts = [
@@ -54,7 +35,6 @@ class Home extends Component {
         return(
             <section className="section">
             <div className="App">
-            {this.buttonForm()}
             </div>
             
                 {this.formatPost()}
