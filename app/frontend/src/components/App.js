@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import ErrorBoundary from "./ErrorBoundary";
 import Setup from "./Setup";
-import NewResearch from './NewResearch';
+import NewResearch from "./NewResearch";
 import PageNotFound from "./ErrorPage";
 
 NavLink.defaultProps.activeClassName = "is-active";
@@ -28,10 +28,9 @@ const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
 
 class App extends Component {
   componentDidMount() {
-      
-      this.props.fetchUser().then(_ => {
-        this.props.fetchProfile(this.props.auth.cruzid);
-      });
+    this.props.fetchUser().then(_ => {
+      this.props.fetchProfile(this.props.auth.cruzid);
+    });
   }
 
   render() {
@@ -57,7 +56,7 @@ class App extends Component {
             />
             <PrivateRoute
               exact
-              path="/profile/:cruzid/edit"
+              path="/settings"
               component={EditProfile}
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}

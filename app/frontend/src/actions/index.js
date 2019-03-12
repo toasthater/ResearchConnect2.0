@@ -67,7 +67,6 @@ export const uploadResume = resume => async dispatch => {
 };
 
 export const fetchPost = (id, spinner) => async dispatch => {
-  
   if (spinner) {
     dispatch({ type: PARTIAL_LOADING, payload: false });
   }
@@ -81,7 +80,7 @@ export const fetchPost = (id, spinner) => async dispatch => {
   if (spinner) {
     dispatch({ type: PARTIAL_LOADING, payload: true });
   }
-  
+
   dispatch({ type: FETCH_POST, payload: res.data });
 };
 
@@ -173,27 +172,6 @@ export const updateProfile = profile => async dispatch => {
     }
   });
 
-  /*const res = await axios.post("/api/students/?cruzid=" + profile.cruzid, {
-    params: {
-      cruzid: profile.cruzid
-    },
-
-    name: profile.name,
-    email: profile.email
-  let res = await axios.post("/api/students/", {
-    profile,
-    params: {
-      cruzid: profile.cruzid
-    }
-  });
-
-  /*const res = await axios.post("/api/students/?cruzid=" + profile.body.cruzid, {
-    name: profile.query.name,
-    email: profile.query.email,
-    major: profile.query.major,
-    bio: profile.query.bio
-  });*/
-
   dispatch({
     type: UPDATE_PROFILE,
     payload: res.data
@@ -221,8 +199,8 @@ export const searchPosts = (type, query) => async dispatch => {
 
 export const startPartialLoading = () => async dispatch => {
   dispatch({ type: PARTIAL_LOADING, payload: false });
-}
+};
 
 export const stopPartialLoading = () => async dispatch => {
   dispatch({ type: PARTIAL_LOADING, payload: true });
-}
+};
