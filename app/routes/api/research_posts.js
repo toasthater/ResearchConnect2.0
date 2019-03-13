@@ -69,8 +69,8 @@ router.post('/', (req, res) => {
 // @route DELETE api/research_posts/:id
 // @desc  Delete a research post
 // @access Public
-router.delete('/:id', (req, res) => {
-    Research.findById(req.params.id)
+router.delete('/', (req, res) => {
+    Research.findById(req.query.id)
         .then(research => research.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json({success: true}));
 });

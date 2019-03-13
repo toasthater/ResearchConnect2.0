@@ -37,6 +37,19 @@ class ResearchPost extends Component {
       alert(val.data);
     }
   }
+
+  handleDelete() {
+    if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
+      return;
+    }
+
+    axios.delete("/api/research_posts?id=" + this.state.post._id)
+    .then(res => this.props.history.push("/"))
+    .catch(err => {
+      console.log(err);
+      alert("Failed to delete post");
+    });
+  }
   
   render() {
     if (this.state.post !== null && this.state.post.title === undefined) {
@@ -76,8 +89,13 @@ class ResearchPost extends Component {
               {this.state.post.department.name}
             </div>
             <br />
-            {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-          (<button className="button is-success" onClick={() => this.handleSubmit()}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>) : ""}
+            <div align="center">
+              {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
+                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>) : ""}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ? 
+                (<button className="button is-success" onClick={() => this.handleDelete()}>Delete</button>) : ""}
+              </div>
+
           </div>
           
         </section>
