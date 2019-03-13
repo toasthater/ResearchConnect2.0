@@ -1,92 +1,113 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
+import { Field, reduxForm } from "redux-form";
+import DropZoneField from "./DropZoneField";
+
+const renderField = ({
+  input,
+  label,
+  type,
+  rows,
+  meta: { touched, error, warning }
+}) => (
+  <div className="field">
+    <label className="label">{label}</label>
+    <div className="control">
+      <textarea {...input} placeholder={label} type={type} rows={rows} className="textarea" style={{resize:"none", width: "100%"}} />
+      {touched &&
+        ((error && <p className="help is-danger">{error}</p>) ||
+          (warning && <p className="help is-warning">{warning}</p>))}
+    </div>
+  </div>
+);
+
+class EditProfileForm extends Component {
+  required = value => value ? undefined : "Required";
+
+  render() {
+    const { handleSubmit } = this.props;
+
+    return (
+      <div>
+        <br />
+        <div className="box">
+          <Field
+            name="displayName"
+            component={renderField}
+            type="text"
+            label="Display Name"
+            rows={1}
+            validate={this.required}
+          />
+          <br />
+          <br />
+          <Field
+            name="major"
+            component={renderField}
+            type="text"
+            label={this.props.isProfessor ? "Department" : "Major"}
+            rows={1}
+            validate={this.required}
+          />
+          <br />
+          <br />
+          <Field
+            name="bio"
+            component={renderField}
+            type="text"
+            label="Bio"
+            rows={5}
+            validate={this.required}
+          />
+          <br />
+          <br />
+          <button
+            onClick={handleSubmit}
+            className="button is-success"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+EditProfileForm = reduxForm({
+  form: "editProfileForm"
+})(EditProfileForm);
 
 class EditProfile extends Component {
-  state = {
-    cruzid: this.props.auth.cruzid,
-    name: "",
-    major: "",
-    bio: ""
-  };
-
-  changeName = event => {
-    this.setState({ name: event.target.value });
-  };
-
-  changeMajor = event => {
-    this.setState({ major: event.target.value });
-  };
-
-  changeBio = event => {
-    this.setState({ bio: event.target.value });
-  };
-
-  onSubmit = e => {
-    e.preventDefault();
-
+  handleSubmit(formData) {
+    console.log(formData);
     let newProfile = {
       cruzid: this.props.auth.cruzid,
-      name: this.state.name,
-      bio: this.state.bio
+      name: formData.displayName,
+      bio: formData.bio
     };
 
     this.props.updateUser(newProfile);
 
     let newMajor = {
       cruzid: this.props.auth.cruzid,
-      major: this.state.major
+      major: formData.major
     };
 
     this.props.updateProfile(newMajor);
-
-    this.props.history.go("./");
-  };
+    this.props.fetchProfile(this.props.auth.cruzid);
+  }
 
   render() {
     return (
-      <div>
-        <br />
-        <form onSubmit={this.onSubmit}>
-          <div className="box">
-            <h1>Display Name:</h1>
-            <input
-              required
-              name="name"
-              type="text"
-              value={this.state.name}
-              placeholder="Enter Name"
-              onChange={e => this.changeName(e)}
-            />
-            <br />
-            <br />
-            <h3>Major:</h3>
-            <input
-              name="major"
-              type="text"
-              value={this.state.major}
-              placeholder="Enter Major"
-              onChange={e => this.changeMajor(e)}
-            />
-            <br />
-            <br />
-            <h4>Bio:</h4>
-            <textarea
-              required
-              name="bio"
-              type="text"
-              rows="5"
-              value={this.state.bio}
-              placeholder="Enter Bio"
-              onChange={e => this.changeBio(e)}
-            />
-            <br />
-            <br />
-            <input type="submit" value="Submit" />
-          </div>
-        </form>
-      </div>
-    );
+      <section className="section">
+        <div className="container">
+          <h1 className="is-size-1">Edit Profile</h1>
+          <hr className="is-link"/>
+          <EditProfileForm onSubmit={values => this.handleSubmit(values)} isProfessor={this.props.auth.isProfessor} />
+        </div>
+      </section>
+    )
   }
 }
 
@@ -94,9 +115,4 @@ function mapStateToProps({ auth, profile }) {
   return { auth, profile };
 }
 
-EditProfile = connect(
-  mapStateToProps,
-  actions
-)(EditProfile);
-
-export default EditProfile;
+export default connect(mapStateToProps, actions)(EditProfile);

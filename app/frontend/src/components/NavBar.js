@@ -41,7 +41,7 @@ class NavBar extends Component {
                 {this.props.auth.name}
               </NavLink>
               <div className="navbar-dropdown is-right is-boxed">
-                <Link className="navbar-item" onClick={this.forceUpdate} to={"/profile/" + this.props.auth.cruzid}>
+                <Link className="navbar-item" to={"/profile/" + this.props.auth.cruzid}>
                   Account
                 </Link>
                 <Link className="navbar-item" to="/settings">
