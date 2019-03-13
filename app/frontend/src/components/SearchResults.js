@@ -37,7 +37,7 @@ class SearchResults extends Component {
 
     render() {
         return(
-            <div id="search_results_container">
+            <div>
                 {this.formatPost()}
             </div>
         );

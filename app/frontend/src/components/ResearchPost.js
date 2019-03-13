@@ -39,6 +39,11 @@ class ResearchPost extends Component {
   }
   
   render() {
+    if (this.state.post !== null && this.state.post.title === undefined) {
+      this.props.history.push("/");
+      return "";
+    }
+
     return  (this.state.post !== null ? (
       <div className="hero">
         <section className="container" style={{ width: 768 }}>
