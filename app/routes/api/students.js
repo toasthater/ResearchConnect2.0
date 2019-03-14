@@ -49,8 +49,7 @@ router.post("/", async (req, res) => {
             email: req.body.email,
             major: req.body.major,
             bio: req.body.bio,
-            resume: req.body.resume,
-            isProfessor: false
+            resume: req.body.resume
           }
         });
 
@@ -68,8 +67,7 @@ router.post("/", async (req, res) => {
           email: req.body.email,
           major: req.body.major,
           bio: req.body.bio,
-          resume: req.body.resume,
-          isProfessor: false
+          resume: req.body.resume
         });
 
         profile.save().then(students => res.json(students));

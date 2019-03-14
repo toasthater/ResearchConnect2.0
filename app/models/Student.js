@@ -7,10 +7,7 @@ const StudentSchema = new Schema({
     type: String,
     required: true
   },
-  name: String,
-  email: String,
   major: String,
-  bio: String,
   resume: String
 });
 

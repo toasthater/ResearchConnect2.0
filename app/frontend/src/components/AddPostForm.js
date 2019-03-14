@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import Tags from './Tags';
@@ -42,9 +43,9 @@ class AddPostForm extends React.Component {
         })
     };
 
-    onSubmit = (e) => {
+    async onSubmit(e) {
         e.preventDefault();
-        axios.post('/api/research_posts', { ...this.state });  
+        await axios.post('/api/research_posts', { ...this.state });  
 
         console.log(this.state);
         this.setState({
@@ -58,7 +59,7 @@ class AddPostForm extends React.Component {
         })
 
         this.props.onSubmit()
-    };
+    }
 
     onCancel = (e) => {
         e.preventDefault();
@@ -84,6 +85,11 @@ class AddPostForm extends React.Component {
     }
 
     render() {
+        if (!this.props.auth.isProfessor) {
+            this.props.history.push("/");
+            return "";
+        }
+
         return (
             <form>
                 <div className="field">
@@ -151,4 +157,4 @@ function mapStateToProps({auth}){
     return { auth };
 }
 
-export default connect(mapStateToProps)(AddPostForm);
+export default withRouter(connect(mapStateToProps)(AddPostForm));

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import axios from 'axios';
 import PostCard from './PostCard';
+import Spinner from './Spinner';
 
 class Home extends Component {
     
@@ -10,14 +11,41 @@ class Home extends Component {
         super(props);
         
         this.state = {
-            posts: []
+            posts: [],
+            loading: true
         }
     }
 
     componentDidMount() {
+        this.getPosts();
+    }
+
+    componentWillUpdate() {
+        if (!this.state.loading) {
+            this.getPosts();
+        }
+    }
+
+    getPosts() {
+        this.setState({
+            posts: this.state.posts,
+            loading: true
+        });
+
         axios.get("/api/research_posts?fill=true")
-        .then(response => {this.setState({posts: response.data});})
-        .catch(error => console.log(error));
+        .then(response => {
+            this.setState({ 
+                posts: response.data,
+                loading: false
+            });
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState({
+                posts: this.state.posts,
+                loading: true
+            });
+        });
     }
 
     formatPost() {
@@ -37,6 +65,10 @@ class Home extends Component {
     }
 
     render() {
+        if (this.state.loading) {
+            return <Spinner fullPage />;
+        }
+
         return(
             <section className="section">
             <div className="App">

@@ -27,8 +27,10 @@ router.get('/', (req, res) => {
     Research.find({})
       .sort({ date : -1  }).limit(9)
       .then(async research_posts => {
-        for (let i = 0; i < research_posts.length; i++) {
-          research_posts[i] = await fillResearchPost(research_posts[i]);
+        if (req.query.fill) {
+          for (let i = 0; i < research_posts.length; i++) {
+            research_posts[i] = await fillResearchPost(research_posts[i]);
+          }
         }
 
         res.send(research_posts);
@@ -67,8 +69,8 @@ router.post('/', (req, res) => {
 // @route DELETE api/research_posts/:id
 // @desc  Delete a research post
 // @access Public
-router.delete('/:id', (req, res) => {
-    Research.findById(req.params.id)
+router.delete('/', (req, res) => {
+    Research.findById(req.query.id)
         .then(research => research.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json({success: true}));
 });
