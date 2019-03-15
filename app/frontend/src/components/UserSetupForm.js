@@ -49,7 +49,7 @@ class UserSetupForm extends Component {
   }
 
   render() {
-    const { handleSubmit, pristine, submitting } = this.props;
+    const { handleSubmit, pristine, submitting, user } = this.props;
     return (
       <form
         name="userSetupForm"
@@ -65,15 +65,17 @@ class UserSetupForm extends Component {
               type="text"
               label="Display Name"
               validate={[required, name]}
+              value={user.name ? user.name : ""}
             />
             <Field
               name="setupBio"
               component={renderField}
               type="text"
               label="Summary"
+              value={user.bio ? user.bio : ""}
             />
           </div>
-          <div className="column is-5 is-offset-1">
+          <div className="column is-5 is-offset-1 has-text-centered">
             <div className="field">
               <label className="label">Profile Picture</label>
               <Field name="files" component={DropZoneField} type="file" />

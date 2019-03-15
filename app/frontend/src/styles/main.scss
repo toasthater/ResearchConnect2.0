@@ -288,3 +288,8 @@ $this-tile-size-lg: 25%;
 	width: 150px !important;
 	
 }
+
+.react-tabs__tab--selected {
+	background-color: $link;
+	color: #fff;
+}

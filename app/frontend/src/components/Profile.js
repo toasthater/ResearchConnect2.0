@@ -195,6 +195,7 @@ class Profile extends Component {
                       href={this.state.profile.resume}
                       className="button is-info"
                       target="_blank"
+                      rel="noopener noreferrer"
                       download={this.state.profile.name + "_Resume.pdf"}
                     >
                       Download Resume

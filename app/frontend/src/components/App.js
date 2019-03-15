@@ -89,9 +89,7 @@ class App extends Component {
               component={Applicants}
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}
-            />
-            {/* This is how you would use a PrivateRoute */}
-            {/* <PrivateRoute exact path="/about" component={About} loggedIn={this.props.auth} /> */}
+            />        
             <Route component={PageNotFound} />
             {this.props.auth ? <></> : <Redirect from="/*" to="/" />}
           </Switch>

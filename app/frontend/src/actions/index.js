@@ -9,7 +9,6 @@ import {
   UPDATE_RESUME,
   FETCH_POST,
   FETCH_DEPARTMENT,
-  LOAD_PROFILE,
   UPDATE_PROFILE
 } from "./types";
 
