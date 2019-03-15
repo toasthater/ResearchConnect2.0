@@ -7,7 +7,6 @@ export default function(state = null, action) {
     case UPDATE_RESUME:
       return action.payload ? action.payload : null;
     case UPDATE_PROFILE:
-      //return { ...state, profile: action.payload.profile } || null;
       return action.payload ? action.payload : null;
     default:
       return state;

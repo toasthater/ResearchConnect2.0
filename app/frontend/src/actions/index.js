@@ -164,7 +164,7 @@ export const fetchProfile = cruzid => async dispatch => {
 };
 
 export const updateProfile = profile => async dispatch => {
-  dispatch({ type: LOAD_PROFILE, payload: false });
+  dispatch({ type: PARTIAL_LOADING, payload: false });
 
   let res = await axios.post("/api/students/", profile, {
     params: {
@@ -176,7 +176,7 @@ export const updateProfile = profile => async dispatch => {
     type: UPDATE_PROFILE,
     payload: res.data
   });
-  dispatch({ type: LOAD_PROFILE, payload: true });
+  dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
 export const searchPosts = (type, query) => async dispatch => {
