@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import DropZoneField from "./DropZoneField";
+import { connect } from "react-redux";
+import * as actions from "../actions";
 
 const required = value => (value ? undefined : "Required");
 
@@ -49,7 +51,7 @@ class UserSetupForm extends Component {
   }
 
   render() {
-    const { handleSubmit, pristine, submitting, user } = this.props;
+    const { handleSubmit, pristine, submitting } = this.props;
     return (
       <form
         name="userSetupForm"
@@ -65,14 +67,14 @@ class UserSetupForm extends Component {
               type="text"
               label="Display Name"
               validate={[required, name]}
-              value={user.name ? user.name : ""}
+              value={this.props.auth.displayName ? this.props.auth.displayName : ""}
             />
             <Field
               name="setupBio"
               component={renderField}
               type="text"
               label="Summary"
-              value={user.bio ? user.bio : ""}
+              value={this.props.auth.bio ? this.props.auth.bio : ""}
             />
           </div>
           <div className="column is-5 is-offset-1 has-text-centered">
@@ -103,4 +105,8 @@ UserSetupForm = reduxForm({
   form: "userSetupForm"
 })(UserSetupForm);
 
-export default UserSetupForm;
+function mapStateToProps({ auth, profile }) {
+  return { auth, profile };
+}
+
+export default connect(mapStateToProps, actions)(UserSetupForm);

@@ -56,13 +56,10 @@ class Profile extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.props);
-    console.log(this.state);
+    // console.log(this.props);
+    // console.log(this.state);
   }
 
-  handleEditProfile() {
-    //return <Redirect from="/*" to="/home" />;
-  }
 
   uploadResume(resume) {
     this.props.uploadResume(resume);

@@ -72,14 +72,6 @@ class EditProfileForm extends Component {
                 rows={1}
                 validate={[required, name]}
               />
-              <Field
-                name="bio"
-                component={renderTextArea}
-                type="text"
-                label="Bio"
-                rows={5}
-                validate={this.required}
-              />
               <div className="field">
                 <div className="control">
                   <button
