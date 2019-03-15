@@ -72,7 +72,7 @@ class EditProfileForm extends Component {
                 rows={1}
                 validate={[required, name]}
               />
-              <div className="field">
+              <div className="field is-centered">
                 <div className="control">
                   <button
                     onClick={handleSubmit}
@@ -94,5 +94,6 @@ class EditProfileForm extends Component {
 EditProfileForm = reduxForm({
   form: "editProfileForm"
 })(EditProfileForm);
+
 
 export default EditProfileForm;

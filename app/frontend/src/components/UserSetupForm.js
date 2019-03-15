@@ -85,7 +85,7 @@ class UserSetupForm extends Component {
             </div>
           </div>
         </div>
-        <div className="field">
+        <div className="field is-centered">
           <div className="control">
             <button
               onClick={handleSubmit}

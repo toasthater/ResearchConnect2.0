@@ -26,6 +26,7 @@ class EditProfile extends Component {
     this.props.fetchProfile(this.props.auth.cruzid);
   }
 
+
   handleSubmitUser = values => {
     const body = {
         'id' : this.props.auth._id,
@@ -52,10 +53,10 @@ class EditProfile extends Component {
             </TabList>
 
             <TabPanel>
-              <UserSetupForm onSubmit={this.handleSubmitUser} user={this.props.auth} />
+              <UserSetupForm onSubmit={this.handleSubmitUser} user={this.props.auth} initialValues={{displayName:[this.props.auth.name], setupBio: [this.props.auth.bio]}} />
             </TabPanel>
             {!this.props.auth.isProfessor && (<TabPanel>
-              <EditProfileForm onSubmit={values => this.handleSubmit(values)} isProfessor={this.props.auth.isProfessor} />
+              {this.props.profile && <EditProfileForm onSubmit={values => this.handleSubmit(values)} isProfessor={this.props.auth.isProfessor}  initialValues={{major:[this.props.profile.major]}} />}
             </TabPanel>)}
             <TabPanel>
               <p>Not Yet Implemented.</p>
