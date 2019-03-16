@@ -11,6 +11,7 @@ const facultyMember = require('./routes/api/faculty_members');
 const search = require('./routes/api/search');
 const authRoutes = require("./routes/authRoutes");
 const setup = require('./routes/api/setup');
+const updateStudent = require('./routes/api/updateStudent');
 const users = require('./routes/api/users');
 const follow = require('./routes/api/follow');
 const studentMember = require("./routes/api/students");
@@ -53,6 +54,7 @@ app.use("/api/faculty_members", facultyMember);
 // app.use("/api/user", users);
 app.use("/api/students", studentMember);
 app.use('/api/setup', setup);
+app.use('/api/updateStudent', updateStudent);
 app.use("/api/resume", resume);
 app.use("/api/apply", require("./routes/api/applications"));
 

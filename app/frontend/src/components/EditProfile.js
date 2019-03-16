@@ -7,23 +7,12 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 
 class EditProfile extends Component {
-  handleSubmit(formData) {
-    console.log(formData);
-    let newProfile = {
-      cruzid: this.props.auth.cruzid,
-      name: formData.displayName,
-      bio: formData.bio
-    };
-
-    this.props.updateUser(newProfile);
-
-    let newMajor = {
-      cruzid: this.props.auth.cruzid,
-      major: formData.major
-    };
-
-    this.props.updateProfile(newMajor);
-    this.props.fetchProfile(this.props.auth.cruzid);
+  handleSubmitStudent(formData) {
+    const data = {
+      "profile_id": this.props.profile._id,
+      "major": formData.major
+    }
+    this.props.updateProfile(data);
   }
 
 
@@ -56,7 +45,7 @@ class EditProfile extends Component {
               <UserSetupForm onSubmit={this.handleSubmitUser} user={this.props.auth} initialValues={{displayName:[this.props.auth.name], setupBio: [this.props.auth.bio]}} />
             </TabPanel>
             {!this.props.auth.isProfessor && (<TabPanel>
-              {this.props.profile && <EditProfileForm onSubmit={values => this.handleSubmit(values)} isProfessor={this.props.auth.isProfessor}  initialValues={{major:[this.props.profile.major]}} />}
+              {this.props.profile && <EditProfileForm onSubmit={values => this.handleSubmitStudent(values)} isProfessor={this.props.auth.isProfessor}  initialValues={{major:[this.props.profile.major]}} />}
             </TabPanel>)}
             <TabPanel>
               <p>Not Yet Implemented.</p>
