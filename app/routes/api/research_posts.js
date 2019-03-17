@@ -62,7 +62,27 @@ router.post('/', (req, res) => {
         deadline: req.body.deadline
       });
 
-    researchPost.save().then(research => res.json(research));
+      if (req.body._id) {
+        Research.findByIdAndUpdate(req.body._id, { $set: {
+          title: researchPost.title,
+          owner: researchPost.owner,
+          tags: researchPost.tags,
+          summary: researchPost.summary,
+          description: researchPost.description,
+          department: researchPost.department,
+          status: researchPost.status,
+          deadline: researchPost.deadline
+        }}, (err, research) => {
+          if (err) {
+            console.log(err);
+            res.send(err);
+          } else {
+            res.send(research);
+          }
+        });
+      } else {
+        researchPost.save().then(research => res.json(research));
+      }
     });
 });
 

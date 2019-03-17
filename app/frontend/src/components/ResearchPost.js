@@ -50,6 +50,15 @@ class ResearchPost extends Component {
       alert("Failed to delete post");
     });
   }
+
+  handleEdit() {
+    if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
+      return;
+    }
+
+    this.props.savePost(this.state.post);
+    this.props.history.push("/new");
+  }
   
   render() {
     if (this.state.post !== null && this.state.post.title === undefined) {
@@ -94,6 +103,8 @@ class ResearchPost extends Component {
                 (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>) : ""}
               {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ? 
                 (<button className="button is-success" onClick={() => this.handleDelete()}>Delete</button>) : ""}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ? 
+                (<button className="button is-success" onClick={() => this.handleEdit()} style={{ marginLeft: "1em" }}>Edit</button>) : ""}
               </div>
 
           </div>

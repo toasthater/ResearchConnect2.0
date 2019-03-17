@@ -9,7 +9,8 @@ import {
   UPDATE_RESUME,
   FETCH_POST,
   FETCH_DEPARTMENT,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  POST_DATA
 } from "./types";
 
 export const fetchUser = () => async dispatch => {
@@ -92,6 +93,10 @@ export const fetchPost = (id, spinner) => async dispatch => {
 export const fetchPosts = () => async dispatch => {
   const res = await axios.get("/api/research_posts");
   return res.data;
+};
+
+export const savePost = post => async dispatch => {
+  dispatch({ type: POST_DATA, payload: post });
 };
 
 export const fetchDepartment = id => async dispatch => {

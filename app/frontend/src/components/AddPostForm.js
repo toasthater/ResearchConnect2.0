@@ -31,6 +31,24 @@ class AddPostForm extends React.Component {
         owner: this.props.auth.cruzid,
     }
 
+    componentDidMount() {
+        if (this.props.post && this.props.post.owner.cruzid === this.props.auth.cruzid) {
+            this.setState({
+                _id: this.props.post._id,
+                title: this.props.post.title,
+                tags: this.props.post.tags,
+                summary: this.props.post.summary,
+                description: this.props.post.description,
+                department: {
+                    label: this.props.post.department.name,
+                    value: this.props.post.department._id
+                },
+                deadline: new Date(this.props.post.deadline),
+                owner: this.props.post.owner.cruzid
+            });
+        }
+    }
+
     change = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -134,7 +152,7 @@ class AddPostForm extends React.Component {
                     <div className="control">
                         <Calendar
                             onChange={this.onChange}
-                            value={this.state.date}
+                            value={this.state.deadline}
                         />
                         {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
                     </div>
@@ -153,8 +171,8 @@ class AddPostForm extends React.Component {
     }
 }
 
-function mapStateToProps({auth}){
-    return { auth };
+function mapStateToProps({ auth, post }){
+    return { auth, post };
 }
 
 export default withRouter(connect(mapStateToProps)(AddPostForm));
