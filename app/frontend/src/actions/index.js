@@ -38,8 +38,13 @@ export const updateUser = body => async dispatch => {
     data: formData,
     config: { headers: { "Content-Type": "multipart/form-data" } }
   });
-  await dispatch({ type: SETUP_USER, payload: res.data });
-  await dispatch({ type: FETCH_USER, payload: res.data });
+
+  try {
+    const res = await axios.get("/api/current_user");
+    await dispatch({ type: FETCH_USER, payload: res.data });
+  } catch {
+    await dispatch({ type: FETCH_USER, payload: false });
+  }
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
