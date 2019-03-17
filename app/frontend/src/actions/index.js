@@ -38,7 +38,8 @@ export const updateUser = body => async dispatch => {
     data: formData,
     config: { headers: { "Content-Type": "multipart/form-data" } }
   });
-  dispatch({ type: SETUP_USER, payload: res.data });
+  await dispatch({ type: SETUP_USER, payload: res.data });
+  await dispatch({ type: FETCH_USER, payload: res.data });
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
