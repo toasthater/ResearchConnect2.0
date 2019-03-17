@@ -13,8 +13,7 @@ class Profile extends Component {
       this.state = {
         cruzid: this.props.match.params.cruzid,
         profileLoaded: true,
-        profile: this.props.auth,
-        professor: false
+        profile: this.props.auth
       };
     } else {
       this.state = {
@@ -22,8 +21,7 @@ class Profile extends Component {
         profileLoaded: false,
         profile: null,
         following: false,
-        isFollowDisabled: false,
-        professor: null
+        isFollowDisabled: false
       };
     }
 
@@ -37,49 +35,23 @@ class Profile extends Component {
       .catch(error => console.log(error));
 
     if (props.match.params.cruzid !== props.auth.cruzid) {
-      if (this.props.profile === null) {
-        axios
-          .get("/api/faculty_members/", {
-            params: {
-              cruzid: this.props.match.params.cruzid
-            }
+      axios
+        .get("/api/users/", {
+          params: {
+            cruzid: this.props.match.params.cruzid
+          }
+        })
+        .then(response =>
+          this.setState({
+            profileLoaded: true,
+            profile: response.data,
+            isFollowDisabled: false,
+            following:
+              this.props.auth.following &&
+              this.props.auth.following.includes(this.props.match.params.cruzid)
           })
-          .then(response =>
-            this.setState({
-              professor: true,
-              profileLoaded: true,
-              profile: response.data,
-              isFollowDisabled: false,
-              following:
-                this.props.auth.following &&
-                this.props.auth.following.includes(
-                  this.props.match.params.cruzid
-                )
-            })
-          )
-          .catch(error => console.log(error));
-      } else {
-        axios
-          .get("/api/users/", {
-            params: {
-              cruzid: this.props.match.params.cruzid
-            }
-          })
-          .then(response =>
-            this.setState({
-              professor: false,
-              profileLoaded: true,
-              profile: response.data,
-              isFollowDisabled: false,
-              following:
-                this.props.auth.following &&
-                this.props.auth.following.includes(
-                  this.props.match.params.cruzid
-                )
-            })
-          )
-          .catch(error => console.log(error));
-      }
+        )
+        .catch(error => console.log(error));
     }
   }
 
@@ -87,6 +59,7 @@ class Profile extends Component {
     // console.log(this.props);
     // console.log(this.state);
   }
+
 
   uploadResume(resume) {
     this.props.uploadResume(resume);
@@ -158,35 +131,47 @@ class Profile extends Component {
                   )}
                 </div>
                 <div className="box">
-                  {this.state.profile != null && this.state.professor === false && (
-                    (<h1>{this.state.profile.email ? (<p>{this.state.profile.email}</p>) : (<p>No email listed</p>)}</h1>)
-                  )}
-                  {this.state.profile != null && this.state.professor === true && (
-                    (<h1>{this.state.profile.title ? (<p>{this.state.profile.title}</p>) : (<p>No title listed</p>)}</h1>)
+                  {this.state.profile != null && (
+                    <h1>
+                      {" "}
+                      {this.state.profile.email ? (
+                        <p>{this.state.profile.email}</p>
+                      ) : (
+                        <p>No Email Listed</p>
+                      )}{" "}
+                    </h1>
                   )}
                 </div>
               </div>
 
               <div className="column" align="center">
                 <div className="box">
-                  {this.state.profile != null && this.state.professor === false && (
-                    (<h1>{this.state.profile.major ? (<p>{this.state.profile.major}</p>) : (<p>No major listed</p>)}</h1>)
-                  )}
-                  {this.state.profile != null && this.state.professor === true && (
-                    (<h1>{this.state.profile.department ? (<p>{this.state.profile.department}</p>) : (<p>No department listed</p>)}</h1>)
+                  {this.state.major != null && (
+                    <h1>
+                      {" "}
+                      {this.state.major ? (
+                        <p>{this.state.major}</p>
+                      ) : (
+                        <p>No Major Listed</p>
+                      )}{" "}
+                    </h1>
                   )}
                 </div>
               </div>
 
               <div className="column" align="left">
                 <div className="box">
-
-                  {this.state.profile != null && this.state.professor === false && (
-                    (<h1>{this.state.profile.bio ? (<p>{this.state.profile.bio}</p>) : (<p>No bio listed</p>)}</h1>)
+                  Bio:
+                  {this.state.profile != null && (
+                    <div>
+                      {" "}
+                      {this.state.profile.bio ? (
+                        <p>{this.state.profile.bio}</p>
+                      ) : (
+                        <p>No Available Bio</p>
+                      )}{" "}
+                    </div>
                   )}
-                  {/*{this.state.profile != null && this.state.professor === true && (
-                    (<h1>{this.state.profile.research ? (<p>{this.state.profile.research}</p>) : (<p>No research listed</p>)}</h1>)
-                  )}*/}
                 </div>
               </div>
 
