@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import Tags from './Tags';
+import { Textbox, Textarea, Radiobox, Checkbox, input } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 
 var rawDepartmentList;
@@ -20,6 +22,7 @@ function populateList(list){
     }
 }
 
+
 class AddPostForm extends React.Component { 
     state = {
         title: '',
@@ -29,6 +32,7 @@ class AddPostForm extends React.Component {
         department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
         deadline: new Date(),
         owner: this.props.auth.cruzid,
+        valid: false,
     }
 
     componentDidMount() {
@@ -44,7 +48,7 @@ class AddPostForm extends React.Component {
                     value: this.props.post.department._id
                 },
                 deadline: new Date(this.props.post.deadline),
-                owner: this.props.post.owner.cruzid
+                owner: this.props.post.owner.cruzid,
             });
         }
     }
@@ -61,22 +65,39 @@ class AddPostForm extends React.Component {
         })
     };
 
+    validate() {
+        const {
+            title,
+            summary,
+            description
+          } = this.state;
+        if(/\S/.test(title) && /\S/.test(summary) && /\S/.test(description))
+            this.setState({
+                valid:true
+            })
+      }
+
     async onSubmit(e) {
         e.preventDefault();
-        await axios.post('/api/research_posts', { ...this.state });  
+        await this.validate()
+        if (this.state.valid == true){
+            await axios.post('/api/research_posts', { ...this.state }); 
+            console.log(this.state);
+            this.setState({
+                title: '',
+                tags: [],
+                summary: '',
+                description: '',
+                department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
+                deadline: new Date(),
+                owner: this.props.auth.cruzid,
+                valid: false,
+            })
 
-        console.log(this.state);
-        this.setState({
-            title: '',
-            tags: [],
-            summary: '',
-            description: '',
-            department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
-            deadline: new Date(),
-            owner: this.props.auth.cruzid,
-        })
-
-        this.props.onSubmit()
+            this.props.onSubmit()
+        }
+        else
+            alert('Title, Summary and Description are required fields.');
     }
 
     onCancel = (e) => {
@@ -89,6 +110,7 @@ class AddPostForm extends React.Component {
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
             owner: this.props.auth.cruzid,
+            valid:false
         })
 
         this.props.onSubmit()
@@ -109,61 +131,63 @@ class AddPostForm extends React.Component {
         }
 
         return (
-            <form>
-                <div className="field">
-                    <label className="label">Title</label>
-                    <div className="control">
-                        <input name="title" className="input" type="text" placeholder="Title" value={this.state.title} onChange={e => this.change(e)}></input>
-                    </div>
-                </div>
-
-                <div className="field">
-                    <label className="label">Department</label>
-                    <div className="control">
-                        <div className="Select">
-                            <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)} />                        
+            <form >
+                <div className="container" style={{ width: 768 , marginTop: "5em" }}>
+                    <div className="field" align="center">
+                        <label className="label">Title</label>
+                        <div className="control">
+                            <input name="title" className="input" type="text" maxLength="50" placeholder="Title, 50 char limit" value={this.state.title} onChange={e => this.change(e)}></input>
                         </div>
                     </div>
-                </div>
 
-                <div className="field">
-                    <label className="label">Summary</label>
-                    <div className="control">
-                        <textarea name="summary" className="textarea" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)}></textarea>
+                    <div className="field" align="center">
+                        <label className="label">Department</label>
+                        <div className="control">
+                            <div className="Select">
+                                <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)}/>                        
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div className="field">
-                    <label className="label">Description</label>
-                    <div className="control">
-                        <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)}></textarea>
+                    <div className="field" align="center">
+                        <label className="label">Summary</label>
+                        <div className="control">
+                            <textarea name="summary" className="textarea" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)}></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <div className="field">
-                    <label className="label">Tags</label>
-                    <div className="control">
-                       <Tags tagsChange={this.tagsChange} />
+                    <div className="field" align="center">
+                        <label className="label">Description</label>
+                        <div className="control">
+                            <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)}></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <div className="field">
-                    <label className="label">Deadline</label>
-                    <div className="control">
-                        <Calendar
-                            onChange={this.onChange}
-                            value={this.state.deadline}
-                        />
-                        {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
+                    <div className="field" align="center">
+                        <label className="label">Tags</label>
+                        <div className="control">
+                        <Tags tagsChange={this.tagsChange} />
+                        </div>
                     </div>
-                </div>
 
-                <div className="field is-grouped">
-                    <div className="control">
-                        <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                    <div className="field" align="center">
+                        <label className="label">Deadline</label>
+                        <div  align="center">
+                            <Calendar 
+                                onChange={this.onChange}
+                                value={this.state.deadline}
+                            />
+                            {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
+                        </div>
                     </div>
-                    <div className="control">
-                        <button onClick={e => this.onCancel(e)} className="button is-link">Cancel</button>
+
+                    <div className="columns" align="center">
+                        <div className="column">
+                            <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                        </div>
+                        <div className="column"> 
+                            <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </form>
