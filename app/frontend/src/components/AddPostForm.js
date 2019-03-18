@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import Tags from './Tags';
-
+import * as actions from '../actions';
 
 var rawDepartmentList;
 const departmentList = [];
@@ -46,6 +46,8 @@ class AddPostForm extends React.Component {
                 deadline: new Date(this.props.post.deadline),
                 owner: this.props.post.owner.cruzid
             });
+
+            this.props.savePost(null);
         }
     }
 
@@ -175,4 +177,4 @@ function mapStateToProps({ auth, post }){
     return { auth, post };
 }
 
-export default withRouter(connect(mapStateToProps)(AddPostForm));
+export default withRouter(connect(mapStateToProps, actions)(AddPostForm));
