@@ -5,9 +5,6 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import Tags from './Tags';
-import { Textbox, Textarea, Radiobox, Checkbox, input } from 'react-inputs-validation';
-import 'react-inputs-validation/lib/react-inputs-validation.min.css';
-
 
 var rawDepartmentList;
 const departmentList = [];

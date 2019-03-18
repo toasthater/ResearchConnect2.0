@@ -15,7 +15,6 @@
     "react-calendar": "^2.18.1",
     "react-dom": "^16.7.0",
     "react-dropzone": "^8.1.0",
-    "react-inputs-validation": "^2.2.0",
     "react-lazy-hero": "^2.0.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
