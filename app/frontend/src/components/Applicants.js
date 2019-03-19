@@ -56,6 +56,10 @@ class Applicants extends Component {
       }
 
       const data = this.state.post.applicants;
+
+      if (data === null || data.length === 0)
+        return (<div className="has-text-centered"><br /><br />No Applicants</div>);
+
       const listItems = data.map((d) => {
         if (d.status === 'pending') {
           return (
