@@ -126,7 +126,12 @@ class AddPostForm extends React.Component {
         
     }
 
+    getTags = () => {
+        return this.state.tags
+    }
+
     render() {
+        console.log(this.state)
         if (!this.props.auth.isProfessor) {
             this.props.history.push("/");
             return "";
@@ -168,7 +173,7 @@ class AddPostForm extends React.Component {
                     <div className="field" align="center">
                         <label className="label">Tags</label>
                         <div className="control">
-                        <Tags tagsChange={this.tagsChange} />
+                        <Tags getTags={this.getTags} tagsChange={this.tagsChange} />
                         </div>
                     </div>
 

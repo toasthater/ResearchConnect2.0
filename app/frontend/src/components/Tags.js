@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 const ENTER_KEY = 13;
 const COMMA_KEY = 188;
@@ -7,8 +8,14 @@ const BACKSPACE_KEY = 8;
 
 class Tags extends React.Component {
   constructor(props) {
+    console.log(props)
     super(props);
-    this.state = { tags: [], value: "" };
+    var temp = [];
+    if (this.props.post) {
+      temp = this.props.post.tags
+    }
+
+    this.state = { tags: temp, value: "", props: props };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -16,6 +23,7 @@ class Tags extends React.Component {
   }
 
   handleChange(e) {
+    console.log(this.state)
     this.setState({
       value: e.target.value
     });
@@ -96,5 +104,9 @@ class Tags extends React.Component {
   }
 }
 
-export default Tags;
+function mapStateToProps({post}){
+  return { post };
+}
+
+export default connect(mapStateToProps, null)(Tags);
 
