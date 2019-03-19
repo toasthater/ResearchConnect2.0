@@ -40,7 +40,7 @@ class DropZoneField extends Component {
         return (
           <div className="image shadowed" style={{ height: 256, width: 256, background: 'white' }}>
           <ReactDropzone
-                accept="image/jpeg, image/png"
+                accept="image/jpeg, image/png, image/jpg"
                 className="upload-container"
                 onDrop={this.onDrop}
                 multiple={false}>

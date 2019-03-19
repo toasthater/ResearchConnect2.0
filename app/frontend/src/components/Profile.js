@@ -176,7 +176,7 @@ class Profile extends Component {
               </div>
 
               <div className="column" align="center">
-                {myProfile && (
+                {myProfile && this.props.auth && !this.props.auth.isProfessor && (
                   <div className="box">
                     <div>
                       <p>Upload Resume:</p>
@@ -186,7 +186,7 @@ class Profile extends Component {
                     </div>
                   </div>
                 )}
-                {this.state.profile.resume && (
+                {this.state.profile.resume && this.props.auth && !this.props.auth.isProfessor && (
                   <div>
                     <a
                       href={this.state.profile.resume}

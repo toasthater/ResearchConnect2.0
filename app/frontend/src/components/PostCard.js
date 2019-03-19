@@ -22,7 +22,7 @@ class PostCard extends PureComponent {
                             <div className="media">
                                 <div className="media-content">
                                     <p className="title is-5">{post.name}</p>
-                                    <Link className="subtitle is-6" to={post.ownerProfile}>{post.professor}</Link>
+                                    <Link className="subtitle is-6 has-text-link" to={post.ownerProfile}>{post.professor}</Link>
                                 </div>
                             </div>
                             

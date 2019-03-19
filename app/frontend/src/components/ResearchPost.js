@@ -87,7 +87,7 @@ class ResearchPost extends Component {
               {this.state.post.description}
             </div>
 
-            <div className="box" style={{ background: "#DDDDDD" }}>
+            <div className="box" style={{ background: "#DDDDDD", display: "grid" }}>
             {this.state.post.tags.map(tag => (<span className="tag is-medium" key={tag}>{tag}</span>))}
             </div>
           </div>
@@ -101,7 +101,7 @@ class ResearchPost extends Component {
           </div>
 
           <div className="column" align="center">
-            <div className="box" style={{ background: "#DDDDDD" }}>
+            <div className="box" style={{ background: "#DDDDDD"}}>
               {this.state.post.department.name}
             </div>
             <br />

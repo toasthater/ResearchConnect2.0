@@ -159,7 +159,7 @@ class AddPostForm extends React.Component {
                     <div className="field" align="center">
                         <label className="label">Summary</label>
                         <div className="control">
-                            <textarea name="summary" className="textarea" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)}></textarea>
+                            <input type="text" name="summary" className="input" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)}></input>
                         </div>
                     </div>
 

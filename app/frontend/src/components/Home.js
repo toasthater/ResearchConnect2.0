@@ -44,7 +44,7 @@ class Home extends Component {
             console.log(error);
             this.setState({
                 posts: this.state.posts,
-                loading: true
+                loading: false
             });
         });
     }
