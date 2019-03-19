@@ -12,16 +12,17 @@ class Home extends Component {
         
         this.state = {
             posts: [],
-            loading: true
+            loading: false
         }
     }
 
     componentDidMount() {
+        this.setState({loading: true});
         this.getPosts();
     }
 
-    componentWillUpdate() {
-        if (!this.state.loading) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.posts.length !== this.state.posts.length) {
             this.getPosts();
         }
     }
@@ -37,7 +38,7 @@ class Home extends Component {
             this.setState({ 
                 posts: response.data,
                 loading: false
-            });
+            }, () => console.log(this.state.loading));
         })
         .catch(error => {
             console.log(error);

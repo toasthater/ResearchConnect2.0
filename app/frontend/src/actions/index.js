@@ -5,7 +5,6 @@ import {
   PARTIAL_LOADING,
   SEARCH,
   FETCH_PROFILE,
-  SETUP_USER,
   UPDATE_RESUME,
   FETCH_POST,
   FETCH_DEPARTMENT,
@@ -33,7 +32,7 @@ export const updateUser = body => async dispatch => {
   formData.append("filename", body.filename);
   if (body.files != null) formData.append("file", body.files);
 
-  const res = await axios({
+  await axios({
     method: "post",
     url: "/api/setup/",
     data: formData,
@@ -153,7 +152,7 @@ export const fetchStudent = cruzid => async dispatch => {
 };
 
 export const fetchProfile = cruzid => async dispatch => {
-  //dispatch({ type: LOAD_PROFILE, payload: true });
+  // dispatch({ type: LOAD_PROFILE, payload: true });
 
   let res = await axios.get("/api/students/", {
     params: {
@@ -161,13 +160,14 @@ export const fetchProfile = cruzid => async dispatch => {
     }
   });
 
-  if (res.data.name == null) {
+  if (res.data.cruzid == null) {
     res = await axios.get("/api/faculty_members/", {
       params: {
         cruzid: cruzid
       }
     });
   }
+
 
   dispatch({ type: FETCH_PROFILE, payload: res.data });
   //dispatch({ type: LOAD_PROFILE, payload: false });

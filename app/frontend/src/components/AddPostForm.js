@@ -80,7 +80,7 @@ class AddPostForm extends React.Component {
     async onSubmit(e) {
         e.preventDefault();
         await this.validate()
-        if (this.state.valid == true){
+        if (this.state.valid === true){
             await axios.post('/api/research_posts', { ...this.state }); 
             console.log(this.state);
             this.setState({
