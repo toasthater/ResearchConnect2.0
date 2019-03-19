@@ -54,6 +54,7 @@ router.post('/', (req, res) => {
       const researchPost = new Research({
         title: req.body.title,
         owner: data._id,
+        cruzid: req.body.cruzid,
         tags: req.body.tags,
         summary: req.body.summary,
         description: req.body.description,
@@ -66,6 +67,7 @@ router.post('/', (req, res) => {
         Research.findByIdAndUpdate(req.body._id, { $set: {
           title: researchPost.title,
           owner: researchPost.owner,
+          cruzid: researchPost.cruzid,
           tags: researchPost.tags,
           summary: researchPost.summary,
           description: researchPost.description,

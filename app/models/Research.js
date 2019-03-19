@@ -12,6 +12,7 @@ const ResearchSchema = new Schema({
         ref: 'faculty_members',
         required: true
     }, 
+    cruzid: String,
     created: {
         type: Date,
         default: Date.now

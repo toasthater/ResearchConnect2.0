@@ -91,6 +91,7 @@ class AddPostForm extends React.Component {
                 department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
                 deadline: new Date(),
                 owner: this.props.auth.cruzid,
+                cruzid: this.props.auth.cruzid,
                 valid: false,
             })
 
@@ -110,6 +111,7 @@ class AddPostForm extends React.Component {
             department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
             deadline: new Date(),
             owner: this.props.auth.cruzid,
+            cruzid: this.props.auth.cruzid,
             valid:false
         })
 
@@ -182,11 +184,11 @@ class AddPostForm extends React.Component {
                     </div>
 
                     <div className="columns" align="center">
-                        <div className="column">
-                            <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
-                        </div>
                         <div className="column"> 
                             <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
+                        </div>
+                        <div className="column">
+                            <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
                         </div>
                     </div>
                 </div>
