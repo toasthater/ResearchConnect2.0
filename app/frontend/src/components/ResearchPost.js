@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
 import * as actions from "../actions";
 import qs from "query-string";
 import axios from 'axios';
@@ -88,9 +89,11 @@ class ResearchPost extends Component {
           </div>
 
           <div className="column" align="center">
-            <div className="box" style={{ background: "#DDDDDD" }}>
-              {this.state.post.owner.name}
-            </div>
+            <Link to={"/profile/" + this.state.post.owner.cruzid}>
+              <div className="box" style={{ background: "#DDDDDD" }}>
+                {this.state.post.owner.name}
+              </div>
+            </Link>
           </div>
 
           <div className="column" align="center">
