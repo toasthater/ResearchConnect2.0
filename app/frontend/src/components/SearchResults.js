@@ -30,7 +30,8 @@ class SearchResults extends Component {
                 professor: post.owner.name,
                 tags: post.tags,
                 summary: post.summary,
-                department: post.department.name
+                department: post.department.name,
+                ownerProfile: "/profile/" + post.owner.cruzid
             }} />))}
         </div>)
     }
