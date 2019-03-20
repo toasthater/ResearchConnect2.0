@@ -13,23 +13,23 @@ const name = value =>
     ? "Invalid Name"
     : undefined;
 
-const renderTextArea = ({
-  input,
-  label,
-  type,
-  rows,
-  meta: { touched, error, warning }
-}) => (
-    <div className="field">
-      <label className="label">{label}</label>
-      <div className="control">
-        <textarea {...input} placeholder={label} type={type} rows={rows} className="textarea" style={{ resize: "none", width: "100%" }} />
-        {touched &&
-          ((error && <p className="help is-danger">{error}</p>) ||
-            (warning && <p className="help is-warning">{warning}</p>))}
-      </div>
-    </div>
-  );
+// const renderTextArea = ({
+//   input,
+//   label,
+//   type,
+//   rows,
+//   meta: { touched, error, warning }
+// }) => (
+//     <div className="field">
+//       <label className="label">{label}</label>
+//       <div className="control">
+//         <textarea {...input} placeholder={label} type={type} rows={rows} className="textarea" style={{ resize: "none", width: "100%" }} />
+//         {touched &&
+//           ((error && <p className="help is-danger">{error}</p>) ||
+//             (warning && <p className="help is-warning">{warning}</p>))}
+//       </div>
+//     </div>
+//   );
 
 const renderField = ({
   input,
