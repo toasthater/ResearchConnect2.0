@@ -6,6 +6,7 @@ import ResumeForm from "./ResumeForm";
 import axios from "axios";
 
 class Profile extends Component {
+
   constructor(props) {
     super(props);
 
@@ -25,13 +26,49 @@ class Profile extends Component {
       };
     }
 
-    axios
-      .get("/api/students/", {
-        params: {
-          cruzid: this.props.match.params.cruzid
+    axios.get("/api/users/", {
+      params: {
+        cruzid: this.props.match.params.cruzid
+      }
+    })
+      .then(response => {
+        if (response.data.isProfessor === true) {
+          console.log("Fetching Professor Profile...")
+
+          axios.get("/api/faculty_members/", {
+            params: {
+              cruzid: this.props.match.params.cruzid
+            }
+          })
+            .then(response => {
+              console.log(response.data)
+              this.setState({
+                professor: response.data,
+                major: response.data.department,
+                isProfessor: true
+              })
+            })
+            .catch(error => console.log(error));
+        }
+        else {
+          console.log("Fetching Student Profile...")
+
+          axios.get("/api/students/", {
+            params: {
+              cruzid: this.props.match.params.cruzid
+            }
+          })
+            .then(response => {
+              console.log(response.data)
+              this.setState({
+                student: response.data,
+                major: response.data.major,
+                isProfessor: false
+              })
+            })
+            .catch(error => console.log(error));
         }
       })
-      .then(response => this.setState({ major: response.data.major }))
       .catch(error => console.log(error));
 
     if (props.match.params.cruzid !== props.auth.cruzid) {
@@ -54,12 +91,6 @@ class Profile extends Component {
         .catch(error => console.log(error));
     }
   }
-
-  componentDidUpdate() {
-    // console.log(this.props);
-    // console.log(this.state);
-  }
-
 
   uploadResume(resume) {
     this.props.uploadResume(resume);
@@ -125,51 +156,60 @@ class Profile extends Component {
                     <br />
                   </div>
                 )}
+
                 <div className="box is-danger">
                   {this.state.profile != null && (
                     <p> {this.state.profile.name} </p>
                   )}
                 </div>
+
                 <div className="box">
                   {this.state.profile != null && (
                     <h1>
-                      {" "}
-                      {this.state.profile.email ? (
-                        <p>{this.state.profile.email}</p>
-                      ) : (
-                        <p>No Email Listed</p>
-                      )}{" "}
+                      {this.state.profile.email ? (<p>{this.state.profile.email}</p>) : (<p>No Email Listed</p>)}
                     </h1>
                   )}
                 </div>
               </div>
 
-              <div className="column" align="center">
-                <div className="box">
-                  {this.state.major != null && (
-                    <h1>
-                      {" "}
-                      {this.state.major ? (
-                        <p>{this.state.major}</p>
-                      ) : (
-                        <p>No Major Listed</p>
-                      )}{" "}
-                    </h1>
-                  )}
+              {this.state.isProfessor === true && (
+                <div className="box" align="center">
+                  <h1>
+                    {this.state.professor.department ? (<p>{this.state.professor.department + " Department"}</p>) : (<p>No Department Listed</p>)}
+                  </h1>
                 </div>
-              </div>
+              )}
+
+              {this.state.isProfessor === true && (
+                <div className="box" align="center">
+                  <h1>
+                    {this.state.professor.phone ? (<p>{this.state.professor.phone}</p>) : (<p>No Phone Number Listed</p>)}
+                  </h1>
+                </div>
+              )}
+
+              {this.state.isProfessor === true && (
+                <div className="box" align="center">
+                  <h1>
+                    {this.state.professor.title ? (<p>{"Title: " + this.state.professor.title}</p>) : (<p>No Title Listed</p>)}
+                  </h1>
+                </div>
+              )}
+
+              {this.state.isProfessor === false && (
+                <div className="box" align="center">
+                  <h1>
+                    {this.state.student.major ? (<p>{this.state.student.major + " Major"}</p>) : (<p>No Major Listed</p>)}
+                  </h1>
+                </div>
+              )}
 
               <div className="column" align="left">
                 <div className="box">
                   Bio:
                   {this.state.profile != null && (
                     <div>
-                      {" "}
-                      {this.state.profile.bio ? (
-                        <p>{this.state.profile.bio}</p>
-                      ) : (
-                        <p>No Available Bio</p>
-                      )}{" "}
+                      {this.state.profile.bio ? (<p>{this.state.profile.bio}</p>) : (<p>No Available Bio</p>)}
                     </div>
                   )}
                 </div>
