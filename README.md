@@ -22,7 +22,7 @@
   <a href="#install">Install</a> •
   <a href="#install">Run</a> •
   <a href="#deploy">Deploy</a> •
-  <a href="#api-used">API Used</a> 
+  <a href="#api-used">API Used</a> •
   <a href="#credits">Credits</a> •
   <a href="#license">Authors</a>
 </p>
@@ -69,6 +69,7 @@ This software uses the following open source packages:
 * **Harpreet Singh**
 * **Sean Riley**
 * **Gene Choi**
+* **Manthan Mallikarjun**
 
 
 
