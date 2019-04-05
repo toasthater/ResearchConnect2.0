@@ -1,20 +1,18 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
-import DropZoneField from "./DropZoneField";
-import { connect } from "react-redux";
-import * as actions from "../actions";
+import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import DropZoneField from './DropZoneField';
+import * as actions from '../actions';
 
-const required = value => (value ? undefined : "Required");
+const required = value => (value ? undefined : 'Required');
 
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+const maxLength = max => value => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 
 const maxLength15 = maxLength(15);
 
-const name = value =>
-  value && maxLength15 && !/^[a-zA-Z ]+$/.test(value)
-    ? "Invalid Name"
-    : undefined;
+const name = value => (value && maxLength15 && !/^[a-zA-Z ]+$/.test(value)
+  ? 'Invalid Name'
+  : undefined);
 
 // const renderTextArea = ({input, label, meta: { touched, error, warning }}) => (
 //     <div className="field">
@@ -30,15 +28,15 @@ const renderField = ({
   input,
   label,
   type,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
 }) => (
   <div className="field">
     <label className="label">{label}</label>
     <div className="control">
       <input {...input} placeholder={label} type={type} className="input" />
-      {touched &&
-        ((error && <p className="help is-danger">{error}</p>) ||
-          (warning && <p className="help is-warning">{warning}</p>))}
+      {touched
+        && ((error && <p className="help is-danger">{error}</p>)
+          || (warning && <p className="help is-warning">{warning}</p>))}
     </div>
   </div>
 );
@@ -67,14 +65,14 @@ class UserSetupForm extends Component {
               type="text"
               label="Display Name"
               validate={[required, name]}
-              value={this.props.auth.displayName ? this.props.auth.displayName : ""}
+              value={this.props.auth.displayName ? this.props.auth.displayName : ''}
             />
             <Field
               name="setupBio"
               component={renderField}
               type="text"
               label="Summary"
-              value={this.props.auth.bio ? this.props.auth.bio : ""}
+              value={this.props.auth.bio ? this.props.auth.bio : ''}
             />
           </div>
           <div className="column is-5 is-offset-1 has-text-centered">
@@ -102,7 +100,7 @@ class UserSetupForm extends Component {
 }
 
 UserSetupForm = reduxForm({
-  form: "userSetupForm"
+  form: 'userSetupForm',
 })(UserSetupForm);
 
 function mapStateToProps({ auth, profile }) {
