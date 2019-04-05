@@ -15,8 +15,8 @@ class PostCard extends PureComponent {
                 <div className="card-img-top">
                   <div className="circle">
                     <div>
-                          <DepartmentImage type={post.type} />
-                        </div>
+                      <DepartmentImage type={post.type} />
+                    </div>
                   </div>
                 </div>
                 <div className="media">

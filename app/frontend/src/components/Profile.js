@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import profileImg from "../assets/profile.png";
-import * as actions from "../actions";
-import ResumeForm from "./ResumeForm";
-import axios from "axios";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import profileImg from '../assets/profile.png';
+import * as actions from '../actions';
+import ResumeForm from './ResumeForm';
 
 class Profile extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Profile extends Component {
       this.state = {
         cruzid: this.props.match.params.cruzid,
         profileLoaded: true,
-        profile: this.props.auth
+        profile: this.props.auth,
       };
     } else {
       this.state = {
@@ -21,36 +21,34 @@ class Profile extends Component {
         profileLoaded: false,
         profile: null,
         following: false,
-        isFollowDisabled: false
+        isFollowDisabled: false,
       };
     }
 
     axios
-      .get("/api/students/", {
+      .get('/api/students/', {
         params: {
-          cruzid: this.props.match.params.cruzid
-        }
+          cruzid: this.props.match.params.cruzid,
+        },
       })
       .then(response => this.setState({ major: response.data.major }))
       .catch(error => console.log(error));
 
     if (props.match.params.cruzid !== props.auth.cruzid) {
       axios
-        .get("/api/users/", {
+        .get('/api/users/', {
           params: {
-            cruzid: this.props.match.params.cruzid
-          }
+            cruzid: this.props.match.params.cruzid,
+          },
         })
-        .then(response =>
-          this.setState({
+        .then(response => this.setState({
             profileLoaded: true,
             profile: response.data,
             isFollowDisabled: false,
             following:
-              this.props.auth.following &&
-              this.props.auth.following.includes(this.props.match.params.cruzid)
-          })
-        )
+              this.props.auth.following
+              && this.props.auth.following.includes(this.props.match.params.cruzid),
+          }))
         .catch(error => console.log(error));
     }
   }
@@ -65,20 +63,20 @@ class Profile extends Component {
     this.props.uploadResume(resume);
   }
 
-  toggleFollow = _ => {
-    const following = this.state.following;
+  toggleFollow = (_) => {
+    const { following } = this.state;
     this.setState({ isFollowDisabled: false });
     this.setState({ following: !this.state.following });
 
     axios
-      .post("/api/follow", {
+      .post('/api/follow', {
         cruzid: this.props.match.params.cruzid,
-        following: following
+        following,
       })
       .then(_ => this.setState({ isFollowDisabled: false }))
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-        this.setState({ following: following });
+        this.setState({ following });
       });
   };
 
@@ -113,13 +111,13 @@ class Profile extends Component {
                   <div>
                     <button
                       className={
-                        "button is-link " +
-                        (this.state.following ? "" : "is-inverted")
+                        `button is-link ${
+                        this.state.following ? '' : 'is-inverted'}`
                       }
                       disabled={this.state.isFollowDisabled}
                       onClick={this.toggleFollow}
                     >
-                      {this.state.following ? "Following" : "Follow"}
+                      {this.state.following ? 'Following' : 'Follow'}
                     </button>
                     <br />
                     <br />
@@ -127,18 +125,23 @@ class Profile extends Component {
                 )}
                 <div className="box is-danger">
                   {this.state.profile != null && (
-                    <p> {this.state.profile.name} </p>
+                    <p>
+                      {' '}
+                      {this.state.profile.name}
+                      {' '}
+                    </p>
                   )}
                 </div>
                 <div className="box">
                   {this.state.profile != null && (
                     <h1>
-                      {" "}
+                      {' '}
                       {this.state.profile.email ? (
                         <p>{this.state.profile.email}</p>
                       ) : (
                         <p>No Email Listed</p>
-                      )}{" "}
+                      )}
+                      {' '}
                     </h1>
                   )}
                 </div>
@@ -148,12 +151,13 @@ class Profile extends Component {
                 <div className="box">
                   {this.state.major != null && (
                     <h1>
-                      {" "}
+                      {' '}
                       {this.state.major ? (
                         <p>{this.state.major}</p>
                       ) : (
                         <p>No Major Listed</p>
-                      )}{" "}
+                      )}
+                      {' '}
                     </h1>
                   )}
                 </div>
@@ -164,12 +168,13 @@ class Profile extends Component {
                   Bio:
                   {this.state.profile != null && (
                     <div>
-                      {" "}
+                      {' '}
                       {this.state.profile.bio ? (
                         <p>{this.state.profile.bio}</p>
                       ) : (
                         <p>No Available Bio</p>
-                      )}{" "}
+                      )}
+                      {' '}
                     </div>
                   )}
                 </div>
@@ -193,7 +198,7 @@ class Profile extends Component {
                       className="button is-info"
                       target="_blank"
                       rel="noopener noreferrer"
-                      download={this.state.profile.name + "_Resume.pdf"}
+                      download={`${this.state.profile.name }_Resume.pdf`}
                     >
                       Download Resume
                     </a>
@@ -214,5 +219,5 @@ function mapStateToProps({ auth, profile }) {
 
 export default connect(
   mapStateToProps,
-  actions
+  actions,
 )(Profile);
