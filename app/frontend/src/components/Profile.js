@@ -4,10 +4,6 @@ import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import ResumeForm from "./ResumeForm";
 import axios from "axios";
-
-import StudentProfile from "./StudentProfile"
-import PostCard from "./PostCard"
-
 import { Link } from 'react-router-dom';
 
 class Profile extends Component {
