@@ -5,6 +5,11 @@ import * as actions from "../actions";
 import ResumeForm from "./ResumeForm";
 import axios from "axios";
 
+import StudentProfile from "./StudentProfile"
+import PostCard from "./PostCard"
+
+import { Link } from 'react-router-dom';
+
 class Profile extends Component {
 
   constructor(props) {
@@ -14,7 +19,8 @@ class Profile extends Component {
       this.state = {
         cruzid: this.props.match.params.cruzid,
         profileLoaded: true,
-        profile: this.props.auth
+        profile: this.props.auth,
+        research: []
       };
     } else {
       this.state = {
@@ -22,7 +28,8 @@ class Profile extends Component {
         profileLoaded: false,
         profile: null,
         following: false,
-        isFollowDisabled: false
+        isFollowDisabled: false,
+        research: []
       };
     }
 
@@ -41,13 +48,25 @@ class Profile extends Component {
             }
           })
             .then(response => {
-              console.log(response.data)
               this.setState({
                 professor: response.data,
-                major: response.data.department,
                 isProfessor: true
               })
             })
+            .catch(error => console.log(error));
+
+          axios
+            .get("/api/research_posts?fill=true", {
+              params: {
+                cruzid: this.props.match.params.cruzid
+              }
+            })
+            .then(response =>
+              this.setState({
+                research: response.data
+              })
+            )
+            .then(console.log(this.state))
             .catch(error => console.log(error));
         }
         else {
@@ -62,7 +81,6 @@ class Profile extends Component {
               console.log(response.data)
               this.setState({
                 student: response.data,
-                major: response.data.major,
                 isProfessor: false
               })
             })
@@ -90,6 +108,22 @@ class Profile extends Component {
         )
         .catch(error => console.log(error));
     }
+  }
+
+  fetchResearchPosts = () => {
+    const research_posts = this.state.research.map((research) =>
+      <div key={research._id} className="box">
+        <h1 align="left">{"Title: " + research.title}</h1>
+        <br />
+        <h2 align="left">{"Summary: " + research.summary}</h2>
+        <br />
+        <Link className="card-footer-item info" to={`/post?id=${research._id}`}>Learn More</Link>
+      </div>
+    );
+
+    return (
+      <ul>{research_posts}</ul>
+    )
   }
 
   uploadResume(resume) {
@@ -213,6 +247,12 @@ class Profile extends Component {
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div>
+                {this.state.research != null && this.state.isProfessor === true && (
+                  this.fetchResearchPosts()
+                )}
               </div>
 
               <div className="column" align="center">
