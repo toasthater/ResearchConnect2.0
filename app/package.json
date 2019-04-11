@@ -33,6 +33,7 @@
     "react-tagsinput": "^3.19.0"
   },
   "devDependencies": {
+    "dotenv": "^7.0.0",
     "nodemon": "^1.18.9"
   }
 }
