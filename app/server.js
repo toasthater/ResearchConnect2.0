@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const keys = require('./config/keys');
 const passport = require('passport');
@@ -66,6 +67,15 @@ mongoose
   .connect(db)
   .then(() => console.log("MongoDB connected...."))
   .catch(err => console.log(err));
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+  });
+}
 
 const port = process.env.port || 5000;
 
