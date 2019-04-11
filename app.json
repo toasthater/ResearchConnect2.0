@@ -6,6 +6,27 @@
 
   ],
   "env": {
+    "MONGO_URL": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_ID": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "required": true
+    },
+    "COOKIE_KEY": {
+      "required": true
+    },
+    "CLOUDINARY_CLOUD_NAME": {
+      "required": true
+    },
+    "CLOUDINARY_API_KEY": {
+      "required": true
+    },
+    "CLOUDINARY_API_SECRET": {
+      "required": true
+    }
   },
   "formation": {
   },
