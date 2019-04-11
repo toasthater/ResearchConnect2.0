@@ -1,15 +1,29 @@
 {
+  "version": 2,
   "name": "researchconnect",
-  "type": "docker",
-  "features": {
-    "cloud": "v2"
-  },
-  "engines": {
-    "node": "^10.0.0"
-  },
-  "env": {
-    "NODE_ENV": "production",
-    "HOST": "0.0.0.0",
-    "PORT": "5000"
-  }
+  "builds": [
+    { "src": "app/server.js", "use": "@now/node-server" },
+    {
+      "src": "app/frontend/package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": "build" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000,immutable" },
+      "dest": "/app/frontend/static/$1"
+    },
+    { "src": "/favicon.ico", "dest": "/app/frontend/favicon.ico" },
+    { "src": "/asset-manifest.json", "dest": "/app/frontend/asset-manifest.json" },
+    { "src": "/manifest.json", "dest": "/app/frontend/manifest.json" },
+    { "src": "/precache-manifest.(.*)", "dest": "/app/frontend/precache-manifest.$1" },
+    {
+      "src": "/service-worker.js",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/app/frontend/service-worker.js"
+    },
+    { "src": "/(.*)", "dest": "app/server.js" }
+  ]
 }
