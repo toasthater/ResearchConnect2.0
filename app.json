@@ -12,5 +12,5 @@
   "name": "ResearchConnect2.0",
   "scripts": {
   },
-  "stack": "heroku-18"
+  "stack": "container"
 }
