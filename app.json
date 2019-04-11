@@ -26,6 +26,9 @@
     },
     "CLOUDINARY_API_SECRET": {
       "required": true
+    },
+    "NODE_ENV": {
+      "required": true
     }
   },
   "formation": {
