@@ -18,12 +18,13 @@ passport.deserializeUser((id, done) => {
 });
 
 // Passport setup
+const root = (process.env.NODE_ENV === 'production') ? `https://${keys.baseURL}` : '';
 passport.use(
   new googleStrategy(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
-      callbackURL: "/auth/google/callback"
+      callbackURL: `${root}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       //We need to save the accessToken & info to DB
