@@ -43,6 +43,11 @@ router.get('/', (req, res) => {
 // @desc  Create a research post
 // @access Public
 router.post('/', (req, res) => {
+    if (!req.user || req.body.owner !== req.user.cruzid) {
+      res.send(null);
+      return;
+    }
+    
     let relevantFaculty = FacultyMember.findOne({
         'cruzid': {
             '$regex': req.body.owner.toLowerCase(),
@@ -54,7 +59,7 @@ router.post('/', (req, res) => {
       const researchPost = new Research({
         title: req.body.title,
         owner: data._id,
-        cruzid: req.body.cruzid,
+        cruzid: req.body.owner,
         tags: req.body.tags,
         summary: req.body.summary,
         description: req.body.description,
@@ -92,9 +97,21 @@ router.post('/', (req, res) => {
 // @desc  Delete a research post
 // @access Public
 router.delete('/', (req, res) => {
+    if (!req.user || !req.query || !req.query.id) {
+      console.log(1);
+      res.send(null);
+      return;
+    }
+    
     Research.findById(req.query.id)
-        .then(research => research.remove().then(() => res.json({success: true})))
-        .catch(err => res.status(404).json({success: true}));
+    .then(research => {
+      if (research.cruzid !== req.user.cruzid) {
+        res.send(null);
+        return;
+      }
+
+      research.remove().then(() => res.json({success: true}))
+    }).catch(err => res.status(404).json({success: true}));
 });
 
 module.exports = router;

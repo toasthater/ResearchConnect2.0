@@ -16,18 +16,4 @@ router.get('/', (req, res) => {
     .catch(err => res.status(404).json({success: true}));
 });
 
-router.post('/', (req, res) => {
-    const department = new Department({
-        name: req.body.title,
-    })
-
-    department.save().then(research => res.json(research));
-});
-
-router.delete('/:id', (req, res) => {
-    Department.findById(req.params.id)
-        .then(research => research.remove().then(() => res.json({success: true})))
-        .catch(err => res.status(404).json({success: true}));
-});
-
 module.exports = router;

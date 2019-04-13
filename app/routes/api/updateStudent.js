@@ -2,20 +2,27 @@ const express = require("express");
 const Student = require("../../models/Student");
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-    Student.findByIdAndUpdate(req.body.profile_id,{ $set: { major: req.body.major } },
-        (err, user) => {
-          if (err) {
-            console.log("Something wrong when updating data!");
-            res.send(null);
-            res_sent = true;
-          } else {
-            edited_student = user;
-            res.send(edited_student);
-            res_sent = true;
-          }
-        })
-    .catch(err => {
+router.post("/", (req, res) => {
+    if (!req.body.profile_id || !req.body.major) {
+      res.send(null);
+      return;
+    }
+
+    Student.findById(req.body.profile_id, (err, student) => {
+      if (err) {
+        console.log("Something wrong when updating data!");
+        res.send(null);
+      } else {
+        if (!req.user || req.user.cruzid !== student.cruzid) {
+          console.log("Detected invalid profile edit request");
+          res.send(null);
+        } else {
+          student.major = req.body.major;
+          student.save();
+          res.send(student);
+        }
+      }
+    }).catch(err => {
       console.log(err);
     });
   });

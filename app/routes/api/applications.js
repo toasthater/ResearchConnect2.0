@@ -3,21 +3,29 @@ const router = express.Router();
 
 const Research = require('../../models/Research');
 const Application = require('../../models/Application');
-const Student = require('../../models/Student');
 const User = require('../../models/User');
 const FacultyMember = require('../../models/FacultyMember');
 
 router.get('/', (req, res) => {
-    Application.find().then(research_posts => res.json(research_posts));
+    Application.find().then(applications => res.json(applications));
 });
 
 router.post('/', async (req, res) => {
+    if (!req.user || !req.query) {
+        res.send(null);
+        return;
+    }
+
     try {
         if (req.body.applicant) {
-            let newApplicant = await User.findById(req.body.applicant);
+            if (req.body.applicant.toString() !== req.user._id.toString() || !req.body.postID) {
+                res.send('Error applying to project');
+                return;
+            }
+
             let newStudent = await User.findOne({
                 'cruzid': {
-                    '$regex': newApplicant.cruzid,
+                    '$regex': req.user.cruzid,
                     $options: 'i'
                 }
             });
@@ -43,6 +51,11 @@ router.post('/', async (req, res) => {
             research.applicants = [...research.applicants, newApp._id];
             research.save().then(research => res.send("Application successful"));
         } else {
+            if (!req.body.id || req.body.status !== 'pending') {
+                res.send("Error accepting/declining application");
+                return;
+            }
+
             Application.findById(req.body.id, async (err, application) => {
                 if(err || application === null) {
                     console.log(err);
