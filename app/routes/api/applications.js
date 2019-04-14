@@ -25,10 +25,10 @@ router.post('/', async (req, res) => {
 
       const research = await Research.findById(req.body.postID);
 
-      for (let i = 0; i < research.applicants.length; i++) {
+      for (let i = 0; i < research.applicants.length; i += 1) {
         const oldApplication = await Application.findById(research.applicants[i]);
 
-        if (newStudent._id.toString() === oldApplication.student.toString()) {
+        if (newStudent.id.toString() === oldApplication.student.toString()) {
           res.send('You have already applied to this project.');
           return;
         }
@@ -36,12 +36,12 @@ router.post('/', async (req, res) => {
 
       const newApp = new Application({
         research: req.body.postID,
-        student: newStudent._id,
+        student: newStudent.id,
       });
 
       await newApp.save();
 
-      research.applicants = [...research.applicants, newApp._id];
+      research.applicants = [...research.applicants, newApp.id];
       research.save().then(research => res.send('Application successful'));
     } else {
       Application.findById(req.body.id, async (err, application) => {

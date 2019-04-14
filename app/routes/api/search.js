@@ -20,8 +20,8 @@ async function searchDepartments(name) {
 
   await relevantDepartments.then(async (data) => {
     const deptIDs = [];
-    for (let i = 0; i < data.length; i++) {
-      deptIDs.push(data[i]._id);
+    for (let i = 0; i < data.length; i += 1) {
+      deptIDs.push(data[i].id);
     }
 
     const relevantPosts = Research.find({
@@ -33,7 +33,7 @@ async function searchDepartments(name) {
     });
   });
 
-  for (let i = 0; i < ret.length; i++) {
+  for (let i = 0; i < ret.length; i += 1) {
     ret[i] = await fillResearchPost(ret[i]);
   }
 
@@ -52,8 +52,8 @@ async function searchFaculty(name) {
 
   await relevantFaculty.then(async (data) => {
     const facIDs = [];
-    for (let i = 0; i < data.length; i++) {
-      facIDs.push(data[i]._id);
+    for (let i = 0; i < data.length; i += 1) {
+      facIDs.push(data[i].id);
     }
 
     const relevantPosts = Research.find({
@@ -65,7 +65,7 @@ async function searchFaculty(name) {
     });
   });
 
-  for (let i = 0; i < ret.length; i++) {
+  for (let i = 0; i < ret.length; i += 1) {
     ret[i] = await fillResearchPost(ret[i]);
   }
 
@@ -86,7 +86,7 @@ async function searchTitle(name) {
     ret = data;
   });
 
-  for (let i = 0; i < ret.length; i++) {
+  for (let i = 0; i < ret.length; i += 1) {
     ret[i] = await fillResearchPost(ret[i]);
   }
 
@@ -103,8 +103,8 @@ async function searchTags(name) {
     posts = data;
   });
 
-  for (let i = 0; i < posts.length; i++) {
-    for (let j = 0; j < posts[i].tags.length; j++) {
+  for (let i = 0; i < posts.length; i += 1) {
+    for (let j = 0; j < posts[i].tags.length; j += 1) {
       if (name.toString().localeCompare(posts[i].tags[j].toString()) === 0) {
         relevantPosts.push(await fillResearchPost(posts[i]));
       }
@@ -156,7 +156,7 @@ router.get('/', (req, res) => {
 
       break;
     default:
-      var promises = [
+      const promises = [
         searchDepartments(req.query.query),
         searchFaculty(req.query.query),
         searchTitle(req.query.query),
@@ -165,11 +165,11 @@ router.get('/', (req, res) => {
       Promise.all(promises).then((data) => {
         const posts = [];
 
-        for (let i = 0; i < data.length; i++) {
-          for (let j = 0; j < data[i].length; j++) {
+        for (let i = 0; i < data.length; i += 1) {
+          for (let j = 0; j < data[i].length; j += 1) {
             let inArray = false;
             for (const post of posts) {
-              if (post._id.toString().localeCompare(data[i][j]._id.toString()) === 0) {
+              if (post.id.toString().localeCompare(data[i][j].id.toString()) === 0) {
                 inArray = true;
                 break;
               }

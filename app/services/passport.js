@@ -1,6 +1,6 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
-const googleStrategy = require('passport-google-oauth20');
+const GoogleStrategy = require('passport-google-oauth20');
 const keys = require('../config/keys');
 
 const User = mongoose.model('users');
@@ -20,7 +20,7 @@ passport.deserializeUser((id, done) => {
 // Passport setup
 const root = (process.env.NODE_ENV === 'production') ? `https://${keys.baseURL}` : '';
 passport.use(
-  new googleStrategy(
+  new GoogleStrategy(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
@@ -36,18 +36,18 @@ passport.use(
       }
 
       // Get cruzid from email
-      const profile_cruzid = profile.emails[0].value.split('@')[0];
+      const PROFILE_CRUZID = profile.emails[0].value.split('@')[0];
 
       // Check if person with this cruzid exists in faculty
       const existingFacultyMember = await FacultyMember.findOne({
-        cruzid: profile_cruzid,
+        cruzid: PROFILE_CRUZID,
       });
 
       // User logging in for first time - save to db
       const user = await new User({
         googleId: profile.id,
         email: profile.emails[0].value,
-        cruzid: profile_cruzid,
+        cruzid: PROFILE_CRUZID,
         isProfessor: !!existingFacultyMember,
         isSetup: false,
         name: profile.displayName,

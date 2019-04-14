@@ -7,17 +7,17 @@ router.post('/', async (req, res) => {
   Student.findByIdAndUpdate(req.body.profile_id, { $set: { major: req.body.major } },
     (err, user) => {
       if (err) {
-        console.log('Something wrong when updating data!');
+        // console.log('Something wrong when updating data!');
         res.send(null);
-        res_sent = true;
+        var RES_SENT = true;
       } else {
-        edited_student = user;
-        res.send(edited_student);
-        res_sent = true;
+        const EDITED_STUDENT = user;
+        res.send(EDITED_STUDENT);
+        var RES_SENT = true;
       }
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 });
 

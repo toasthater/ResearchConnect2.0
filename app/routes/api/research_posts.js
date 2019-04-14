@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   if (req.query.id) {
     Research.findById(req.query.id, (err, result) => {
       if (err) {
-        console.log(err);
+        // console.log(err);
         res.send(new Research());
       } else if (req.query.fill) {
         fillResearchPost(result)
@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
       .sort({ date: -1 }).limit(9)
       .then(async (research_posts) => {
         if (req.query.fill) {
-          for (let i = 0; i < research_posts.length; i++) {
+          for (let i = 0; i < research_posts.length; i += 1) {
             research_posts[i] = await fillResearchPost(research_posts[i]);
           }
         }
@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
   relevantFaculty.then((data) => {
     const researchPost = new Research({
       title: req.body.title,
-      owner: data._id,
+      owner: data.id,
       cruzid: req.body.cruzid,
       tags: req.body.tags,
       summary: req.body.summary,
@@ -64,8 +64,8 @@ router.post('/', (req, res) => {
       deadline: req.body.deadline,
     });
 
-    if (req.body._id) {
-      Research.findByIdAndUpdate(req.body._id, {
+    if (req.body.id) {
+      Research.findByIdAndUpdate(req.body.id, {
         $set: {
           title: researchPost.title,
           owner: researchPost.owner,
@@ -79,7 +79,7 @@ router.post('/', (req, res) => {
         },
       }, (err, research) => {
         if (err) {
-          console.log(err);
+          // console.log(err);
           res.send(err);
         } else {
           res.send(research);
