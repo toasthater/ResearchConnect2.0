@@ -8,7 +8,7 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix frontend",
-    "lint": "eslint *.js services routes models",
+    "lint": "eslint *.js services routes models --fix",
     "test": "npm run test",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

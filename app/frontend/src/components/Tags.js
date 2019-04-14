@@ -54,12 +54,23 @@ class Tags extends React.Component {
       return;
     }
 
-    this.setState({
-      tags: [...tags, tag],
-      value: '',
-    }, () => {
-      this.props.tagsChange(this.state.tags);
-    });
+    if (this.state.tags.indexOf(tag) != -1) {
+      console.log("This tag already exists");
+      alert("This tag already exists");
+      this.setState({
+        value: '',
+      }, () => {
+        this.props.tagsChange(this.state.tags);
+      });
+    }
+    else {
+      this.setState({
+        tags: [...tags, tag],
+        value: '',
+      }, () => {
+        this.props.tagsChange(this.state.tags);
+      });
+    }
   }
 
   editPrevTag() {
@@ -98,15 +109,15 @@ class Tags extends React.Component {
           {' '}
           <code>enter</code>
           {' '}
-or
+          or
           {' '}
           <code>,</code>
           {' '}
-to add a tag. Press
+          to add a tag. Press
           {' '}
           <code>backspace</code>
           {' '}
-to edit previous tag.
+          to edit previous tag.
         </small>
       </div>
     );
