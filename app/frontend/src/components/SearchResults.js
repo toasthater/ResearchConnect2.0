@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as actions from '../actions';
 import PostCard from './PostCard';
 
 class SearchResults extends Component {
-  componentDidMount() {
-    this.setState({ search: [] });
-  }
-
-  async componentDidUpdate() {
-    console.log(this.props.search);
-  }
-
   formatPost() {
-    const posts = this.props.search;
+    const { search } = this.props;
 
-    if (posts === undefined) {
+    if (search === undefined) {
       return (
         <div className="flex-container" />
       );
@@ -23,7 +16,7 @@ class SearchResults extends Component {
 
     return (
       <div className="flex-container">
-        {posts.map(post => (
+        {search.map(post => (
           <PostCard
             key={post._id}
             post={{
@@ -50,6 +43,21 @@ class SearchResults extends Component {
     );
   }
 }
+
+SearchResults.propTypes = {
+  search: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    department: PropTypes.object,
+    title: PropTypes.string,
+    owner: PropTypes.object,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    summary: PropTypes.string,
+  })),
+};
+
+SearchResults.defaultProps = {
+  search: [],
+};
 
 const mapStateToProps = state => ({
   search: state.search,

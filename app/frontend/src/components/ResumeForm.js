@@ -1,45 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import PropTypes from 'prop-types';
+import ResumeFileInput from './ResumeFileInput';
 
-class ResumeFileInput extends Component {
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-  }
+const ResumeForm = (props) => {
+  const { handleSubmit, pristine, submitting } = props;
+  return (
+    <div>
+      <Field name="file" component={ResumeFileInput} />
+      <button type="button" className="button is-success" disabled={pristine || submitting} onClick={handleSubmit}>Upload</button>
+    </div>
+  );
+};
 
-  onChange(e) {
-    const { input: { onChange } } = this.props;
-    onChange(e.target.files[0]);
-  }
+ResumeForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
+};
 
-  render() {
-    // const { input: { value } } = this.props;
-    return (
-      <div>
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={this.onChange}
-        />
-      </div>
-    );
-  }
-}
-
-class ResumeForm extends Component {
-  render() {
-    const { handleSubmit, pristine, submitting } = this.props;
-    return (
-      <div>
-        <Field name="file" component={ResumeFileInput} />
-        <button className="button is-success" disabled={pristine || submitting} onClick={handleSubmit}>Upload</button>
-      </div>
-    );
-  }
-}
-
-ResumeForm = reduxForm({
+export default reduxForm({
   form: 'resumeForm',
 })(ResumeForm);
-
-export default ResumeForm;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import qs from 'query-string';
 import axios from 'axios';
 import * as actions from '../actions';
@@ -14,9 +15,10 @@ class Applicants extends Component {
     };
   }
 
-
   async componentDidMount() {
-    const args = qs.parse(this.props.location.search);
+    const { location } = this.props;
+
+    const args = qs.parse(location.search);
     const id = args.id ? args.id : '';
 
     const post = await axios.get('/api/research_posts/', {
@@ -36,9 +38,10 @@ class Applicants extends Component {
       status: accept,
     });
 
-    for (let i = 0; i < this.state.post.applicants.length; i++) {
-      if (this.state.post.applicants[i]._id === applicationID) {
-        const { post } = this.state;
+    const { post } = this.state;
+
+    for (let i = 0; i < post.applicants.length; i += 1) {
+      if (post.applicants[i]._id === applicationID) {
         post.applicants[i].status = accept ? 'accepted' : 'denied';
         this.setState({
           post,
@@ -50,19 +53,21 @@ class Applicants extends Component {
   }
 
   render() {
-    if (this.state.post !== null) {
-      if (this.props.auth.cruzid !== this.state.post.owner.cruzid) {
+    const { post, auth } = this.state;
+
+    if (post !== null) {
+      if (auth.cruzid !== post.owner.cruzid) {
         return <p>Permission denied</p>;
       }
 
-      const data = this.state.post.applicants;
+      const data = post.applicants;
 
       if (data === null || data.length === 0) {
         return (
           <div className="has-text-centered">
             <br />
             <br />
-No Applicants
+            No Applicants
           </div>
         );
       }
@@ -73,9 +78,9 @@ No Applicants
             <li key={d.student.cruzid}>
               <Link className="link" to={`/profile/${d.student.cruzid}`}>{d.student.cruzid}</Link>
               <br />
-              <button className="accept" onClick={() => this.onSubmit(d._id, true)}>Accept</button>
+              <button type="button" className="accept" onClick={() => this.onSubmit(d._id, true)}>Accept</button>
               <br />
-              <button className="decline" onClick={() => this.onSubmit(d._id, false)}>Decline</button>
+              <button type="button" className="decline" onClick={() => this.onSubmit(d._id, false)}>Decline</button>
             </li>
           );
         }
@@ -95,6 +100,20 @@ No Applicants
     return <Spinner fullPage />;
   }
 }
+
+Applicants.propTypes = {
+  location: PropTypes.shape({
+    hash: PropTypes.string,
+    key: PropTypes.string,
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+    state: PropTypes.object,
+  }),
+};
+
+Applicants.defaultProps = {
+  location: null,
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

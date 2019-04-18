@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Spinner = ({ fullPage }) => (
   <div className={fullPage ? 'full-page' : ''}>
@@ -18,5 +19,9 @@ const Spinner = ({ fullPage }) => (
     </div>
   </div>
 );
+
+Spinner.propTypes = {
+  fullPage: PropTypes.bool.isRequired,
+};
 
 export default Spinner;

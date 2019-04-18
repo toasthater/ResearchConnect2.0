@@ -55,14 +55,13 @@ class Tags extends React.Component {
     }
 
     if (this.state.tags.indexOf(tag) != -1) {
-      alert("This tag already exists");
+      alert('This tag already exists');
       this.setState({
         value: '',
       }, () => {
         this.props.tagsChange(this.state.tags);
       });
-    }
-    else {
+    } else {
       this.setState({
         tags: [...tags, tag],
         value: '',
