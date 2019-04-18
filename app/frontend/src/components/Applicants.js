@@ -53,10 +53,10 @@ class Applicants extends Component {
   }
 
   render() {
-    const { post, auth } = this.state;
+    const {post } = this.state;
 
     if (post !== null) {
-      if (auth.cruzid !== post.owner.cruzid) {
+      if (this.props.auth.cruzid !== post.owner.cruzid) {
         return <p>Permission denied</p>;
       }
 
