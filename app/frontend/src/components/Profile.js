@@ -1,12 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import ResumeForm from "./ResumeForm";
 import axios from "axios";
 import { Link } from 'react-router-dom';
 
+import Spinner from './Spinner';
+import StudentProfile from './StudentProfile'
+import ProfessorProfile from './ProfessorProfile'
+
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
+
 class Profile extends Component {
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(prevProps)
+
+    if (prevProps.match.params.cruzid !== this.props.match.params.cruzid) {
+      this.setProfileStates();
+      this.setRelevantStates();
+    }
+  }
 
   constructor(props) {
     super(props);
@@ -15,6 +30,8 @@ class Profile extends Component {
       this.state = {
         cruzid: this.props.match.params.cruzid,
         profileLoaded: true,
+        userLoaded: false,
+        researchLoaded: false,
         profile: this.props.auth,
         research: []
       };
@@ -22,6 +39,8 @@ class Profile extends Component {
       this.state = {
         cruzid: this.props.match.params.cruzid,
         profileLoaded: false,
+        userLoaded: false,
+        researchLoaded: false,
         profile: null,
         following: false,
         isFollowDisabled: false,
@@ -29,6 +48,38 @@ class Profile extends Component {
       };
     }
 
+    if (props.match.params.cruzid !== props.auth.cruzid) {
+      this.setProfileStates();
+      this.setRelevantStates();
+    }
+    else {
+      this.setRelevantStates();
+    }
+  }
+
+  setProfileStates = () => {
+    //Fetch and set user specific data to local states
+    axios
+      .get("/api/users/", {
+        params: {
+          cruzid: this.props.match.params.cruzid
+        }
+      })
+      .then(response =>
+        this.setState({
+          profileLoaded: true,
+          profile: response.data,
+          isFollowDisabled: false,
+          following:
+            this.props.auth.following &&
+            this.props.auth.following.includes(this.props.match.params.cruzid)
+        })
+      )
+      .catch(error => console.log(error));
+  }
+
+  setRelevantStates = () => {
+    //Fetch and set student/professor specific data to local states
     axios.get("/api/users/", {
       params: {
         cruzid: this.props.match.params.cruzid
@@ -46,7 +97,8 @@ class Profile extends Component {
             .then(response => {
               this.setState({
                 professor: response.data,
-                isProfessor: true
+                isProfessor: true,
+                userLoaded: true
               })
             })
             .catch(error => console.log(error));
@@ -59,10 +111,10 @@ class Profile extends Component {
             })
             .then(response =>
               this.setState({
-                research: response.data
+                research: response.data,
+                researchLoaded: true
               })
             )
-            .then(console.log(this.state))
             .catch(error => console.log(error));
         }
         else {
@@ -74,36 +126,16 @@ class Profile extends Component {
             }
           })
             .then(response => {
-              console.log(response.data)
               this.setState({
                 student: response.data,
-                isProfessor: false
+                isProfessor: false,
+                userLoaded: true
               })
             })
             .catch(error => console.log(error));
         }
       })
       .catch(error => console.log(error));
-
-    if (props.match.params.cruzid !== props.auth.cruzid) {
-      axios
-        .get("/api/users/", {
-          params: {
-            cruzid: this.props.match.params.cruzid
-          }
-        })
-        .then(response =>
-          this.setState({
-            profileLoaded: true,
-            profile: response.data,
-            isFollowDisabled: false,
-            following:
-              this.props.auth.following &&
-              this.props.auth.following.includes(this.props.match.params.cruzid)
-          })
-        )
-        .catch(error => console.log(error));
-    }
   }
 
   fetchResearchPosts = () => {
@@ -119,6 +151,31 @@ class Profile extends Component {
 
     return (
       <ul>{research_posts}</ul>
+    )
+  }
+
+  displayStudentProfile() {
+    return (
+      <StudentProfile
+        auth={{ cruzid: this.props.auth.cruzid }}
+        profile={this.state.profile}
+        student={{ major: this.state.student.major }}
+        resume={this.state.resume}
+        following={this.state.following}
+        isFollowDisabled={this.state.isFollowDisabled}>
+      </StudentProfile>
+    )
+  }
+
+  displayProfessorProfile() {
+    return (
+      <ProfessorProfile
+        auth={{ cruzid: this.props.auth.cruzid }}
+        profile={this.state.profile}
+        professor={this.state.professor}
+        following={this.state.following}
+        isFollowDisabled={this.state.isFollowDisabled}>
+      </ProfessorProfile>
     )
   }
 
@@ -144,143 +201,66 @@ class Profile extends Component {
   };
 
   render() {
-    const myProfile = this.state.cruzid === this.props.auth.cruzid;
+    if (!this.state.profileLoaded || !this.state.userLoaded) {
+      return <Spinner fullPage />;
+    }
+
+    const myProfile = this.state.profile.cruzid === this.props.auth.cruzid;
 
     return (
-      <div>
-        {this.state.profileLoaded && this.state.profile && (
-          <div className="hero is-light">
-            <section className="container" style={{ width: 768 }}>
-              <h1 align="center">
-                <br />
-                <div align="center">
-                  <figure className="image is-128x128">
-                    <img
-                      className="is-rounded"
-                      src={
-                        this.state.profile.profile_pic
-                          ? this.state.profile.profile_pic
-                          : profileImg
-                      }
-                      alt={this.state.profile.name}
-                      width={200}
+      <section className="section">
+        <div className="container has-text-centered">
+          <Tabs>
+            <TabList>
+              {!this.state.isProfessor && <Tab>Student</Tab>}
+              {this.state.isProfessor && <Tab>Professor</Tab>}
+              <Tab>Projects</Tab>
+            </TabList>
+
+            <TabPanel>
+              {!myProfile && (
+                <div>
+                  <br />
+                  <button
+                    className={"button is-link " + (this.state.following ? "" : "is-inverted")}
+                    disabled={this.state.isFollowDisabled}
+                    onClick={this.toggleFollow}
+                  >
+                    {this.state.following ? "Following" : "Follow"}
+                  </button>
+                  <br />
+                </div>
+              )}
+
+              {!this.state.isProfessor && this.displayStudentProfile()}
+              {this.state.isProfessor && this.displayProfessorProfile()}
+
+              {myProfile && /*this.props.auth &&*/ (
+                <div className="box">
+                  <div>
+                    <p>Upload Resume:</p>
+                    <ResumeForm
+                      onSubmit={(data) => this.uploadResume(data.file)}
                     />
-                  </figure>
-                </div>
-              </h1>
-
-              <div className="column" align="center">
-                {!myProfile && (
-                  <div>
-                    <button
-                      className={
-                        "button is-link " +
-                        (this.state.following ? "" : "is-inverted")
-                      }
-                      disabled={this.state.isFollowDisabled}
-                      onClick={this.toggleFollow}
-                    >
-                      {this.state.following ? "Following" : "Follow"}
-                    </button>
-                    <br />
-                    <br />
                   </div>
-                )}
-
-                <div className="box is-danger">
-                  {this.state.profile != null && (
-                    <p> {this.state.profile.name} </p>
-                  )}
-                </div>
-
-                <div className="box">
-                  {this.state.profile != null && (
-                    <h1>
-                      {this.state.profile.email ? (<p>{this.state.profile.email}</p>) : (<p>No Email Listed</p>)}
-                    </h1>
-                  )}
-                </div>
-              </div>
-
-              {this.state.isProfessor === true && (
-                <div className="box" align="center">
-                  <h1>
-                    {this.state.professor.department ? (<p>{this.state.professor.department + " Department"}</p>) : (<p>No Department Listed</p>)}
-                  </h1>
                 </div>
               )}
 
-              {this.state.isProfessor === true && (
-                <div className="box" align="center">
-                  <h1>
-                    {this.state.professor.phone ? (<p>{this.state.professor.phone}</p>) : (<p>No Phone Number Listed</p>)}
-                  </h1>
-                </div>
-              )}
+            </TabPanel>
 
-              {this.state.isProfessor === true && (
-                <div className="box" align="center">
-                  <h1>
-                    {this.state.professor.title ? (<p>{"Title: " + this.state.professor.title}</p>) : (<p>No Title Listed</p>)}
-                  </h1>
-                </div>
-              )}
-
-              {this.state.isProfessor === false && (
-                <div className="box" align="center">
-                  <h1>
-                    {this.state.student.major ? (<p>{this.state.student.major + " Major"}</p>) : (<p>No Major Listed</p>)}
-                  </h1>
-                </div>
-              )}
-
-              <div className="column" align="left">
-                <div className="box">
-                  Bio:
-                  {this.state.profile != null && (
-                    <div>
-                      {this.state.profile.bio ? (<p>{this.state.profile.bio}</p>) : (<p>No Available Bio</p>)}
-                    </div>
-                  )}
-                </div>
-              </div>
-
+            <TabPanel>
               <div>
-                {this.state.research != null && this.state.isProfessor === true && (
-                  this.fetchResearchPosts()
-                )}
+                <h1>In progress...</h1>
+                <h2>Currently displaying professor's researches only.</h2>
+                <br></br>
+                <h2>{this.fetchResearchPosts()}</h2>
               </div>
+            </TabPanel>
+          </Tabs>
 
-              <div className="column" align="center">
-                {myProfile && this.props.auth && !this.props.auth.isProfessor && (
-                  <div className="box">
-                    <div>
-                      <p>Upload Resume:</p>
-                      <ResumeForm
-                        onSubmit={data => this.uploadResume(data.file)}
-                      />
-                    </div>
-                  </div>
-                )}
-                {this.state.profile.resume && (
-                  <div>
-                    <a
-                      href={this.state.profile.resume}
-                      className="button is-info"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download={this.state.profile.name + "_Resume.pdf"}
-                    >
-                      Download Resume
-                    </a>
-                  </div>
-                )}
-              </div>
-            </section>
-          </div>
-        )}
-      </div>
-    );
+        </div>
+      </section>
+    )
   }
 }
 
