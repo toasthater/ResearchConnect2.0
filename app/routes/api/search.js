@@ -5,6 +5,7 @@ const fillResearchPost = require('./fillResearchHelper');
 // Schemas
 const Research = require('../../models/Research');
 const Department = require('../../models/Department');
+const Application = require('../../models/Application');
 const FacultyMember = require('../../models/FacultyMember');
 
 async function searchDepartments(name) {
@@ -69,6 +70,34 @@ async function searchFaculty(name) {
     }
 
     return ret;
+}
+
+async function searchApplicant(studentID) {
+    let apIDs = []
+    await Research.find()
+    .then(async research => {
+        for(let i = 0; i < research.length; i++)
+        {
+            let promises = []
+            for(let j = 0; j < research[i].applicants.length; j++)
+            {
+                promises.push(Application.findById(research[i].applicants[j]));
+            }
+            
+            await Promise.all(promises).then(async applications => {
+                for(let x = 0; x < applications.length; x++)
+                {
+                    if(applications[x].student.toString() === studentID.toString() && applications[x].status.toString() === "accepted")
+                    {
+                        apIDs.push(await fillResearchPost(research[i]));
+                        break;
+                    }
+                }
+            });
+        }
+    });
+
+    return apIDs;
 }
 
 async function searchTitle(name) {
@@ -157,6 +186,15 @@ router.get('/', (req, res) => {
                 console.log(err);
             });
             
+            break;
+        case "Applicants":
+            searchApplicant(req.query.query)
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
             break;
         default:
             var promises = [

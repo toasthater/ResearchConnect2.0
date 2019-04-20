@@ -4,6 +4,9 @@ import profileImg from "../assets/profile.png";
 import * as actions from "../actions";
 import ResumeForm from "./ResumeForm";
 import axios from "axios";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import PostCard from './PostCard';
+import Spinner from './Spinner';
 
 class Profile extends Component {
   constructor(props) {
@@ -53,17 +56,19 @@ class Profile extends Component {
         )
         .catch(error => console.log(error));
     }
-  }
 
-  componentDidUpdate() {
-    // console.log(this.props);
-    // console.log(this.state);
+    axios.get("/api/search?type=Applicants&query=" + this.props.auth._id)
+    .then(response => {
+      this.setState({ posts: response.data });
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
-
 
   uploadResume(resume) {
     this.props.uploadResume(resume);
-  }
+  } 
 
   toggleFollow = _ => {
     const following = this.state.following;
@@ -82,128 +87,167 @@ class Profile extends Component {
       });
   };
 
+  formatPost() {
+    var posts = this.state.posts;
+    return (
+    <div className="flex item inner content">
+        {posts.map(post => (<PostCard key={post._id} post={{
+            id: post._id,
+            type: post.department.type,
+            name: post.title,
+            professor: post.owner.name,
+            tags: post.tags,
+            summary: post.summary,
+            department: post.department.name,
+            ownerProfile: "/profile/" + post.owner.cruzid
+        }} />))}
+    </div>)
+  }
+
   render() {
     const myProfile = this.state.cruzid === this.props.auth.cruzid;
 
+    if (!this.state.posts) {
+      return <Spinner fullPage />;
+    }
+
     return (
-      <div>
-        {this.state.profileLoaded && this.state.profile && (
-          <div className="hero is-light">
-            <section className="container" style={{ width: 768 }}>
-              <h1 align="center">
-                <br />
-                <div align="center">
-                  <figure className="image is-128x128">
-                    <img
-                      className="is-rounded"
-                      src={
-                        this.state.profile.profile_pic
-                          ? this.state.profile.profile_pic
-                          : profileImg
-                      }
-                      alt={this.state.profile.name}
-                      width={200}
-                    />
-                  </figure>
-                </div>
-              </h1>
+      <section className="section">
+        <div className="container has-text-centered">
+          <Tabs>
+            <TabList>
+              <Tab>Profile</Tab>
+              {this.props.auth.cruzid === this.state.profile.cruzid && 
+                <Tab>Research</Tab>}
+            </TabList>
 
-              <div className="column" align="center">
-                {!myProfile && (
-                  <div>
-                    <button
-                      className={
-                        "button is-link " +
-                        (this.state.following ? "" : "is-inverted")
-                      }
-                      disabled={this.state.isFollowDisabled}
-                      onClick={this.toggleFollow}
-                    >
-                      {this.state.following ? "Following" : "Follow"}
-                    </button>
-                    <br />
-                    <br />
-                  </div>
-                )}
-                <div className="box is-danger">
-                  {this.state.profile != null && (
-                    <p> {this.state.profile.name} </p>
-                  )}
-                </div>
-                <div className="box">
-                  {this.state.profile != null && (
-                    <h1>
-                      {" "}
-                      {this.state.profile.email ? (
-                        <p>{this.state.profile.email}</p>
-                      ) : (
-                        <p>No Email Listed</p>
-                      )}{" "}
+            <TabPanel>
+              <div>
+              {this.state.profileLoaded && this.state.profile && (
+                <div className="hero is-light">
+                  <section className="container" style={{ width: 768 }}>
+                    <h1 align="center">
+                      <br />
+                      <div align="center">
+                        <figure className="image is-128x128">
+                          <img
+                            className="is-rounded"
+                            src={
+                              this.state.profile.profile_pic
+                                ? this.state.profile.profile_pic
+                                : profileImg
+                            }
+                            alt={this.state.profile.name}
+                            width={200}
+                          />
+                        </figure>
+                      </div>
                     </h1>
-                  )}
-                </div>
-              </div>
 
-              <div className="column" align="center">
-                <div className="box">
-                  {this.state.major != null && (
-                    <h1>
-                      {" "}
-                      {this.state.major ? (
-                        <p>{this.state.major}</p>
-                      ) : (
-                        <p>No Major Listed</p>
-                      )}{" "}
-                    </h1>
-                  )}
-                </div>
-              </div>
-
-              <div className="column" align="left">
-                <div className="box">
-                  Bio:
-                  {this.state.profile != null && (
-                    <div>
-                      {" "}
-                      {this.state.profile.bio ? (
-                        <p>{this.state.profile.bio}</p>
-                      ) : (
-                        <p>No Available Bio</p>
-                      )}{" "}
+                    <div className="column" align="center">
+                      {!myProfile && (
+                        <div>
+                          <button
+                            className={
+                              "button is-link " +
+                              (this.state.following ? "" : "is-inverted")
+                            }
+                            disabled={this.state.isFollowDisabled}
+                            onClick={this.toggleFollow}
+                          >
+                            {this.state.following ? "Following" : "Follow"}
+                          </button>
+                          <br />
+                          <br />
+                        </div>
+                      )}
+                      <div className="box is-danger">
+                        {this.state.profile != null && (
+                          <p> {this.state.profile.name} </p>
+                        )}
+                      </div>
+                      <div className="box">
+                        {this.state.profile != null && (
+                          <h1>
+                            {" "}
+                            {this.state.profile.email ? (
+                              <p>{this.state.profile.email}</p>
+                            ) : (
+                              <p>No Email Listed</p>
+                            )}{" "}
+                          </h1>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
 
-              <div className="column" align="center">
-                {myProfile && this.props.auth && !this.props.auth.isProfessor && (
-                  <div className="box">
-                    <div>
-                      <p>Upload Resume:</p>
-                      <ResumeForm
-                        onSubmit={data => this.uploadResume(data.file)}
-                      />
+                    <div className="column" align="center">
+                      <div className="box">
+                        {this.state.major != null && (
+                          <h1>
+                            {" "}
+                            {this.state.major ? (
+                              <p>{this.state.major}</p>
+                            ) : (
+                              <p>No Major Listed</p>
+                            )}{" "}
+                          </h1>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-                {this.state.profile.resume && (
-                  <div>
-                    <a
-                      href={this.state.profile.resume}
-                      className="button is-info"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download={this.state.profile.name + "_Resume.pdf"}
-                    >
-                      Download Resume
-                    </a>
-                  </div>
-                )}
-              </div>
-            </section>
-          </div>
-        )}
-      </div>
+
+                    <div className="column" align="left">
+                      <div className="box">
+                        Bio:
+                        {this.state.profile != null && (
+                          <div>
+                            {" "}
+                            {this.state.profile.bio ? (
+                              <p>{this.state.profile.bio}</p>
+                            ) : (
+                              <p>No Available Bio</p>
+                            )}{" "}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="column" align="center">
+                      {myProfile && this.props.auth && !this.props.auth.isProfessor && (
+                        <div className="box">
+                          <div>
+                            <p>Upload Resume:</p>
+                            <ResumeForm
+                              onSubmit={data => this.uploadResume(data.file)}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {this.state.profile.resume && (
+                        <div>
+                          <a
+                            href={this.state.profile.resume}
+                            className="button is-info"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={this.state.profile.name + "_Resume.pdf"}
+                          >
+                            Download Resume
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                </div>
+              )}
+            </div>
+            </TabPanel>
+            {this.props.auth.cruzid === this.state.profile.cruzid && 
+            <TabPanel>
+                <section>{this.formatPost()}</section>
+            </TabPanel>}
+          </Tabs>
+        </div>
+      </section>
     );
   }
 }
