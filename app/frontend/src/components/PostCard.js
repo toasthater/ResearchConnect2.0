@@ -4,6 +4,18 @@ import DepartmentImage from './DepartmentImage';
 
 
 class PostCard extends PureComponent {
+    getApplicants() {
+        var applicants = this.props.post.applicants;
+        return (
+        <div className="flex item inner content">
+            {applicants.map(applicant =>
+                <div key={applicant}>
+                    <Link className="subtitle is-6 has-text-link" to={"/profile/" + applicant}>{applicant}</Link>
+                    <br />
+                </div>)}
+        </div>)
+    }
+
     render() {
         const post = this.props.post;
         return(
@@ -36,6 +48,8 @@ class PostCard extends PureComponent {
                             </div>
                         </div>
                         
+                        {this.props.post.applicants && this.getApplicants()}
+
                         <footer className="card-footer">
                             <Link className="card-footer-item info" to={`/post?id=${post.id}`}>
                                 Learn More

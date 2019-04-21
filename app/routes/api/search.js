@@ -72,6 +72,38 @@ async function searchFaculty(name) {
     return ret;
 }
 
+async function searchCruzID(name) {
+    let relevantFaculty = FacultyMember.find({
+        'cruzid': {
+            '$regex': name.toLowerCase(),
+            $options: 'i'
+        }
+    });
+
+    var ret;
+
+    await relevantFaculty.then(async (data) => {
+        let facIDs = []
+        for (let i = 0; i < data.length; i++) {
+            facIDs.push(data[i]._id);
+        }
+
+        let relevantPosts = Research.find({
+            'owner': facIDs
+        });
+
+        await relevantPosts.then((posts) => {
+            ret = posts;
+        });
+    });
+
+    for (let i = 0; i < ret.length; i++) {
+        ret[i] = await fillResearchPost(ret[i]);
+    }
+
+    return ret;
+}
+
 async function searchApplicant(studentID) {
     let apIDs = []
     await Research.find()
@@ -189,6 +221,15 @@ router.get('/', (req, res) => {
             break;
         case "Applicants":
             searchApplicant(req.query.query)
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+            break;
+        case "cruzid":
+            searchCruzID(req.query.query)
             .then((data) => {
                 res.send(data);
             })

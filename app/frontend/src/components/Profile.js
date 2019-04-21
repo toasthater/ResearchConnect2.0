@@ -57,7 +57,11 @@ class Profile extends Component {
         .catch(error => console.log(error));
     }
 
-    axios.get("/api/search?type=Applicants&query=" + this.props.auth._id)
+    var request = this.props.auth.isProfessor ?
+    "/api/search?type=cruzid&query=" + this.props.auth.cruzid
+    : "/api/search?type=Applicants&query=" + this.props.auth._id;
+
+    axios.get(request)
     .then(response => {
       this.setState({ posts: response.data });
     })
@@ -99,7 +103,8 @@ class Profile extends Component {
             tags: post.tags,
             summary: post.summary,
             department: post.department.name,
-            ownerProfile: "/profile/" + post.owner.cruzid
+            ownerProfile: "/profile/" + post.owner.cruzid,
+            applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
         }} />))}
     </div>)
   }
