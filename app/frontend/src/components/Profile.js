@@ -1,9 +1,8 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import ResumeForm from "./ResumeForm";
 import axios from "axios";
-import { Link } from 'react-router-dom';
 
 import Spinner from './Spinner';
 import StudentProfile from './StudentProfile'
@@ -11,11 +10,9 @@ import ProfessorProfile from './ProfessorProfile'
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-
 class Profile extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log(prevProps)
 
     if (prevProps.match.params.cruzid !== this.props.match.params.cruzid) {
       this.setProfileStates();
@@ -42,7 +39,6 @@ class Profile extends Component {
         userLoaded: false,
         researchLoaded: false,
         profile: null,
-        following: false,
         isFollowDisabled: false,
         research: []
       };
@@ -69,10 +65,7 @@ class Profile extends Component {
         this.setState({
           profileLoaded: true,
           profile: response.data,
-          isFollowDisabled: false,
-          following:
-            this.props.auth.following &&
-            this.props.auth.following.includes(this.props.match.params.cruzid)
+          isFollowDisabled: false
         })
       )
       .catch(error => console.log(error));
@@ -157,12 +150,13 @@ class Profile extends Component {
   displayStudentProfile() {
     return (
       <StudentProfile
+        id={this.state.profile.cruzid}
         auth={{ cruzid: this.props.auth.cruzid }}
         profile={this.state.profile}
         student={{ major: this.state.student.major }}
-        resume={this.state.resume}
-        following={this.state.following}
-        isFollowDisabled={this.state.isFollowDisabled}>
+        resume={this.state.profile.resume}
+        isFollowDisabled={this.state.isFollowDisabled}
+        uploadResume={this.props.uploadResume}>
       </StudentProfile>
     )
   }
@@ -170,42 +164,20 @@ class Profile extends Component {
   displayProfessorProfile() {
     return (
       <ProfessorProfile
+        id={this.state.profile.cruzid}
         auth={{ cruzid: this.props.auth.cruzid }}
         profile={this.state.profile}
         professor={this.state.professor}
-        following={this.state.following}
-        isFollowDisabled={this.state.isFollowDisabled}>
+        isFollowDisabled={this.state.isFollowDisabled}
+      >
       </ProfessorProfile>
     )
   }
-
-  uploadResume(resume) {
-    this.props.uploadResume(resume);
-  }
-
-  toggleFollow = _ => {
-    const following = this.state.following;
-    this.setState({ isFollowDisabled: false });
-    this.setState({ following: !this.state.following });
-
-    axios
-      .post("/api/follow", {
-        cruzid: this.props.match.params.cruzid,
-        following: following
-      })
-      .then(_ => this.setState({ isFollowDisabled: false }))
-      .catch(error => {
-        console.log(error);
-        this.setState({ following: following });
-      });
-  };
 
   render() {
     if (!this.state.profileLoaded || !this.state.userLoaded) {
       return <Spinner fullPage />;
     }
-
-    const myProfile = this.state.profile.cruzid === this.props.auth.cruzid;
 
     return (
       <section className="section">
@@ -218,40 +190,13 @@ class Profile extends Component {
             </TabList>
 
             <TabPanel>
-              {!myProfile && (
-                <div>
-                  <br />
-                  <button
-                    className={"button is-link " + (this.state.following ? "" : "is-inverted")}
-                    disabled={this.state.isFollowDisabled}
-                    onClick={this.toggleFollow}
-                  >
-                    {this.state.following ? "Following" : "Follow"}
-                  </button>
-                  <br />
-                </div>
-              )}
-
               {!this.state.isProfessor && this.displayStudentProfile()}
               {this.state.isProfessor && this.displayProfessorProfile()}
-
-              {myProfile && /*this.props.auth &&*/ (
-                <div className="box">
-                  <div>
-                    <p>Upload Resume:</p>
-                    <ResumeForm
-                      onSubmit={(data) => this.uploadResume(data.file)}
-                    />
-                  </div>
-                </div>
-              )}
-
             </TabPanel>
 
             <TabPanel>
               <div>
                 <h1>In progress...</h1>
-                <h2>Currently displaying professor's researches only.</h2>
                 <br></br>
                 <h2>{this.fetchResearchPosts()}</h2>
               </div>
