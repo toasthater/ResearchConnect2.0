@@ -14,7 +14,7 @@ class NavBar extends Component {
     async submitSearch(values) {
       const type = values.type ? values.type : "Default";
       const query = values.query;
-      
+
       if (type && query)
       {
         await this.props.searchPosts(type, query)
@@ -25,7 +25,7 @@ class NavBar extends Component {
     }
 
     toggle = () => this.setState({open: !this.state.isOpen});
-    
+
     renderLoginButton() {
       switch (this.props.auth) {
         case null:

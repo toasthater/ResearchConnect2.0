@@ -18,7 +18,7 @@ export default class LazyImg extends React.PureComponent {
 		if (this._isMounted && this.props.src)
 			this.loadImage();
 	}
-	
+
 	componentDidUpdate(prevProps) {
 		if (this._isMounted && (this.props.src !== prevProps.src)) {
 			if (this.props.src)
@@ -28,7 +28,7 @@ export default class LazyImg extends React.PureComponent {
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
-	
+
 	loadImage(forceAnimate) {
 		this.$img = document.createElement('img');
 		this.$img.src = this.props.src;
@@ -40,26 +40,26 @@ export default class LazyImg extends React.PureComponent {
 			this.$img.onerror = this.onError;
 		}
 	}
-	
+
 	onLoad = () => {
 		this.$img.remove();
 		if (this._isMounted)
 			this.setState({ loaded: 'loaded', src: this.props.src });
 	}
-	
+
 	onError = () => {
 		this.$img.remove();
 		if (this._isMounted)
 			this.setState({ loaded: 'failed' });
 	}
-	
+
 	render() {
 		const { children = null, style = {}, className = '', placeholder = null } = this.props;
 		const { loaded, src } = this.state;
-		
+
 		return (
 			<figure style={style} className={`image ${className}`}>
-			<div className={`lazy ${loaded}`} style={{ backgroundImage: `url('${src}')` }}/>
+			<div className={`lazy ${loaded}`} style={{ backgroundImage: `url('${src}')`, opacity: '0.15' }}/>
 			{loaded ? null : placeholder}
 			{children}
 			</figure>
