@@ -74,7 +74,7 @@ export default class Landing extends Component {
 							<li className="step-item is-info is-completed is-active">
 								<div className="step-marker">
 									<span className="icon">
-										<i className="fa fa-check-square"></i>
+										<i className="fa fa-handshake"></i>
 									</span>
 								</div>
 								<div className="step-details">
