@@ -8,7 +8,12 @@ import Spinner from './Spinner';
 import ApplicantCard from './ApplicantCard';
 
 class Applicants extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      post: null
+    };
+  }
 
   async componentDidMount() {
     const args = qs.parse(this.props.location.search);
@@ -39,7 +44,7 @@ class Applicants extends Component {
       </div>)
   }
 
-  onSubmit(applicationID, accept) {
+  onSubmit = (applicationID, accept) => {
     axios.post('/api/apply', {
       id: applicationID,
       status: accept
