@@ -67,28 +67,8 @@ class Applicants extends Component {
       if (data === null || data.length === 0)
         return (<div className="has-text-centered"><br /><br />No Applicants</div>);
 
-      // const listItems = data.map((d) => {
-      //   if (d.status === 'pending') {
-      //     return (
-      //       <li key={d.student.cruzid}>
-      //         <Link className="link" to={"/profile/" + d.student.cruzid}>{d.student.cruzid}</Link><br />
-      //         <button className="accept" onClick={() => this.onSubmit(d._id, true)}>Accept</button><br />
-      //         <button className="decline" onClick={() => this.onSubmit(d._id, false)}>Decline</button>
-      //       </li>
-      //     );
-      //   } else {
-      //     return (
-      //       <li key={d.student.cruzid}>
-      //         <Link className="link" to={"/profile/" + d.student.cruzid}>{d.student.cruzid + " - " + d.status}</Link>
-      //       </li>
-      //     );
-      //   }
-      // });
 
       return (
-        // <div>
-        // {listItems}
-        // </div>
         <section className="section">
           <div className="App">
           </div>

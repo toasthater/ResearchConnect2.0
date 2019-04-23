@@ -2,11 +2,6 @@ import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 class ApplicantCard extends PureComponent {
-
-    constructor(props) {
-        super(props);
-      }
-
     onSubmit(applicationID, accept) {
         this.props.onSubmit(applicationID, accept)
     };
