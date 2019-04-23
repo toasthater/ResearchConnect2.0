@@ -34,7 +34,7 @@ class ApplicantCard extends PureComponent {
                                     </div>
                                     <footer className="card-footer">
                                         <div>
-                                            <button align="center"
+                                            <a align="center"
                                                 href={applicant.student.resume}
                                                 className="button is-info"
                                                 target="_blank"
@@ -43,7 +43,7 @@ class ApplicantCard extends PureComponent {
                                                 disabled={applicant.student.resume ? false : true}
                                             >
                                                 {applicant.student.resume ? "Download Resume" : "No Resume Available"}
-                                            </button>
+                                            </a>
                                         </div>
                                     </footer>
                                 </div>
