@@ -5,15 +5,10 @@ import * as actions from "../actions";
 import qs from "query-string";
 import axios from 'axios';
 import Spinner from './Spinner';
+import ApplicantCard from './ApplicantCard';
 
 class Applicants extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      post: null
-    };
-  }
-  
+
 
   async componentDidMount() {
     const args = qs.parse(this.props.location.search);
@@ -30,12 +25,25 @@ class Applicants extends Component {
     this.forceUpdate();
   }
 
+  formatApplicant() {
+    var applicants = this.state.post.applicants;
+    return (
+      <div className="flex-container">
+        {applicants.map(applicant => (<ApplicantCard onSubmit={this.onSubmit} key={applicant._id} applicant={{
+          id: applicant._id,
+          status: applicant.status,
+          student: applicant.student,
+          cruzid: applicant.student.cruzid,
+          ownerProfile: "/profile/" + applicant.student.cruzid,
+        }} />))}
+      </div>)
+  }
+
   onSubmit(applicationID, accept) {
-    axios.post('/api/apply', { 
+    axios.post('/api/apply', {
       id: applicationID,
       status: accept
     });
-
     for (let i = 0; i < this.state.post.applicants.length; i++) {
       if (this.state.post.applicants[i]._id === applicationID) {
         var post = this.state.post;
@@ -45,10 +53,9 @@ class Applicants extends Component {
         });
       }
     }
-
     this.forceUpdate();
   }
-  
+
   render() {
     if (this.state.post !== null) {
       if (this.props.auth.cruzid !== this.state.post.owner.cruzid) {
@@ -60,28 +67,35 @@ class Applicants extends Component {
       if (data === null || data.length === 0)
         return (<div className="has-text-centered"><br /><br />No Applicants</div>);
 
-      const listItems = data.map((d) => {
-        if (d.status === 'pending') {
-          return (
-          <li key={d.student.cruzid}>
-            <Link className="link" to={"/profile/" + d.student.cruzid}>{d.student.cruzid}</Link><br />
-            <button className="accept" onClick={() => this.onSubmit(d._id, true)}>Accept</button><br />
-            <button className="decline" onClick={() => this.onSubmit(d._id, false)}>Decline</button>
-          </li>
-          );
-        } else {
-          return (
-            <li key={d.student.cruzid}>
-              <Link className="link" to={"/profile/" + d.student.cruzid}>{d.student.cruzid + " - " + d.status}</Link>
-            </li>
-          );
-        }
-      });
+      // const listItems = data.map((d) => {
+      //   if (d.status === 'pending') {
+      //     return (
+      //       <li key={d.student.cruzid}>
+      //         <Link className="link" to={"/profile/" + d.student.cruzid}>{d.student.cruzid}</Link><br />
+      //         <button className="accept" onClick={() => this.onSubmit(d._id, true)}>Accept</button><br />
+      //         <button className="decline" onClick={() => this.onSubmit(d._id, false)}>Decline</button>
+      //       </li>
+      //     );
+      //   } else {
+      //     return (
+      //       <li key={d.student.cruzid}>
+      //         <Link className="link" to={"/profile/" + d.student.cruzid}>{d.student.cruzid + " - " + d.status}</Link>
+      //       </li>
+      //     );
+      //   }
+      // });
 
       return (
-        <div>
-        {listItems}
-        </div>
+        // <div>
+        // {listItems}
+        // </div>
+        <section className="section">
+          <div className="App">
+          </div>
+
+          {this.formatApplicant()}
+
+        </section>
       );
     } else {
       return <Spinner fullPage />;
