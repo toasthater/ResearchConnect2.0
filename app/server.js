@@ -65,7 +65,7 @@ const db = require("./config/keys").mongoURI;
 // Connect to Mongo
 mongoose
   .connect(db, {
-    poolSize: 1,
+    poolSize: 3,
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 100,
     connectTimeoutMS: 10000,
