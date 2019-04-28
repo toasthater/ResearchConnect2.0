@@ -76,9 +76,6 @@ class NavBar extends Component {
               </div>
               <div className={`navbar-menu ${open ? 'is-active' : ''}`}>
                 <div className="navbar-start">
-                  <NavLink className="navbar-item" to="/about">
-                    About
-                  </NavLink>
                 </div>
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values) }} />}
                 <div className="navbar-end">
