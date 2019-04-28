@@ -64,7 +64,13 @@ const db = require("./config/keys").mongoURI;
 
 // Connect to Mongo
 mongoose
-  .connect(db)
+  .connect(db, {
+    poolSize: 3,
+    reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 100,
+    connectTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+  })
   .then(() => console.log("MongoDB connected...."))
   .catch(err => console.log(err));
 
