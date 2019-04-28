@@ -5,6 +5,7 @@ import qs from 'query-string';
 import axios from 'axios';
 import * as actions from '../actions';
 import Spinner from './Spinner';
+import ApplicantCard from './ApplicantCard';
 
 class Applicants extends Component {
   constructor(props) {
@@ -13,7 +14,6 @@ class Applicants extends Component {
       post: null,
     };
   }
-
 
   async componentDidMount() {
     const args = qs.parse(this.props.location.search);
@@ -30,12 +30,25 @@ class Applicants extends Component {
     this.forceUpdate();
   }
 
-  onSubmit(applicationID, accept) {
+  formatApplicant() {
+    var applicants = this.state.post.applicants;
+    return (
+      <div className="flex-container">
+        {applicants.map(applicant => (<ApplicantCard onSubmit={this.onSubmit} key={applicant._id} applicant={{
+          id: applicant._id,
+          status: applicant.status,
+          student: applicant.student,
+          cruzid: applicant.student.cruzid,
+          ownerProfile: "/profile/" + applicant.student.cruzid,
+        }} />))}
+      </div>)
+  }
+
+  onSubmit = (applicationID, accept) => {
     axios.post('/api/apply', {
       id: applicationID,
       status: accept,
     });
-
     for (let i = 0; i < this.state.post.applicants.length; i++) {
       if (this.state.post.applicants[i]._id === applicationID) {
         const { post } = this.state;
@@ -45,7 +58,6 @@ class Applicants extends Component {
         });
       }
     }
-
     this.forceUpdate();
   }
 
@@ -67,29 +79,15 @@ No Applicants
         );
       }
 
-      const listItems = data.map((d) => {
-        if (d.status === 'pending') {
-          return (
-            <li key={d.student.cruzid}>
-              <Link className="link" to={`/profile/${d.student.cruzid}`}>{d.student.cruzid}</Link>
-              <br />
-              <button className="accept" onClick={() => this.onSubmit(d._id, true)}>Accept</button>
-              <br />
-              <button className="decline" onClick={() => this.onSubmit(d._id, false)}>Decline</button>
-            </li>
-          );
-        }
-        return (
-          <li key={d.student.cruzid}>
-            <Link className="link" to={`/profile/${d.student.cruzid}`}>{`${d.student.cruzid} - ${d.status}`}</Link>
-          </li>
-        );
-      });
 
       return (
-        <div>
-          {listItems}
-        </div>
+        <section className="section">
+          <div className="App">
+          </div>
+
+          {this.formatApplicant()}
+
+        </section>
       );
     }
     return <Spinner fullPage />;
