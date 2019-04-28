@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
 import reduxThunk from 'redux-thunk';
-import reducers from './reducers';
 
 const initialState = { loadState: 0, auth: false, profile: null, search: null, form: null };
 const middleware = [reduxThunk];
