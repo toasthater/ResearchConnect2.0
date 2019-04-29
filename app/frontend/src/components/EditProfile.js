@@ -1,30 +1,32 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+ Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
+import * as actions from '../actions';
 import UserSetupForm from './UserSetupForm';
 import EditProfileForm from './EditProfileForm';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import "react-tabs/style/react-tabs.css";
+import 'react-tabs/style/react-tabs.css';
 
 class EditProfile extends Component {
   handleSubmitStudent(formData) {
     const data = {
-      "profile_id": this.props.profile._id,
-      "major": formData.major
-    }
+      profile_id: this.props.profile._id,
+      major: formData.major,
+    };
     this.props.updateProfile(data);
   }
 
 
-  handleSubmitUser = values => {
+  handleSubmitUser = (values) => {
     const body = {
-        'id' : this.props.auth._id,
-        'name' : values.displayName,
-        'bio' : values.setupBio,
-        'filename' : values.files ? values.files[0].name : "",
-        'files' : values.files ? values.files[0].file : null
-    }
-    
+        id: this.props.auth._id,
+        name: values.displayName,
+        bio: values.setupBio,
+        filename: values.files ? values.files[0].name : '',
+        files: values.files ? values.files[0].file : null,
+    };
+
     this.props.updateUser(body);
   }
 
@@ -42,11 +44,13 @@ class EditProfile extends Component {
             </TabList>
 
             <TabPanel>
-              <UserSetupForm onSubmit={this.handleSubmitUser} user={this.props.auth} initialValues={{displayName:[this.props.auth.name], setupBio: [this.props.auth.bio]}} />
+              <UserSetupForm onSubmit={this.handleSubmitUser} user={this.props.auth} initialValues={{ displayName: [this.props.auth.name], setupBio: [this.props.auth.bio] }} />
             </TabPanel>
-            {!this.props.auth.isProfessor && (<TabPanel>
-              {this.props.profile && <EditProfileForm onSubmit={values => this.handleSubmitStudent(values)} isProfessor={this.props.auth.isProfessor}  initialValues={{major:[this.props.profile.major]}} />}
-            </TabPanel>)}
+            {!this.props.auth.isProfessor && (
+            <TabPanel>
+              {this.props.profile && <EditProfileForm onSubmit={values => this.handleSubmitStudent(values)} isProfessor={this.props.auth.isProfessor} initialValues={{ major: [this.props.profile.major] }} />}
+            </TabPanel>
+)}
             <TabPanel>
               <p>Not Yet Implemented.</p>
             </TabPanel>
@@ -57,7 +61,7 @@ class EditProfile extends Component {
 
         </div>
       </section>
-    )
+    );
   }
 }
 

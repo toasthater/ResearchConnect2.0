@@ -8,6 +8,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix frontend",
+    "lint": "eslint *.js services routes models",
+    "test": "npm run test",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [
@@ -34,6 +36,9 @@
   },
   "devDependencies": {
     "dotenv": "^7.0.0",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "nodemon": "^1.18.9"
   }
 }

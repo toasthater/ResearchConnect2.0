@@ -1,26 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as actions from "../actions";
-import qs from "query-string";
+import qs from 'query-string';
 import axios from 'axios';
+import * as actions from '../actions';
 import Spinner from './Spinner';
 import DepartmentImage from './DepartmentImage';
 
 class ResearchPost extends Component {
   state = {
-    post: null
+    post: null,
   };
 
   async componentDidMount() {
     const args = qs.parse(this.props.location.search);
-    const id = args.id ? args.id : "";
+    const id = args.id ? args.id : '';
 
-    let post = await axios.get("/api/research_posts/", {
+    const post = await axios.get('/api/research_posts/', {
       params: {
-        id: id,
-        fill: true
-      }
+        id,
+        fill: true,
+      },
     });
 
     this.state.post = post.data;
@@ -30,7 +30,7 @@ class ResearchPost extends Component {
   async handleSubmit(e) {
     const args = qs.parse(this.props.location.search);
     if (this.props.auth.isProfessor) {
-      this.props.history.push('/applicants?id=' + args.id);
+      this.props.history.push(`/applicants?id=${ args.id}`);
     } else {
       const val = await axios.post("/api/apply", { postID: args.id, applicant: this.props.auth._id });
 
@@ -58,7 +58,7 @@ class ResearchPost extends Component {
     }
 
     this.props.savePost(this.state.post);
-    this.props.history.push("/new");
+    this.props.history.push('/new');
   }
 
   handleClose() {
@@ -114,8 +114,8 @@ class ResearchPost extends Component {
 
   render() {
     if (this.state.post !== null && this.state.post.title === undefined) {
-      this.props.history.push("/");
-      return "";
+      this.props.history.push('/');
+      return '';
     }
 
     return (this.state.post !== null ? (
@@ -130,11 +130,11 @@ class ResearchPost extends Component {
               <div className="is-title">{this.state.post.title}</div>
             </div>
 
-            <div className="box" style={{ background: "#DDDDDD" }}>
+            <div className="box" style={{ background: '#DDDDDD' }}>
               {this.state.post.summary}
             </div>
 
-            <div className="box" style={{ background: "#DDDDDD" }}>
+            <div className="box" style={{ background: '#DDDDDD' }}>
               {this.state.post.description}
             </div>
 
@@ -177,15 +177,14 @@ class ResearchPost extends Component {
           </div>
 
         </section>
-      </div>) : <Spinner fullPage />
+      </div>
+) : <Spinner fullPage />
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    auth: state.auth
-  };
-}
+const mapStateToProps = state => ({
+    auth: state.auth,
+  });
 
 export default connect(mapStateToProps, actions)(ResearchPost);
