@@ -34,7 +34,8 @@ const ResearchSchema = new Schema({
         type: [Schema.Types.ObjectId],
         require: true,
         default: []
-    }
+    },
+    questions: [String]
 });
 
 module.exports = Research = mongoose.model('research', ResearchSchema);

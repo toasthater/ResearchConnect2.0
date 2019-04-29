@@ -60,7 +60,8 @@ router.post('/', (req, res) => {
         description: req.body.description,
         department: req.body.department.value,
         status: "Open",
-        deadline: req.body.deadline
+        deadline: req.body.deadline,
+        questions: req.body.questions
       });
 
       if (req.body._id) {
@@ -73,7 +74,8 @@ router.post('/', (req, res) => {
           description: researchPost.description,
           department: researchPost.department,
           status: researchPost.status,
-          deadline: researchPost.deadline
+          deadline: researchPost.deadline,
+          questions: req.body.questions
         }}, (err, research) => {
           if (err) {
             console.log(err);

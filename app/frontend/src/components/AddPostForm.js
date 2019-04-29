@@ -31,6 +31,7 @@ class AddPostForm extends React.Component {
         deadline: new Date(),
         owner: this.props.auth.cruzid,
         valid: false,
+        questions: []
     }
 
     componentDidMount() {
@@ -59,6 +60,16 @@ class AddPostForm extends React.Component {
         })
     };
 
+    changeQuestion = (e) => {
+        e.persist();
+        this.setState(state => {
+            const questions = state.questions;
+            questions[parseInt(e.target.name)] = e.target.value;
+
+            return { questions };
+        });
+    }
+
     changeDept = (e) => {
         this.setState({
             department: e
@@ -66,15 +77,18 @@ class AddPostForm extends React.Component {
     };
 
     validate() {
-        const {
-            title,
-            summary,
-            description
-          } = this.state;
-        if(/\S/.test(title) && /\S/.test(summary) && /\S/.test(description))
+        const { title, summary, description } = this.state;
+        if (/\S/.test(title) && /\S/.test(summary) && /\S/.test(description)) {
+            for (let i = 0; i < this.state.questions.length; i++) {
+                if (!/\S/.test(this.state.questions[i])) {
+                    return;
+                }
+            }
+
             this.setState({
-                valid:true
-            })
+                valid: true
+            });
+        }
       }
 
     async onSubmit(e) {
@@ -92,13 +106,14 @@ class AddPostForm extends React.Component {
                 deadline: new Date(),
                 owner: this.props.auth.cruzid,
                 cruzid: this.props.auth.cruzid,
-                valid: false,
+                questions: [],
+                valid: false
             })
 
             this.props.onSubmit()
         }
         else
-            alert('Title, Summary and Description are required fields.');
+            alert('Title, Summary and Description are required fields. Questions may not be blank.');
     }
 
     onCancel = (e) => {
@@ -112,11 +127,39 @@ class AddPostForm extends React.Component {
             deadline: new Date(),
             owner: this.props.auth.cruzid,
             cruzid: this.props.auth.cruzid,
+            questions: [],
             valid:false
         })
 
         this.props.onSubmit()
     };
+
+    addQuestion = (e) => {
+        e.preventDefault();
+        
+        this.setState({ questions: [ ...this.state.questions, "" ]});
+    }
+
+    removeQuestion = (e) => {
+        e.preventDefault();
+
+        if (this.state.questions.length > 0) {
+            this.setState(state => {
+                const questions = state.questions;
+                questions.pop();
+
+                return { questions };
+            });
+        }
+    }
+
+    getQuestions = () => { 
+        var questions = this.state.questions.map((question, i) =>
+            <input type="text" key={i} name={i} className="input" placeholder={"Question #" + i} value={this.state.questions[i]} onChange={e => this.changeQuestion(e)} style={{marginBottom: "1em"}}></input>
+        );
+
+        return <div>{questions}</div>
+    }
 
     tagsChange = (new_tags) => {
         console.log(new_tags)
@@ -131,7 +174,6 @@ class AddPostForm extends React.Component {
     }
 
     render() {
-        console.log(this.state)
         if (!this.props.auth.isProfessor) {
             this.props.history.push("/");
             return "";
@@ -171,6 +213,21 @@ class AddPostForm extends React.Component {
                     </div>
 
                     <div className="field" align="center">
+                        <label className="label">Questionnaire</label>
+                        <div className="control">
+                            {this.getQuestions()}
+                            <div className="columns" align="center">
+                                <div className="column"> 
+                                    <button onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
+                                </div>
+                                <div className="column"> 
+                                    <button onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="field" align="center">
                         <label className="label">Tags</label>
                         <div className="control">
                         <Tags getTags={this.getTags} tagsChange={this.tagsChange} />
@@ -184,16 +241,15 @@ class AddPostForm extends React.Component {
                                 onChange={this.onChange}
                                 value={this.state.deadline}
                             />
-                            {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
                         </div>
                     </div>
 
                     <div className="columns" align="center">
-                        <div className="column"> 
-                            <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
-                        </div>
                         <div className="column">
                             <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                        </div>
+                        <div className="column"> 
+                            <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
                         </div>
                     </div>
                 </div>
