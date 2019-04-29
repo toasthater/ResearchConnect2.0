@@ -7,18 +7,18 @@ class ResumeFileInput extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-onChange(e) {
+  onChange(e) {
     const { input: { onChange } } = this.props;
     onChange(e.target.files[0]);
   }
 
   render() {
-    //const { input: { value } } = this.props;
+    // const { input: { value } } = this.props;
     return (
       <div>
         <input
-          type='file'
-          accept='.pdf'
+          type="file"
+          accept=".pdf"
           onChange={this.onChange}
         />
       </div>
@@ -34,12 +34,12 @@ class ResumeForm extends Component {
         <Field name="file" component={ResumeFileInput} />
         <button className="button is-success" disabled={pristine || submitting} onClick={handleSubmit}>Upload</button>
       </div>
-    )
+    );
   }
 }
 
 ResumeForm = reduxForm({
-  form: 'resumeForm'
+  form: 'resumeForm',
 })(ResumeForm);
 
 export default ResumeForm;

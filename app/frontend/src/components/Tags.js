@@ -8,14 +8,14 @@ const BACKSPACE_KEY = 8;
 
 class Tags extends React.Component {
   constructor(props) {
-    console.log(props)
+    console.log(props);
     super(props);
-    var temp = [];
+    let temp = [];
     if (this.props.post) {
-      temp = this.props.post.tags
+      temp = this.props.post.tags;
     }
 
-    this.state = { tags: temp, value: "", props: props };
+    this.state = { tags: temp, value: '', props };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -23,9 +23,9 @@ class Tags extends React.Component {
   }
 
   handleChange(e) {
-    console.log(this.state)
+    console.log(this.state);
     this.setState({
-      value: e.target.value
+      value: e.target.value,
     });
   }
 
@@ -48,7 +48,7 @@ class Tags extends React.Component {
     const { tags, value } = this.state;
     let tag = value.trim();
 
-    tag = tag.replace(/,/g, "");
+    tag = tag.replace(/,/g, '');
 
     if (!tag) {
       return;
@@ -56,16 +56,14 @@ class Tags extends React.Component {
 
     this.setState({
       tags: [...tags, tag],
-      value: ""
-    },  () => {
+      value: '',
+    }, () => {
       this.props.tagsChange(this.state.tags);
-  });
-
-    
+    });
   }
 
   editPrevTag() {
-    let { tags } = this.state;
+    const { tags } = this.state;
 
     const tag = tags.pop();
 
@@ -96,17 +94,27 @@ class Tags extends React.Component {
           />
         </div>
         <small>
-          Press <code>enter</code> or <code>,</code> to add a tag. Press{" "}
-          <code>backspace</code> to edit previous tag.
+          Press
+          {' '}
+          <code>enter</code>
+          {' '}
+or
+          {' '}
+          <code>,</code>
+          {' '}
+to add a tag. Press
+          {' '}
+          <code>backspace</code>
+          {' '}
+to edit previous tag.
         </small>
       </div>
     );
   }
 }
 
-function mapStateToProps({post}){
+function mapStateToProps({ post }) {
   return { post };
 }
 
 export default connect(mapStateToProps, null)(Tags);
-

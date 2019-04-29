@@ -1,17 +1,15 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
+import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form';
 
-const required = value => (value ? undefined : "Required");
+const required = value => (value ? undefined : 'Required');
 
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+const maxLength = max => value => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 
 const maxLength15 = maxLength(15);
 
-const name = value =>
-  value && maxLength15 && !/^[a-zA-Z ]+$/.test(value)
-    ? "Invalid Name"
-    : undefined;
+const name = value => (value && maxLength15 && !/^[a-zA-Z ]+$/.test(value)
+    ? 'Invalid Name'
+    : undefined);
 
 // const renderTextArea = ({
 //   input,
@@ -35,21 +33,21 @@ const renderField = ({
   input,
   label,
   type,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
 }) => (
-    <div className="field">
-      <label className="label">{label}</label>
-      <div className="control">
-        <input {...input} placeholder={label} type={type} className="input" />
-        {touched &&
-          ((error && <p className="help is-danger">{error}</p>) ||
-            (warning && <p className="help is-warning">{warning}</p>))}
-      </div>
+  <div className="field">
+    <label className="label">{label}</label>
+    <div className="control">
+      <input {...input} placeholder={label} type={type} className="input" />
+      {touched
+          && ((error && <p className="help is-danger">{error}</p>)
+            || (warning && <p className="help is-warning">{warning}</p>))}
     </div>
+  </div>
   );
 
 class EditProfileForm extends Component {
-  required = value => value ? undefined : "Required";
+  required = value => (value ? undefined : 'Required');
 
   render() {
     const { handleSubmit, pristine, submitting } = this.props;
@@ -92,7 +90,7 @@ class EditProfileForm extends Component {
 }
 
 EditProfileForm = reduxForm({
-  form: "editProfileForm"
+  form: 'editProfileForm',
 })(EditProfileForm);
 
 

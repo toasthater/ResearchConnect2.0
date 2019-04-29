@@ -1,6 +1,6 @@
-import { FETCH_PROFILE, UPDATE_RESUME, UPDATE_PROFILE } from "../actions/types";
+import { FETCH_PROFILE, UPDATE_RESUME, UPDATE_PROFILE } from '../actions/types';
 
-export default function(state = null, action) {
+export default function (state = null, action) {
   switch (action.type) {
     case FETCH_PROFILE:
       return action.payload ? action.payload : null;

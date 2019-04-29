@@ -1,27 +1,28 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
 // Create schema
 const FacultyMemberSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   cruzid: {
     type: String,
-    required: true
+    required: true,
   },
   title: {
     type: String,
-    required: false
+    required: false,
   },
   department: {
     type: String,
-    required: false
-  }
+    required: false,
+  },
 });
 
 module.exports = FacultyMember = mongoose.model(
-  "faculty_members",
-  FacultyMemberSchema
+  'faculty_members',
+  FacultyMemberSchema,
 );

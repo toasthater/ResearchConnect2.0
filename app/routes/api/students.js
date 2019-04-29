@@ -1,19 +1,20 @@
-const express = require("express");
+const express = require('express');
+
 const router = express.Router();
 
-const Student = require("../../models/Student");
+const Student = require('../../models/Student');
 
-//router.get("/:cruzid", async (req, res) =>
-router.get("/", async (req, res) => {
+// router.get("/:cruzid", async (req, res) =>
+router.get('/', async (req, res) => {
   if (req.query.cruzid !== undefined) {
-    let relevantStudents = Student.findOne({
+    const relevantStudents = Student.findOne({
       cruzid: {
         $regex: req.query.cruzid,
-        $options: "i"
-      }
+        $options: 'i',
+      },
     });
 
-    await relevantStudents.then(async student => {
+    await relevantStudents.then(async (student) => {
       res.send(student);
     });
   } else if (req.query.id !== undefined) {
@@ -23,42 +24,42 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  //if (req.query.cruzid === undefined) {
-  //console.log("UPDATE API TRIGGERED");
+router.post('/', async (req, res) => {
+  // if (req.query.cruzid === undefined) {
+  // console.log("UPDATE API TRIGGERED");
 
-  let userProfile = Student.findOne({
+  const userProfile = Student.findOne({
     cruzid: {
       $regex: req.query.cruzid,
-      $options: "i"
-    }
+      $options: 'i',
+    },
   });
 
-  //if (userProfile === null || userProfile === undefined) {
-  //console.log("User does not exist. Creating...");
+  // if (userProfile === null || userProfile === undefined) {
+  // console.log("User does not exist. Creating...");
   try {
-    await userProfile.then(async student => {
+    await userProfile.then(async (student) => {
       if (student !== null && student.cruzid !== null) {
-        console.log("Updating profile...");
+        console.log('Updating profile...');
 
-        let updatedProfile = student.updateOne({
+        const updatedProfile = student.updateOne({
           $set: {
             profile_pic: req.body.profile_pic,
-            //cruzid: req.body.cruzid,
+            // cruzid: req.body.cruzid,
             name: req.body.name,
             email: req.body.email,
             major: req.body.major,
             bio: req.body.bio,
-            resume: req.body.resume
-          }
+            resume: req.body.resume,
+          },
         });
 
-        await updatedProfile.then(async student => {
+        await updatedProfile.then(async (student) => {
           res.send(student);
-          //userProfile.save().then(students => res.json(students));
+          // userProfile.save().then(students => res.json(students));
         });
       } else {
-        console.log("Creating new profile...");
+        console.log('Creating new profile...');
 
         const profile = new Student({
           profile_pic: req.body.profile_pic,
@@ -67,25 +68,25 @@ router.post("/", async (req, res) => {
           email: req.body.email,
           major: req.body.major,
           bio: req.body.bio,
-          resume: req.body.resume
+          resume: req.body.resume,
         });
 
         profile.save().then(students => res.json(students));
       }
     });
   } catch (err) {
-    err => {
+    (err) => {
       console.log(err);
     };
   }
-  /*} else {
+  /* } else {
     console.log("User does exist. Updating...");
-  }*/
+  } */
 
-  //console.log("Query: " + req.query.cruzid);
-  //console.log("Body: " + req.body.cruzid);
+  // console.log("Query: " + req.query.cruzid);
+  // console.log("Body: " + req.body.cruzid);
 
-  /*if (req.query.cruzid === req.body.cruzid) {
+  /* if (req.query.cruzid === req.body.cruzid) {
     console.log("User already exists, updating...");
   } else {
     await userProfile.then(async student => {
@@ -102,9 +103,9 @@ router.post("/", async (req, res) => {
 
       profile.save().then(students => res.json(students));
     });
-  }*/
+  } */
 
-  /*} else {
+  /* } else {
     const profile = new Student({
       profile_pic: req.body.profile_pic,
       cruzid: req.body.cruzid,
@@ -117,10 +118,10 @@ router.post("/", async (req, res) => {
     });
 
     profile.save().then(students => res.json(students));
-  }*/
+  } */
 });
 
-router.delete("/", (req, res) => {
+router.delete('/', (req, res) => {
   Student.deleteOne({ cruzid: req.query.cruzid })
     .then(students => res.send(students))
     .catch(console.log);

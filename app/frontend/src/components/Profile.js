@@ -58,8 +58,8 @@ class Profile extends Component {
     axios
       .get("/api/users/", {
         params: {
-          cruzid: this.props.match.params.cruzid
-        }
+          cruzid: this.props.match.params.cruzid,
+        },
       })
       .then(response =>
         this.setState({

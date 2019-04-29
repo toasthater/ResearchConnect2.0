@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
-import brandingImg from '../assets/logo.svg';
 import { connect } from 'react-redux';
+import brandingImg from '../assets/logo.svg';
 import * as actions from '../actions';
 
 import SearchBar from './SearchBar';
 
 class NavBar extends Component {
     state = {
-        open: false
+        open: false,
     }
 
     async submitSearch(values) {
-      const type = values.type ? values.type : "Default";
-      const query = values.query;
+      const type = values.type ? values.type : 'Default';
+      const { query } = values;
 
-      if (type && query)
-      {
+      if (type && query) {
         await this.props.searchPosts(type, query)
-        .then(_ => {
+        .then((_) => {
           this.props.history.push('/search_results');
         });
       }
     }
 
-    toggle = () => this.setState({open: !this.state.isOpen});
+    toggle = () => this.setState({ open: !this.state.isOpen });
 
     renderLoginButton() {
       switch (this.props.auth) {
@@ -37,11 +36,11 @@ class NavBar extends Component {
         default:
           return (
             <div className="navbar-item has-dropdown is-hoverable">
-              <NavLink className="navbar-link" to={"/profile/" + this.props.auth.cruzid}>
+              <NavLink className="navbar-link" to={`/profile/${ this.props.auth.cruzid}`}>
                 {this.props.auth.name}
               </NavLink>
               <div className="navbar-dropdown is-right is-boxed">
-                <Link className="navbar-item" to={"/profile/" + this.props.auth.cruzid}>
+                <Link className="navbar-item" to={`/profile/${ this.props.auth.cruzid}`}>
                   Account
                 </Link>
                 <Link className="navbar-item" to="/settings">
@@ -60,15 +59,19 @@ class NavBar extends Component {
     render() {
         const { open } = this.state;
 
-        return(
-            <nav className={`navbar is-fixed-top ${!this.props.auth ? 'is-transparent' : 'is-link'}`}>
+        return (
+          <nav className={`navbar is-fixed-top ${!this.props.auth ? 'is-transparent' : 'is-link'}`}>
             <div className="container">
               <div className="navbar-brand">
                 <Link className="navbar-item " to="/">
                   <img src={brandingImg} alt="Logo" />
                 </Link>
-                <div className={`navbar-burger burger ${open ? 'is-active' : ''}`}
-                  onClick={this.toggle} role="button" tabIndex="0">
+                <div
+                  className={`navbar-burger burger ${open ? 'is-active' : ''}`}
+                  onClick={this.toggle}
+                  role="button"
+                  tabIndex="0"
+                >
                   <span />
                   <span />
                   <span />
@@ -77,22 +80,25 @@ class NavBar extends Component {
               <div className={`navbar-menu ${open ? 'is-active' : ''}`}>
                 <div className="navbar-start">
                 </div>
-                {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values) }} />}
+                {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values); }} />}
                 <div className="navbar-end">
-                    {this.props.auth && this.props.auth.isProfessor && <NavLink className="navbar-item" to="/new">
+                  {this.props.auth && this.props.auth.isProfessor && (
+                    <NavLink className="navbar-item" to="/new">
                       New Research
-                    </NavLink>}
-                    <div className="navbar-item">
-                        {this.renderLoginButton()}
-                    </div>
+                    </NavLink>
+)}
+                  <div className="navbar-item">
+                    {this.renderLoginButton()}
+                  </div>
                 </div>
               </div>
             </div>
           </nav>
-        )}
+        );
+}
 }
 
-function mapStateToProps({ auth, search }){
+function mapStateToProps({ auth, search }) {
   return { auth, search };
 }
 
