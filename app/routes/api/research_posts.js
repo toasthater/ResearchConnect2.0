@@ -51,18 +51,18 @@ router.post('/', (req, res) => {
     },
   });
 
-    relevantFaculty.then(data => {
-      const researchPost = new Research({
-        title: req.body.title,
-        owner: data._id,
-        cruzid: req.body.cruzid,
-        tags: req.body.tags,
-        summary: req.body.summary,
-        description: req.body.description,
-        department: req.body.department.value,
-        status: req.body.status ? req.body.status : "Open",
-        deadline: req.body.deadline
-      });
+  relevantFaculty.then((data) => {
+    const researchPost = new Research({
+      title: req.body.title,
+      owner: data._id,
+      cruzid: req.body.cruzid,
+      tags: req.body.tags,
+      summary: req.body.summary,
+      description: req.body.description,
+      department: req.body.department.value,
+      status: req.body.status ? req.body.status : 'Open',
+      deadline: req.body.deadline,
+    });
 
     if (req.body._id) {
       Research.findByIdAndUpdate(req.body._id, {
