@@ -78,8 +78,7 @@ class NavBar extends Component {
                 </div>
               </div>
               <div className={`navbar-menu ${open ? 'is-active' : ''}`}>
-                <div className="navbar-start">
-                </div>
+                <div className="navbar-start" />
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values); }} />}
                 <div className="navbar-end">
                   {this.props.auth && this.props.auth.isProfessor && (

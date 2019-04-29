@@ -57,11 +57,11 @@ export default class LazyImg extends React.PureComponent {
 		const { loaded, src } = this.state;
 
 		return (
-			<figure style={style} className={`image ${className}`}>
-			<div className={`lazy ${loaded}`} style={{ backgroundImage: `url('${src}')`, opacity: '0.15' }}/>
-			{loaded ? null : placeholder}
-			{children}
-			</figure>
+  <figure style={style} className={`image ${className}`}>
+    <div className={`lazy ${loaded}`} style={{ backgroundImage: `url('${src}')`, opacity: '0.15' }} />
+    {loaded ? null : placeholder}
+    {children}
+  </figure>
 			);
 		}
 	}
