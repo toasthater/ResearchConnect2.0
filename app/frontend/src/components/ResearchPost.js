@@ -32,7 +32,7 @@ class ResearchPost extends Component {
     if (this.props.auth.isProfessor) {
       this.props.history.push(`/applicants?id=${ args.id}`);
     } else {
-      const val = await axios.post("/api/apply", { postID: args.id, applicant: this.props.auth._id });
+      const val = await axios.post('/api/apply', { postID: args.id, applicant: this.props.auth._id });
 
       console.log(val);
       alert(val.data);
@@ -44,11 +44,11 @@ class ResearchPost extends Component {
       return;
     }
 
-    axios.delete("/api/research_posts?id=" + this.state.post._id)
-      .then(res => this.props.history.push("/"))
-      .catch(err => {
+    axios.delete(`/api/research_posts?id=${ this.state.post._id}`)
+      .then(res => this.props.history.push('/'))
+      .catch((err) => {
         console.log(err);
-        alert("Failed to delete post");
+        alert('Failed to delete post');
       });
   }
 
@@ -62,14 +62,14 @@ class ResearchPost extends Component {
   }
 
   handleClose() {
-    console.log(this.state)
+    console.log(this.state);
     if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
       return;
     }
-    var post = this.state.post
-    post.status = 'Closed'
-    this.setState(post)
-    var newPost = {
+    const post = this.state.post;
+    post.status = 'Closed';
+    this.setState(post);
+    const newPost = {
       _id: this.state.post._id,
       title: this.state.post.title,
       owner: this.state.post.owner.cruzid,
@@ -79,22 +79,22 @@ class ResearchPost extends Component {
       description: this.state.post.description,
       department: {
         value: this.state.post.department._id,
-        label: this.state.post.department.name
+        label: this.state.post.department.name,
       },
       status: this.state.post.status,
-      deadline: this.state.post.deadline
-    }
-    axios.post("/api/research_posts?id=" + this.state.post._id, newPost)
+      deadline: this.state.post.deadline,
+    };
+    axios.post(`/api/research_posts?id=${ this.state.post._id}`, newPost);
   }
 
   handleOpen() {
     if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
       return;
     }
-    var post = this.state.post
-    post.status = 'Open'
-    this.setState(post)
-    var newPost = {
+    const post = this.state.post;
+    post.status = 'Open';
+    this.setState(post);
+    const newPost = {
       _id: this.state.post._id,
       title: this.state.post.title,
       owner: this.state.post.cruzid,
@@ -104,12 +104,12 @@ class ResearchPost extends Component {
       description: this.state.post.description,
       department: {
         value: this.state.post.department._id,
-        label: this.state.post.department.name
+        label: this.state.post.department.name,
       },
       status: this.state.post.status,
-      deadline: this.state.post.deadline
-    }
-    axios.post("/api/research_posts?id=" + this.state.post._id, newPost)
+      deadline: this.state.post.deadline,
+    };
+    axios.post(`/api/research_posts?id=${ this.state.post._id}`, newPost);
   }
 
   render() {
@@ -126,7 +126,7 @@ class ResearchPost extends Component {
               <DepartmentImage type={this.state.post.department.type} />
             </div>
 
-            <div className="box" style={{ background: "#DDDDDD" }}>
+            <div className="box" style={{ background: '#DDDDDD' }}>
               <div className="is-title">{this.state.post.title}</div>
             </div>
 
@@ -138,40 +138,40 @@ class ResearchPost extends Component {
               {this.state.post.description}
             </div>
 
-            <div className="box" style={{ background: "#DDDDDD", display: "grid" }}>
+            <div className="box" style={{ background: '#DDDDDD', display: 'grid' }}>
               {this.state.post.tags.map(tag => (<span className="tag is-medium" key={tag}>{tag}</span>))}
             </div>
           </div>
 
           <div className="column" align="center">
-            <Link to={"/profile/" + this.state.post.owner.cruzid}>
-              <div className="box has-text-link" style={{ background: "#DDDDDD" }}>
+            <Link to={`/profile/${ this.state.post.owner.cruzid}`}>
+              <div className="box has-text-link" style={{ background: '#DDDDDD' }}>
                 {this.state.post.owner.name}
               </div>
             </Link>
           </div>
 
-          <div className="box" style={{ background: "#DDDDDD", display: "grid" }}>
+          <div className="box" style={{ background: '#DDDDDD', display: 'grid' }}>
             <span className="status is-medium" align="center">{this.state.post.status}</span>
 
           </div>
 
           <div className="column" align="center">
-            <div className="box" style={{ background: "#DDDDDD" }}>
+            <div className="box" style={{ background: '#DDDDDD' }}>
               {this.state.post.department.name}
             </div>
             <br />
             <div align="center">
-              {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-danger" onClick={() => this.handleDelete()}>Delete</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Open')) ?
-                (<button className="button is-warning" onClick={() => this.handleClose()} style={{ marginLeft: "1em" }}>Close</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Closed')) ?
-                (<button className="button is-warning" onClick={() => this.handleOpen()} style={{ marginLeft: "1em" }}>Open</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-success" onClick={() => this.handleEdit()} style={{ marginLeft: "1em" }}>Edit</button>) : ""}
+              {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid))
+                ? (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: '1em' }}>{this.props.auth.isProfessor ? 'Check Applicants' : 'Apply'}</button>) : ''}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid))
+                ? (<button className="button is-danger" onClick={() => this.handleDelete()}>Delete</button>) : ''}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Open'))
+                ? (<button className="button is-warning" onClick={() => this.handleClose()} style={{ marginLeft: '1em' }}>Close</button>) : ''}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Closed'))
+                ? (<button className="button is-warning" onClick={() => this.handleOpen()} style={{ marginLeft: '1em' }}>Open</button>) : ''}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid))
+                ? (<button className="button is-success" onClick={() => this.handleEdit()} style={{ marginLeft: '1em' }}>Edit</button>) : ''}
             </div>
 
           </div>

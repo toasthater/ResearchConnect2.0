@@ -1,62 +1,60 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import profileImg from "../assets/profile.png";
-import ResumeForm from "./ResumeForm";
+import axios from 'axios';
+import profileImg from '../assets/profile.png';
+import ResumeForm from './ResumeForm';
 import Spinner from './Spinner';
-import axios from "axios";
 
 class StudentProfile extends Component {
-
   componentDidMount() {
-    this.checkFollowers()
+    this.checkFollowers();
   }
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       loading: true,
-      isFollowDisabled: this.props.isFollowDisabled
-    }
+      isFollowDisabled: this.props.isFollowDisabled,
+    };
   }
 
   checkFollowers = () => {
     axios
-      .get("/api/users/", {
+      .get('/api/users/', {
         params: {
-          cruzid: this.props.auth.cruzid
-        }
+          cruzid: this.props.auth.cruzid,
+        },
       })
-      .then(res => {
+      .then((res) => {
         if (res.data.following && res.data.following.includes(this.props.match.params.cruzid)) {
           this.setState({
             following: true,
-            loading: false
-          })
-        }
-        else {
+            loading: false,
+          });
+        } else {
           this.setState({
             following: false,
-            loading: false
-          })
+            loading: false,
+          });
         }
-      })
+      });
   }
 
-  toggleFollow = _ => {
+  toggleFollow = (_) => {
     const following = this.state.following;
     this.setState({ isFollowDisabled: false });
     this.setState({ following: !this.state.following });
 
     axios
-      .post("/api/follow", {
+      .post('/api/follow', {
         cruzid: this.props.match.params.cruzid,
-        following: following
+        following,
       })
       .then(_ => this.setState({ isFollowDisabled: false }))
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-        this.setState({ following: following });
+        this.setState({ following });
       });
   };
 
@@ -77,7 +75,8 @@ class StudentProfile extends Component {
           <h1 align="center">
             <div align="center">
               <figure className="image is-128x128">
-                <img className="is-rounded"
+                <img
+                  className="is-rounded"
                   src={
                     this.props.profile.profile_pic
                       ? this.props.profile.profile_pic
@@ -95,11 +94,11 @@ class StudentProfile extends Component {
               <br />
               <button
                 id={this.props.profile.cruzid}
-                className={"button is-link " + (this.state.following ? "" : "is-inverted")}
+                className={`button is-link ${ this.state.following ? '' : 'is-inverted'}`}
                 disabled={this.state.isFollowDisabled}
                 onClick={this.toggleFollow}
               >
-                {this.state.following ? "Following" : "Follow"}
+                {this.state.following ? 'Following' : 'Follow'}
               </button>
               <br />
             </div>
@@ -108,20 +107,20 @@ class StudentProfile extends Component {
           <br />
 
           <div className="box">
-            {this.props.profile.name ? this.props.profile.name : "No Name Listed"}
+            {this.props.profile.name ? this.props.profile.name : 'No Name Listed'}
           </div>
 
           <div className="box">
-            {this.props.profile.email ? this.props.profile.email : "No Email Listed"}
+            {this.props.profile.email ? this.props.profile.email : 'No Email Listed'}
           </div>
 
           {<div className="box">
-            {this.props.student.major ? this.props.student.major : "No Major Listed"}
+            {this.props.student.major ? this.props.student.major : 'No Major Listed'}
           </div>}
 
           <div className="box">
             <p align="left">Bio:</p>
-            <p align="left">{this.props.profile.bio ? this.props.profile.bio : "No Available Bio"}</p>
+            <p align="left">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</p>
           </div>
 
           {myProfile && this.props.auth && (
@@ -129,7 +128,7 @@ class StudentProfile extends Component {
               <div>
                 <p>Upload Resume:</p>
                 <ResumeForm
-                  onSubmit={(data) => this.uploadResume(data.file)}
+                  onSubmit={data => this.uploadResume(data.file)}
                 />
               </div>
             </div>
@@ -141,17 +140,17 @@ class StudentProfile extends Component {
               className="button is-info"
               target="_blank"
               rel="noopener noreferrer"
-              download={this.props.profile.name + "_Resume.pdf"}
-              disabled={this.props.resume ? false : true}
+              download={`${this.props.profile.name }_Resume.pdf`}
+              disabled={!this.props.resume}
             >
-              {this.props.resume ? "Download Resume" : "No Resume Available"}
+              {this.props.resume ? 'Download Resume' : 'No Resume Available'}
             </a>
           </div>
         </div>
       </div>
 
-    )
+    );
   }
 }
 
-export default withRouter(StudentProfile)
+export default withRouter(StudentProfile);

@@ -31,17 +31,24 @@ class Applicants extends Component {
   }
 
   formatApplicant() {
-    var applicants = this.state.post.applicants;
+    const applicants = this.state.post.applicants;
     return (
       <div className="flex-container">
-        {applicants.map(applicant => (<ApplicantCard onSubmit={this.onSubmit} key={applicant._id} applicant={{
+        {applicants.map(applicant => (
+          <ApplicantCard
+            onSubmit={this.onSubmit}
+            key={applicant._id}
+            applicant={{
           id: applicant._id,
           status: applicant.status,
           student: applicant.student,
           cruzid: applicant.student.cruzid,
-          ownerProfile: "/profile/" + applicant.student.cruzid,
-        }} />))}
-      </div>)
+          ownerProfile: `/profile/${ applicant.student.cruzid}`,
+        }}
+          />
+))}
+      </div>
+);
   }
 
   onSubmit = (applicationID, accept) => {
@@ -82,8 +89,7 @@ No Applicants
 
       return (
         <section className="section">
-          <div className="App">
-          </div>
+          <div className="App" />
 
           {this.formatApplicant()}
 
