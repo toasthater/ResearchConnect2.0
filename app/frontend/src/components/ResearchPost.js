@@ -162,8 +162,10 @@ class ResearchPost extends Component {
             </div>
             <br />
             <div align="center">
-              {(!this.props.auth.isProfessor || (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>{this.props.auth.isProfessor ? "Check Applicants" : "Apply"}</button>) : ""}
+              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
+                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>Check Applicants</button>) : ""}
+              {(!this.props.auth.isProfessor && (this.state.post.owner.cruzid !== this.props.auth.cruzid) && (this.state.post.status === 'Open')) ?
+                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>Apply</button>) : ""}
               {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
                 (<button className="button is-danger" onClick={() => this.handleDelete()}>Delete</button>) : ""}
               {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Open')) ?
