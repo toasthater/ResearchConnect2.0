@@ -47,6 +47,7 @@ class AddPostForm extends React.Component {
                     value: this.props.post.department._id
                 },
                 deadline: new Date(this.props.post.deadline),
+                questions: this.props.post.questions,
                 owner: this.props.post.owner.cruzid,
             });
 

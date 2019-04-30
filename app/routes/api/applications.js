@@ -33,9 +33,15 @@ router.post('/', async (req, res) => {
                 }
             }
 
+            if (research.questions.length > 0 && (!req.body.responses || req.body.responses.length != research.questions.length)) {
+                res.send("Improper amount of responses in application.");
+                return;
+            }
+
             const newApp = new Application({
                 research: req.body.postID,
-                student: newStudent._id
+                student: newStudent._id,
+                responses: req.body.responses
             });
 
             await newApp.save();

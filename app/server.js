@@ -16,6 +16,7 @@ const users = require('./routes/api/users');
 const follow = require('./routes/api/follow');
 const studentMember = require("./routes/api/students");
 const resume = require("./routes/api/resume");
+const hasApplied = require("./routes/api/hasApplied");
 
 require('./models/User');
 require('./models/Student');
@@ -57,6 +58,7 @@ app.use('/api/setup', setup);
 app.use('/api/updateStudent', updateStudent);
 app.use("/api/resume", resume);
 app.use("/api/apply", require("./routes/api/applications"));
+app.use("/api/hasApplied", hasApplied);
 
 // DB config
 const db = require("./config/keys").mongoURI;

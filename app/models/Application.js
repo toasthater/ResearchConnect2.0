@@ -14,7 +14,8 @@ const ApplicationSchema = new Schema({
     status: {
         type: String,
         default: 'pending'
-    }
+    },
+    responses: [String]
 });
 
 module.exports = Application = mongoose.model('application', ApplicationSchema);
