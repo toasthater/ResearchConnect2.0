@@ -31,11 +31,13 @@ const ResearchSchema = new Schema({
     type: Date,
     required: true,
   },
-  applicants: {
-    type: [Schema.Types.ObjectId],
-    require: true,
-    default: [],
-  },
+  applicants: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'application',
+      required: true,
+    },
+  ],
 });
 
 module.exports = Research = mongoose.model('research', ResearchSchema);
