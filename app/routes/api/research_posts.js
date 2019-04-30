@@ -1,8 +1,9 @@
 const express = require('express');
+
 const router = express.Router();
 const fillResearchPost = require('./fillResearchHelper');
 
-//Research post model
+// Research post model
 const Research = require('../../models/Research');
 const FacultyMember = require('../../models/FacultyMember');
 
@@ -17,16 +18,16 @@ router.get('/', (req, res) => {
         res.send(new Research());
       } else if (req.query.fill) {
         fillResearchPost(result)
-        .then(data => res.send(data))
-        .catch(err => res.send(new Research()));
+          .then(data => res.send(data))
+          .catch(err => res.send(new Research()));
       } else {
         res.send(result);
       }
     });
   } else {
     Research.find({})
-      .sort({ date : -1  }).limit(9)
-      .then(async research_posts => {
+      .sort({ date: -1 }).limit(9)
+      .then(async (research_posts) => {
         if (req.query.fill) {
           for (let i = 0; i < research_posts.length; i++) {
             research_posts[i] = await fillResearchPost(research_posts[i]);
@@ -43,12 +44,12 @@ router.get('/', (req, res) => {
 // @desc  Create a research post
 // @access Public
 router.post('/', (req, res) => {
-    let relevantFaculty = FacultyMember.findOne({
-        'cruzid': {
-            '$regex': req.body.owner.toLowerCase(),
-            $options: 'i'
-        }
-    });
+  const relevantFaculty = FacultyMember.findOne({
+    cruzid: {
+      $regex: req.body.owner.toLowerCase(),
+      $options: 'i',
+    },
+  });
 
     relevantFaculty.then(data => {
       const researchPost = new Research({
@@ -59,13 +60,14 @@ router.post('/', (req, res) => {
         summary: req.body.summary,
         description: req.body.description,
         department: req.body.department.value,
-        status: "Open",
+        status: req.body.status ? req.body.status : "Open",
         deadline: req.body.deadline,
         questions: req.body.questions
       });
 
-      if (req.body._id) {
-        Research.findByIdAndUpdate(req.body._id, { $set: {
+    if (req.body._id) {
+      Research.findByIdAndUpdate(req.body._id, {
+        $set: {
           title: researchPost.title,
           owner: researchPost.owner,
           cruzid: researchPost.cruzid,
@@ -76,27 +78,28 @@ router.post('/', (req, res) => {
           status: researchPost.status,
           deadline: researchPost.deadline,
           questions: req.body.questions
-        }}, (err, research) => {
-          if (err) {
-            console.log(err);
-            res.send(err);
-          } else {
-            res.send(research);
-          }
-        });
-      } else {
-        researchPost.save().then(research => res.json(research));
-      }
-    });
+        },
+      }, (err, research) => {
+        if (err) {
+          console.log(err);
+          res.send(err);
+        } else {
+          res.send(research);
+        }
+      });
+    } else {
+      researchPost.save().then(research => res.json(research));
+    }
+  });
 });
 
 // @route DELETE api/research_posts/:id
 // @desc  Delete a research post
 // @access Public
 router.delete('/', (req, res) => {
-    Research.findById(req.query.id)
-        .then(research => research.remove().then(() => res.json({success: true})))
-        .catch(err => res.status(404).json({success: true}));
+  Research.findById(req.query.id)
+    .then(research => research.remove().then(() => res.json({ success: true })))
+    .catch(err => res.status(404).json({ success: true }));
 });
 
 module.exports = router;

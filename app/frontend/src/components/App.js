@@ -1,25 +1,29 @@
-import React, { Component } from "react";
-import NavBar from "./NavBar";
-import Landing from "./Landing";
-import Home from "./Home";
-import About from "./About";
-import Profile from "./Profile";
-import ResearchPost from "./ResearchPost";
-import Spinner from "./Spinner";
-import EditProfile from "./EditProfile";
-import SearchResults from "./SearchResults";
-import Applicants from "./Applicants";
-import { Route, Switch, NavLink, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import * as actions from "../actions";
-import ErrorBoundary from "./ErrorBoundary";
-import Setup from "./Setup";
-import NewResearch from "./NewResearch";
-import PageNotFound from "./ErrorPage";
+import React, { Component } from 'react';
+import {
+  Route, Switch, NavLink, Redirect,
+} from 'react-router-dom';
+import { connect } from 'react-redux';
+import NavBar from './NavBar';
+import Landing from './Landing';
+import Home from './Home';
+import About from './About';
+import Profile from './Profile';
+import ResearchPost from './ResearchPost';
+import Spinner from './Spinner';
+import EditProfile from './EditProfile';
+import SearchResults from './SearchResults';
+import Applicants from './Applicants';
+import * as actions from '../actions';
+import ErrorBoundary from './ErrorBoundary';
+import Setup from './Setup';
+import NewResearch from './NewResearch';
+import PageNotFound from './ErrorPage';
 
-NavLink.defaultProps.activeClassName = "is-active";
+NavLink.defaultProps.activeClassName = 'is-active';
 
-const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
+const PrivateRoute = ({
+  loggedIn, accountSetup, component, ...rest
+}) => (
   <Route
     {...rest}
     component={loggedIn ? (accountSetup ? component : Setup) : Landing}
@@ -28,7 +32,7 @@ const PrivateRoute = ({ loggedIn, accountSetup, component, ...rest }) => (
 
 class App extends Component {
   componentDidMount() {
-    this.props.fetchUser().then(_ => {
+    this.props.fetchUser().then((_) => {
       this.props.fetchProfile(this.props.auth.cruzid);
     });
   }
@@ -89,7 +93,7 @@ class App extends Component {
               component={Applicants}
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}
-            />        
+            />
             <Route component={PageNotFound} />
             {this.props.auth ? <></> : <Redirect from="/*" to="/" />}
           </Switch>
@@ -99,7 +103,7 @@ class App extends Component {
             // Auto-update service worker on route change
             history.listen(() => {
               if (window.swUpdate === true) {
-                console.log("Reloading");
+                console.log('Reloading');
                 window.location.reload();
               }
             });
@@ -124,5 +128,5 @@ function mapStateToProps({ auth, profile, loadState }) {
 
 export default connect(
   mapStateToProps,
-  actions
+  actions,
 )(App);

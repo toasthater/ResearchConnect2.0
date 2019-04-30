@@ -14,15 +14,32 @@ export default () => (
         <img src={logoImg} alt="ResearchConnect" width={200} />
         <br />
       </h1>
-      <h4 align="center">Connecting UCSC students to faculty & research opportunities. <span role="img" aria-label="jsx-a11y/accessible-emoji">🎓 🧪</span></h4>
+      <h4 align="center">
+Connecting UCSC students to faculty & research opportunities.
+        <span role="img" aria-label="jsx-a11y/accessible-emoji">🎓 🧪</span>
+      </h4>
       <p align="center">
-        <a href="#the-issue">The Issue</a> •
-        <a href="#our-solution">Our Solution</a> •
-        <a href="#install">Install</a> •
-        <a href="#install">Run</a> •
-        <a href="#deploy">Deploy</a> •
-        <a href="#api-used">API Used</a> •
-        <a href="#credits">Credits</a> •
+        <a href="#the-issue">The Issue</a>
+        {' '}
+•
+        <a href="#our-solution">Our Solution</a>
+        {' '}
+•
+        <a href="#install">Install</a>
+        {' '}
+•
+        <a href="#install">Run</a>
+        {' '}
+•
+        <a href="#deploy">Deploy</a>
+        {' '}
+•
+        <a href="#api-used">API Used</a>
+        {' '}
+•
+        <a href="#credits">Credits</a>
+        {' '}
+•
         <a href="#license">Authors</a>
       </p>
       <h2 id="theissue">The Issue</h2>

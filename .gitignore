@@ -1,6 +1,6 @@
 # Custom
 functions/credentials.json
-app/config/keys.js
+app/.env
 
 # Logs
 logs

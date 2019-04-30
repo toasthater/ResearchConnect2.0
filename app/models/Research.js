@@ -1,41 +1,42 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 // Create schema
 const ResearchSchema = new Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'faculty_members',
-        required: true
-    }, 
-    cruzid: String,
-    created: {
-        type: Date,
-        default: Date.now
-    },
-    tags: [String],
-    summary: String,
-    description: String,
-    department: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'departments',
-        required: true
-    },
-    status: String,
-    deadline: {
-        type: Date,
-        required: true
-    },
-    applicants: {
-        type: [Schema.Types.ObjectId],
-        require: true,
-        default: []
-    },
-    questions: [String]
+  title: {
+    type: String,
+    required: true,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'faculty_members',
+    required: true,
+  },
+  cruzid: String,
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+  tags: [String],
+  summary: String,
+  description: String,
+  department: {
+    type: Schema.Types.ObjectId,
+    ref: 'departments',
+    required: true,
+  },
+  status: String,
+  deadline: {
+    type: Date,
+    required: true,
+  },
+  applicants: {
+    type: [Schema.Types.ObjectId],
+    require: true,
+    default: [],
+  },
+  questions: [String],
 });
 
 module.exports = Research = mongoose.model('research', ResearchSchema);

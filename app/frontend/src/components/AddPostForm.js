@@ -7,27 +7,27 @@ import Select from 'react-select';
 import Tags from './Tags';
 import * as actions from '../actions';
 
-var rawDepartmentList;
+let rawDepartmentList;
 const departmentList = [];
-axios.get('/api/department').then(function(response){rawDepartmentList = response.data; populateList(rawDepartmentList)});
+axios.get('/api/department').then((response) => { rawDepartmentList = response.data; populateList(rawDepartmentList); });
 
-function populateList(list){
-    for (var i = 0; i < list.length; i++) {
-        var id = list[i]._id
-        var name = list[i].name
-  
-        departmentList.push({ label: name, value: id})
+function populateList(list) {
+    for (let i = 0; i < list.length; i++) {
+        const id = list[i]._id;
+        const { name } = list[i];
+
+        departmentList.push({ label: name, value: id });
     }
 }
 
 
-class AddPostForm extends React.Component { 
+class AddPostForm extends React.Component {
     state = {
         title: '',
         tags: [],
         summary: '',
         description: '',
-        department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
+        department: { label: 'Academic Senate', value: '5c4ab51421e1383889614c73' },
         deadline: new Date(),
         owner: this.props.auth.cruzid,
         valid: false,
@@ -44,7 +44,7 @@ class AddPostForm extends React.Component {
                 description: this.props.post.description,
                 department: {
                     label: this.props.post.department.name,
-                    value: this.props.post.department._id
+                    value: this.props.post.department._id,
                 },
                 deadline: new Date(this.props.post.deadline),
                 questions: this.props.post.questions,
@@ -57,8 +57,8 @@ class AddPostForm extends React.Component {
 
     change = (e) => {
         this.setState({
-            [e.target.name]: e.target.value
-        })
+            [e.target.name]: e.target.value,
+        });
     };
 
     changeQuestion = (e) => {
@@ -73,8 +73,8 @@ class AddPostForm extends React.Component {
 
     changeDept = (e) => {
         this.setState({
-            department: e
-        })
+            department: e,
+        });
     };
 
     validate() {
@@ -90,20 +90,20 @@ class AddPostForm extends React.Component {
                 valid: true
             });
         }
-      }
+    }
 
     async onSubmit(e) {
         e.preventDefault();
-        await this.validate()
-        if (this.state.valid === true){
-            await axios.post('/api/research_posts', { ...this.state }); 
+        await this.validate();
+        if (this.state.valid === true) {
+            await axios.post('/api/research_posts', { ...this.state });
             console.log(this.state);
             this.setState({
                 title: '',
                 tags: [],
                 summary: '',
                 description: '',
-                department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
+                department: { label: 'Academic Senate', value: '5c4ab51421e1383889614c73' },
                 deadline: new Date(),
                 owner: this.props.auth.cruzid,
                 cruzid: this.props.auth.cruzid,
@@ -112,9 +112,7 @@ class AddPostForm extends React.Component {
             })
 
             this.props.onSubmit()
-        }
-        else
-            alert('Title, Summary and Description are required fields. Questions may not be blank.');
+        } else alert('Title, Summary and Description are required fields. Questions may not be blank.');
     }
 
     onCancel = (e) => {
@@ -124,15 +122,15 @@ class AddPostForm extends React.Component {
             tags: [],
             summary: '',
             description: '',
-            department: {label: "Academic Senate", value: "5c4ab51421e1383889614c73"},
+            department: { label: 'Academic Senate', value: '5c4ab51421e1383889614c73' },
             deadline: new Date(),
             owner: this.props.auth.cruzid,
             cruzid: this.props.auth.cruzid,
             questions: [],
             valid:false
-        })
+        });
 
-        this.props.onSubmit()
+        this.props.onSubmit();
     };
 
     addQuestion = (e) => {
@@ -163,103 +161,101 @@ class AddPostForm extends React.Component {
     }
 
     tagsChange = (new_tags) => {
-        console.log(new_tags)
-        this.setState({tags: new_tags},  () => {
+        console.log(new_tags);
+        this.setState({ tags: new_tags }, () => {
             console.log(this.state.tags);
         });
-        
     }
 
-    getTags = () => {
-        return this.state.tags
-    }
+    getTags = () => this.state.tags
 
     render() {
         if (!this.props.auth.isProfessor) {
-            this.props.history.push("/");
-            return "";
+            this.props.history.push('/');
+            return '';
         }
 
         return (
-            <form >
-                <div className="container" style={{ width: 768 , marginTop: "5em" }}>
-                    <div className="field" align="center">
-                        <label className="label">Title</label>
-                        <div className="control">
-                            <input name="title" className="input" type="text" maxLength="50" placeholder="Title, 50 char limit" value={this.state.title} onChange={e => this.change(e)}></input>
-                        </div>
-                    </div>
+          <form>
+            <div className="container" style={{ width: 768, marginTop: '5em' }}>
+              <div className="field" align="center">
+                <label className="label">Title</label>
+                <div className="control">
+                  <input name="title" className="input" type="text" maxLength="50" placeholder="Title, 50 char limit" value={this.state.title} onChange={e => this.change(e)} />
+                </div>
+              </div>
 
-                    <div className="field" align="center">
-                        <label className="label">Department</label>
-                        <div className="control">
-                            <div className="Select">
-                                <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)}/>                        
-                            </div>
-                        </div>
-                    </div>
+              <div className="field" align="center">
+                <label className="label">Department</label>
+                <div className="control">
+                  <div className="Select">
+                    <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)} />
+                  </div>
+                </div>
+              </div>
 
-                    <div className="field" align="center">
-                        <label className="label">Summary</label>
-                        <div className="control">
-                            <input type="text" name="summary" className="input" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)}></input>
-                        </div>
-                    </div>
+              <div className="field" align="center">
+                <label className="label">Summary</label>
+                <div className="control">
+                  <input type="text" name="summary" className="input" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)} />
+                </div>
+              </div>
 
-                    <div className="field" align="center">
-                        <label className="label">Description</label>
-                        <div className="control">
-                            <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)}></textarea>
-                        </div>
-                    </div>
+              <div className="field" align="center">
+                <label className="label">Description</label>
+                <div className="control">
+                  <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)} />
+                </div>
+              </div>
 
-                    <div className="field" align="center">
-                        <label className="label">Questionnaire</label>
-                        <div className="control">
-                            {this.getQuestions()}
-                            <div className="columns" align="center">
-                                <div className="column"> 
-                                    <button onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
-                                </div>
-                                <div className="column"> 
-                                    <button onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field" align="center">
-                        <label className="label">Tags</label>
-                        <div className="control">
-                        <Tags getTags={this.getTags} tagsChange={this.tagsChange} />
-                        </div>
-                    </div>
-
-                    <div className="field" align="center">
-                        <label className="label">Deadline</label>
-                        <div  align="center">
-                            <Calendar 
-                                onChange={this.onChange}
-                                value={this.state.deadline}
-                            />
-                        </div>
-                    </div>
-
+              <div className="field" align="center">
+                <label className="label">Questionnaire</label>
+                <div className="control">
+                    {this.getQuestions()}
                     <div className="columns" align="center">
-                        <div className="column">
-                            <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                        <div className="column"> 
+                            <button onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
                         </div>
                         <div className="column"> 
-                            <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
+                            <button onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
                         </div>
                     </div>
                 </div>
-            </form>
-        )
+            </div>
+
+              <div className="field" align="center">
+                <label className="label">Tags</label>
+                <div className="control">
+                  <Tags getTags={this.getTags} tagsChange={this.tagsChange} />
+                </div>
+              </div>
+
+              <div className="field" align="center">
+                <label className="label">Deadline</label>
+                <div align="center">
+                  <Calendar
+                    onChange={this.onChange}
+                    value={this.state.deadline}
+                  />
+                  {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
+                </div>
+              </div>
+
+              <div className="columns" align="center">
+                <div className="column">
+                  <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
+                </div>
+                <div className="column">
+                  <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        );
     }
 }
 
-function mapStateToProps({ auth, post }){
+function mapStateToProps({ auth, post }) {
     return { auth, post };
 }
 

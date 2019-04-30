@@ -12,7 +12,6 @@ const getMessage = (code) => {
 };
 
 class ErrorBoundary extends React.Component {
-
   state = {
     code: 0,
     message: '',
@@ -20,9 +19,9 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error) {
-    let message,
-        code = 500;
-    
+    let message;
+        let code = 500;
+
     if (typeof error === 'string') message = error;
     else {
       if (error && error.code) code = error.code;
@@ -61,10 +60,13 @@ class ErrorBoundary extends React.Component {
           <div className="container has-text-centered">
             <h1 className="is-size-1">{code}</h1>
             <h3 className="is-size-4">{message}</h3>
-            <br/>
-            <br/>
-            <button className="button is-medium is-primary"
-              onClick={this.goBack}>Go Back
+            <br />
+            <br />
+            <button
+              className="button is-medium is-primary"
+              onClick={this.goBack}
+            >
+Go Back
             </button>
           </div>
         </div>

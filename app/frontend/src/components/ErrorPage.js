@@ -6,8 +6,6 @@ export default () => (
     <br />
     <h1 className="is-size-1">Page Not Found</h1>
 
-    <div className="content">
-      
-    </div>
+    <div className="content" />
   </div>
 );
