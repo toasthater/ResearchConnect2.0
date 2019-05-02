@@ -20,12 +20,6 @@ class Home extends Component {
     this.getPosts();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.posts.length !== this.state.posts.length) {
-      this.getPosts();
-    }
-  }
-
   getPosts() {
     this.setState({
       posts: this.state.posts,
