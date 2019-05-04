@@ -9,6 +9,11 @@ const Student = require('../../models/Student');
 const router = express.Router();
 
 router.post('/', (req, res) => {
+  if (!req.user || !req.busboy) {
+    res.send(null);
+    return;
+  }
+
   req.busboy.on('file', (fieldname, file, filename, name, encoding, mimetype) => {
     const tmpPath = path.join(os.tmpdir(), `${req.user.id}.pdf`);
     file.pipe(fs.createWriteStream(tmpPath));
