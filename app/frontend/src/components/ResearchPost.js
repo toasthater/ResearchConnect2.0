@@ -6,10 +6,17 @@ import axios from 'axios';
 import * as actions from '../actions';
 import Spinner from './Spinner';
 import DepartmentImage from './DepartmentImage';
+import Modal from 'react-modal';
+
+Modal.defaultStyles.overlay.top = "5%";
+Modal.defaultStyles.content.background = "#efebeb";
 
 class ResearchPost extends Component {
   state = {
     post: null,
+    showModal: false,
+    hasApplied: false,
+    responses: []
   };
 
   async componentDidMount() {
@@ -23,19 +30,40 @@ class ResearchPost extends Component {
       },
     });
 
-    this.state.post = post.data;
-    this.forceUpdate();
+    let applied = await axios.get("/api/hasApplied?id=" + id);
+
+    let responses = [];
+    for (let i = 0; i < post.data.questions.length; i += 1) {
+      responses[i] = "";
+    }
+
+    this.setState({
+      post: post.data,
+      hasApplied: applied.data,
+      responses: responses });
+  }
+  
+  async goToApplicants() {
+    if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
+      return;
+    }
+
+    const args = qs.parse(this.props.location.search);
+    this.props.history.push('/applicants?id=' + args.id);
   }
 
-  async handleSubmit(e) {
-    const args = qs.parse(this.props.location.search);
+  async applyToPost() {
     if (this.props.auth.isProfessor) {
-      this.props.history.push(`/applicants?id=${ args.id}`);
-    } else {
-      const val = await axios.post('/api/apply', { postID: args.id, applicant: this.props.auth._id });
+      return;
+    }
 
-      console.log(val);
+    const args = qs.parse(this.props.location.search);
+
+    if (!this.state.post.questions || this.state.post.questions.length === 0) {
+      const val = await axios.post("/api/apply", { postID: args.id, applicant: this.props.auth._id });
       alert(val.data);
+    } else {
+      this.setState({showModal: true});
     }
   }
 
@@ -112,6 +140,57 @@ class ResearchPost extends Component {
     axios.post(`/api/research_posts?id=${ this.state.post._id}`, newPost);
   }
 
+  editResponse = (e) => {
+    e.persist();
+
+    this.setState(state => {
+      const responses = state.responses;
+      responses[parseInt(e.target.name)] = e.target.value;
+
+      return { responses };
+    });
+  }
+
+  getQuestions = () => {
+    let q = this.state.post.questions.map((question, i) =>
+      <div key={"Question " + i} align="center" style={{ marginBottom: "1em" }}>
+        <h1 className="subtitle">{"Question #" + (i + 1)}</h1>
+        <p>{question}</p>
+        <textarea name={i} className="textarea" placeholder={"Response to question #" + (i + 1)} value={this.state.responses[i]} onChange={e => this.editResponse(e)}></textarea>
+      </div>
+    );
+
+    return <div>{q}</div>
+  }
+
+  async onSubmitModal() {
+    for (let i = 0; i < this.state.responses.length; i += 1) {
+      if (!this.state.responses[i] || this.state.responses[i] === "") {
+        alert("All questions must be answered");
+        return;
+      }
+    }
+
+    const args = qs.parse(this.props.location.search);
+
+    const val = await axios.post("/api/apply", {
+      postID: args.id,
+      applicant: this.props.auth._id,
+      responses: this.state.responses
+    });
+
+    alert(val.data);
+    this.setState({
+      showModal: false
+    });
+  }
+
+  onCancelModal = () => {
+    this.setState({
+      showModal: false
+    });
+  }
+  
   render() {
     if (this.state.post !== null && this.state.post.title === undefined) {
       this.props.history.push('/');
@@ -162,22 +241,36 @@ class ResearchPost extends Component {
             </div>
             <br />
             <div align="center">
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>Check Applicants</button>) : ""}
-              {(!this.props.auth.isProfessor && (this.state.post.owner.cruzid !== this.props.auth.cruzid) && (this.state.post.status === 'Open')) ?
-                (<button className="button is-success" onClick={() => this.handleSubmit()} style={{ marginRight: "1em" }}>Apply</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-danger" onClick={() => this.handleDelete()}>Delete</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Open')) ?
-                (<button className="button is-warning" onClick={() => this.handleClose()} style={{ marginLeft: "1em" }}>Close</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && (this.state.post.status === 'Closed')) ?
-                (<button className="button is-warning" onClick={() => this.handleOpen()} style={{ marginLeft: "1em" }}>Open</button>) : ""}
-              {(this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid)) ?
-                (<button className="button is-success" onClick={() => this.handleEdit()} style={{ marginLeft: "1em" }}>Edit</button>) : ""}
-            </div>
+              {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid &&
+                <button className="button is-success" onClick={() => this.goToApplicants()} style={{ marginLeft: "1em" }}>Applicants</button>}
 
+              {!this.props.auth.isProfessor && !this.state.hasApplied && this.state.post.status === 'Open' &&
+                <button className="button is-success" onClick={() => this.applyToPost()} style={{ marginLeft: "1em" }}>Apply</button>}
+
+              {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid && this.state.post.status === 'Open' &&
+                <button className="button is-warning" onClick={() => this.handleClose()} style={{ marginLeft: "1em" }}>Close</button>}
+              
+              {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid && this.state.post.status === 'Closed' &&
+                <button className="button is-warning" onClick={() => this.handleOpen()} style={{ marginLeft: "1em" }}>Open</button>}
+
+              {this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && 
+                <button className="button is-danger" onClick={() => this.handleDelete()} style={{ marginLeft: "1em" }}>Delete</button>}
+
+              {this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) &&
+                <button className="button is-success" onClick={() => this.handleEdit()} style={{ marginLeft: "1em" }}>Edit</button>}
+              </div>
           </div>
-
+          <Modal isOpen={this.state.showModal} contentLabel="Questionnaire">
+            {this.getQuestions()}
+            <div className="columns" align="center">
+              <div className="column">
+                <button onClick={() => this.onSubmitModal()} className="button is-link">Submit</button>
+              </div>
+              <div className="column"> 
+                <button onClick={() => this.onCancelModal()} className="button is-danger is-link">Cancel</button>
+              </div>
+            </div>
+          </Modal>
         </section>
       </div>
 ) : <Spinner fullPage />

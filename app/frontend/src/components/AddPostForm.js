@@ -31,6 +31,7 @@ class AddPostForm extends React.Component {
         deadline: new Date(),
         owner: this.props.auth.cruzid,
         valid: false,
+        questions: []
     }
 
     componentDidMount() {
@@ -46,6 +47,7 @@ class AddPostForm extends React.Component {
                     value: this.props.post.department._id,
                 },
                 deadline: new Date(this.props.post.deadline),
+                questions: this.props.post.questions,
                 owner: this.props.post.owner.cruzid,
             });
 
@@ -59,6 +61,16 @@ class AddPostForm extends React.Component {
         });
     };
 
+    changeQuestion = (e) => {
+        e.persist();
+        this.setState(state => {
+            const questions = state.questions;
+            questions[parseInt(e.target.name)] = e.target.value;
+
+            return { questions };
+        });
+    }
+
     changeDept = (e) => {
         this.setState({
             department: e,
@@ -66,17 +78,19 @@ class AddPostForm extends React.Component {
     };
 
     validate() {
-        const {
-            title,
-            summary,
-            description,
-          } = this.state;
+        const { title, summary, description } = this.state;
         if (/\S/.test(title) && /\S/.test(summary) && /\S/.test(description)) {
-this.setState({
-                valid: true,
+            for (let i = 0; i < this.state.questions.length; i++) {
+                if (!/\S/.test(this.state.questions[i])) {
+                    return;
+                }
+            }
+
+            this.setState({
+                valid: true
             });
-}
-      }
+        }
+    }
 
     async onSubmit(e) {
         e.preventDefault();
@@ -93,11 +107,12 @@ this.setState({
                 deadline: new Date(),
                 owner: this.props.auth.cruzid,
                 cruzid: this.props.auth.cruzid,
-                valid: false,
-            });
+                questions: [],
+                valid: false
+            })
 
-            this.props.onSubmit();
-        } else alert('Title, Summary and Description are required fields.');
+            this.props.onSubmit()
+        } else alert('Title, Summary and Description are required fields. Questions may not be blank.');
     }
 
     onCancel = (e) => {
@@ -111,11 +126,39 @@ this.setState({
             deadline: new Date(),
             owner: this.props.auth.cruzid,
             cruzid: this.props.auth.cruzid,
-            valid: false,
+            questions: [],
+            valid:false
         });
 
         this.props.onSubmit();
     };
+
+    addQuestion = (e) => {
+        e.preventDefault();
+        
+        this.setState({ questions: [ ...this.state.questions, "" ]});
+    }
+
+    removeQuestion = (e) => {
+        e.preventDefault();
+
+        if (this.state.questions.length > 0) {
+            this.setState(state => {
+                const questions = state.questions;
+                questions.pop();
+
+                return { questions };
+            });
+        }
+    }
+
+    getQuestions = () => { 
+        var questions = this.state.questions.map((question, i) =>
+            <input type="text" key={i} name={i} className="input" placeholder={"Question #" + i} value={this.state.questions[i]} onChange={e => this.changeQuestion(e)} style={{marginBottom: "1em"}}></input>
+        );
+
+        return <div>{questions}</div>
+    }
 
     tagsChange = (new_tags) => {
         console.log(new_tags);
@@ -127,7 +170,6 @@ this.setState({
     getTags = () => this.state.tags
 
     render() {
-        console.log(this.state);
         if (!this.props.auth.isProfessor) {
             this.props.history.push('/');
             return '';
@@ -165,6 +207,21 @@ this.setState({
                   <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)} />
                 </div>
               </div>
+
+              <div className="field" align="center">
+                <label className="label">Questionnaire</label>
+                <div className="control">
+                    {this.getQuestions()}
+                    <div className="columns" align="center">
+                        <div className="column"> 
+                            <button onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
+                        </div>
+                        <div className="column"> 
+                            <button onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
               <div className="field" align="center">
                 <label className="label">Tags</label>
