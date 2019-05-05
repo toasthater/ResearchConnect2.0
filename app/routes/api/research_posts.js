@@ -26,14 +26,11 @@ router.get('/', (req, res) => {
     });
   } else {
     Research.find({})
+      .populate('owner')
+      .populate('department')
+      .populate('applicants')
       .sort({ date: -1 }).limit(9)
       .then(async (research_posts) => {
-        if (req.query.fill) {
-          for (let i = 0; i < research_posts.length; i++) {
-            research_posts[i] = await fillResearchPost(research_posts[i]);
-          }
-        }
-
         res.send(research_posts);
       })
       .catch(err => res.send([new Research()]));
