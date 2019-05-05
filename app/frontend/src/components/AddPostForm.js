@@ -61,6 +61,7 @@ class AddPostForm extends React.Component {
         });
     };
 
+    // for calendar change
     onChange = deadline => this.setState({ deadline })
 
     changeQuestion = (e) => {
