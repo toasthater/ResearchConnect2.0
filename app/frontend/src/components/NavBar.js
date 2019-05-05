@@ -24,6 +24,7 @@ class NavBar extends Component {
     }
 
     toggle = () => {this.setState({ open: !this.state.open })};
+    close = () => {this.setState({ open: false })};
 
     renderLoginButton() {
       switch (this.props.auth) {
@@ -86,7 +87,7 @@ class NavBar extends Component {
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values); }} />}
                 <div className="navbar-end">
                   {this.props.auth && this.props.auth.isProfessor && (
-                    <NavLink className="navbar-item" to="/new">
+                    <NavLink className="navbar-item" to="/new" onClick={this.close}>
                       New Research
                     </NavLink>
 )}
