@@ -23,7 +23,7 @@ class NavBar extends Component {
       }
     }
 
-    toggle = () => this.setState({ open: !this.state.isOpen });
+    toggle = () => {this.setState({ open: !this.state.open })};
 
     renderLoginButton() {
       switch (this.props.auth) {
