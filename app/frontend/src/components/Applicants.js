@@ -38,17 +38,19 @@ class Applicants extends Component {
           <ApplicantCard
             onSubmit={this.onSubmit}
             key={applicant._id}
+            questions={this.state.post.questions}
             applicant={{
-          id: applicant._id,
-          status: applicant.status,
-          student: applicant.student,
-          cruzid: applicant.student.cruzid,
-          ownerProfile: `/profile/${ applicant.student.cruzid}`,
-        }}
+              id: applicant._id,
+              status: applicant.status,
+              student: applicant.student,
+              cruzid: applicant.student.cruzid,
+              ownerProfile: `/profile/${ applicant.student.cruzid}`,
+              responses: applicant.responses,
+            }}
           />
-))}
+        ))}
       </div>
-);
+    );
   }
 
   onSubmit = (applicationID, accept) => {

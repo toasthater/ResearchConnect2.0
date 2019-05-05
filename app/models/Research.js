@@ -38,6 +38,7 @@ const ResearchSchema = new Schema({
       required: true,
     },
   ],
+  questions: [String],
 });
 
 module.exports = Research = mongoose.model('research', ResearchSchema);
