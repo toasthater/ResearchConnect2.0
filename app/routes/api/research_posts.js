@@ -17,12 +17,25 @@ router.get('/', (req, res) => {
       if (err) {
         console.log(err);
         res.send(new Research());
-      } else if (req.query.fill) {
-        fillResearchPost(result)
-          .then(data => res.send(data))
-          .catch(err => res.send(new Research()));
       } else {
-        res.send(result);
+        var currentDate = new Date();
+        var postDate = new Date(result.deadline);
+        if (result.status === 'Open' && currentDate > postDate) {
+          result.status = 'Closed';
+          Research.findByIdAndUpdate(result._id, {
+            $set: {
+              status: result.status
+            }
+          })
+        }
+
+        if (req.query.fill) {
+          fillResearchPost(result)
+            .then(data => res.send(data))
+            .catch(err => res.send(new Research()));
+        } else {
+          res.send(result);
+        }
       }
     });
   } else {
