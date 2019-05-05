@@ -76,6 +76,9 @@ class Home extends Component {
 
         {this.formatPost()}
 
+        <div className="container is-size-2 has-background-grey-light">
+          <center>Search to discover more</center>
+        </div>
       </section>
     );
   }
