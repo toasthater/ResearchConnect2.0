@@ -10,7 +10,7 @@ import * as actions from '../actions';
 import Spinner from './Spinner';
 import StudentProfile from './StudentProfile';
 import ProfessorProfile from './ProfessorProfile';
-
+import PostCard from './PostCard';
 
 class Profile extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -94,11 +94,7 @@ class Profile extends Component {
             .catch(error => console.log(error));
 
           axios
-            .get('/api/research_posts?fill=true', {
-              params: {
-                cruzid: this.props.match.params.cruzid,
-              },
-            })
+            .get('/api/search?type=cruzid&query=' + this.props.match.params.cruzid)
             .then(response => this.setState({
                 research: response.data,
                 researchLoaded: true,
@@ -120,6 +116,15 @@ class Profile extends Component {
               });
             })
             .catch(error => console.log(error));
+
+          axios.get('/api/search?type=Applicants&query=' + this.props.match.params.cruzid)
+          .then(response => {
+            this.setState({
+              research: response.data,
+              researchLoaded: true,
+            })
+          })
+          .catch(error => console.log(error));
         }
       })
       .catch(error => console.log(error));
@@ -134,7 +139,7 @@ class Profile extends Component {
         <br />
         <Link className="card-footer-item info" to={`/post?id=${research._id}`}>Learn More</Link>
       </div>
-));
+    ));
 
     return (
       <ul>{research_posts}</ul>
@@ -167,6 +172,24 @@ class Profile extends Component {
     );
   }
 
+  formatPost() {
+    var posts = this.state.research;
+    return (
+    <div className="flex item inner content">
+        {posts.map(post => (<PostCard key={post._id} post={{
+            id: post._id,
+            type: post.department.type,
+            name: post.title,
+            professor: post.owner.name,
+            tags: post.tags,
+            summary: post.summary,
+            department: post.department.name,
+            ownerProfile: "/profile/" + post.owner.cruzid,
+            applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
+        }} />))}
+    </div>)
+  }
+
   render() {
     if (!this.state.profileLoaded || !this.state.userLoaded) {
       return <Spinner fullPage />;
@@ -189,9 +212,7 @@ class Profile extends Component {
 
             <TabPanel>
               <div>
-                <h1>In progress...</h1>
-                <br />
-                <h2>{this.fetchResearchPosts()}</h2>
+                {this.state.researchLoaded ? this.formatPost() : <Spinner fullPage />}
               </div>
             </TabPanel>
           </Tabs>

@@ -11,7 +11,7 @@ const ApplicationSchema = new Schema({
   },
   student: {
     type: Schema.Types.ObjectId,
-    ref: 'Student',
+    ref: 'users',
     required: true,
   },
   status: {

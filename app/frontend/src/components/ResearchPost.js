@@ -30,6 +30,10 @@ class ResearchPost extends Component {
       },
     });
 
+    if (!post.data.questions) {
+      post.data.questions = [];
+    }
+
     let applied = await axios.get("/api/hasApplied?id=" + id);
 
     let responses = [];

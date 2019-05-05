@@ -31,6 +31,8 @@ router.post('/', async (req, res) => {
           }
       });
 
+      const research = await Research.findById(req.body.postID);
+
       for (let i = 0; i < research.applicants.length; i++) {
         const oldApplication = await Application.findById(research.applicants[i]);
 
@@ -61,7 +63,7 @@ router.post('/', async (req, res) => {
           console.log(err);
           res.send('Error accepting/declining application');
         } else {
-          if (!req.body.id || req.body.status !== 'pending') {
+          if (!req.body.id || application.status !== 'pending') {
             res.send("Error accepting/declining application");
             return;
           }
