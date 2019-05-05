@@ -1,58 +1,44 @@
 import React, { Component } from 'react';
-import landing from '../assets/hero.jpg';
 import signinButton from '../assets/google_signin.png';
-import LazyImg from './LazyImg';
 
 export default class Landing extends Component {
   render() {
     return (
       <React.Fragment>
-        <LazyImg src={landing} style={{ backgroundColor: '#000000' }} className="home">
-          <section className="hero is-medium has-text-centered">
-            <div className="hero-body">
-              <div className="container">
-                <h1 className="title is-size-1 has-text-white ">
-								ResearchConnect
-
-                </h1>
-                <h2 className="subtitle is-size-4 has-text-weight-bold has-text-white ">
-								Connecting UCSC students & faculty to improve involvement in research.
-
-                </h2>
-                <a href="/auth/google">
-                  <button
-                    style={{
-										background: `url("${signinButton}")`, backgroundSize: 'cover', width: 196, height: 46, border: 'none',
-									}}
-                    className="button"
-                    onClick={this.signIn}
-                    title="Sign In"
-                  />
-                </a>
-              </div>
-            </div>
-          </section>
-        </LazyImg>
-        <section>
-          <div className="container">
-            <div className="columns has-text-centered">
-              <div className="column">
-                <div className="title">Professors</div>
-                <div className="subtitle">Post your open research and lab positions to find the best students UCSC has to offer</div>
-              </div>
-              <div className="column">
-                <div className="title">Students</div>
-                <div className="subtitle">Find the best open research positions tailored towards your interests and skills</div>
-              </div>
-              <div className="column">
-                <div className="title">Grads/Ph.D</div>
-                <div className="subtitle">Find students to help in your current research something something something</div>
+        <section className="hero">
+          <div className="hero-body is-medium">
+            <div className="container">
+              <div className="columns is-vcentered">
+                <div className="column is-half">
+                  <h1 className="title is-size-1 has-text-primary">
+                    Connecting UCSC students & faculty to improve involvement in research.
+                  </h1>
+                  <a href="/auth/google" className="has-text-centered">
+                    <button
+                      style={{
+                      background: `url("${signinButton}")`, backgroundSize: 'cover', width: 196, height: 46, border: 'none', display: 'inline-block'
+                    }}
+                      className="button"
+                      onClick={this.signIn}
+                      title="Sign In"
+                    />
+                  </a>
+                  <br /><br />
+                  <div class="subtitle is-size-7 is-uppercase has-text-centered">
+                    Scroll down to see how ResearchConnect can help you!
+                  </div>
+                </div>
+                <div className="column is-half">
+                  <figure class="image has-text-centered">
+                    <img class="is-rounded" src="https://via.placeholder.com/1000" style={{ height: '384px', width: '384px', display: 'inline-block' }}/>
+                  </figure>
+                </div>
               </div>
             </div>
           </div>
         </section>
         <hr />
-        <section>
+        <section className="section">
           <div className="container">
             <div className="title">How it works</div>
             <ul className="steps is-medium">
@@ -65,10 +51,10 @@ export default class Landing extends Component {
                 <div className="step-details">
                   <p className="step-title">Step 1</p>
                   <p>
-Sign in with your
+  Sign in with your
                     <strong>@ucsc.edu</strong>
                     {' '}
-email with Google.
+  email with Google.
                   </p>
                 </div>
               </li>
@@ -108,7 +94,63 @@ email with Google.
             </ul>
           </div>
         </section>
-        <section className="section" />
+        <hr />
+        <section className="section">
+          <div className="container">
+            <div className="columns is-vcentered">
+              <div className="column is-one-third">
+                <h1 className="title is-uppercase">Professors</h1>
+              </div>
+              <div className="column">
+                <div className="content is-large">
+                  <ol style={{ wordBreak: 'break-word' }}>
+                    <li>asdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdff</li>
+                    <li>asasdfasdfaasdfasdfasdfsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfdf</li>
+                    <li>asasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfdf</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <hr />
+        <section className="section">
+          <div className="container">
+            <div className="columns is-vcentered">
+              <div className="column is-one-third">
+                <h1 className="title is-uppercase">Students</h1>
+              </div>
+              <div className="column">
+                <div className="content is-large">
+                  <ol style={{ wordBreak: 'break-word' }}>
+                    <li>asdfasdfasdfaasdfasdfasdfsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                    <li>asdfasdfasasdfasdfasdfasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                    <li>asdfasdfasasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <hr />
+        <section className="section">
+          <div className="container">
+            <div className="columns is-vcentered">
+              <div className="column is-one-third">
+                <h1 className="title is-uppercase">Grad Students</h1>
+              </div>
+              <div className="column">
+                <div className="content is-large">
+                  <ol style={{ wordBreak: 'break-word' }}>
+                    <li>asdfasdfasdfaasdfasdfasdfsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                    <li>asdfasdfasasdfasdfasdfasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                    <li>asdfasdfasasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </React.Fragment>
       );
     }

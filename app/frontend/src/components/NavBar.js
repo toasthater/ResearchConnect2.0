@@ -60,11 +60,13 @@ class NavBar extends Component {
         const { open } = this.state;
 
         return (
-          <nav className={`navbar is-fixed-top ${!this.props.auth ? 'is-transparent' : 'is-link'}`}>
+          <nav className={`navbar ${!this.props.auth ? 'is-white' : 'is-link'}`}>
             <div className="container">
               <div className="navbar-brand">
                 <Link className="navbar-item " to="/">
                   <img src={brandingImg} alt="Logo" />
+                  &nbsp;&nbsp;
+                  <strong>ResearchConnect</strong>
                 </Link>
                 <div
                   className={`navbar-burger burger ${open ? 'is-active' : ''}`}
