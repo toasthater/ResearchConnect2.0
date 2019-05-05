@@ -47,30 +47,30 @@ class ResearchPost extends Component {
       responses: responses
     });
 
-    var currentDate = new Date()
-    var postDate = new Date(post.data.deadline)
-    if (post.data.status === 'Open' && currentDate > postDate) {
-      console.log("closed the post (past deadline)")
-      const post = this.state.post;
-      post.status = 'Closed';
-      this.setState(post);
-      const newPost = {
-        _id: this.state.post._id,
-        title: this.state.post.title,
-        owner: this.state.post.owner.cruzid,
-        cruzid: this.state.post.owner.cruzid,
-        tags: this.state.post.tags,
-        summary: this.state.post.summary,
-        description: this.state.post.description,
-        department: {
-          value: this.state.post.department._id,
-          label: this.state.post.department.name,
-        },
-        status: this.state.post.status,
-        deadline: this.state.post.deadline,
-      };
-      axios.post(`/api/research_posts?id=${this.state.post._id}`, newPost);
-    }
+    // var currentDate = new Date()
+    // var postDate = new Date(post.data.deadline)
+    // if (post.data.status === 'Open' && currentDate > postDate) {
+    //   console.log("closed the post (past deadline)")
+    //   const post = this.state.post;
+    //   post.status = 'Closed';
+    //   this.setState(post);
+    //   const newPost = {
+    //     _id: this.state.post._id,
+    //     title: this.state.post.title,
+    //     owner: this.state.post.owner.cruzid,
+    //     cruzid: this.state.post.owner.cruzid,
+    //     tags: this.state.post.tags,
+    //     summary: this.state.post.summary,
+    //     description: this.state.post.description,
+    //     department: {
+    //       value: this.state.post.department._id,
+    //       label: this.state.post.department.name,
+    //     },
+    //     status: this.state.post.status,
+    //     deadline: this.state.post.deadline,
+    //   };
+    //   axios.post(`/api/research_posts?id=${this.state.post._id}`, newPost);
+    // }
 
   }
 

@@ -32,6 +32,26 @@ router.get('/', (req, res) => {
       .populate('applicants')
       .sort({ date: -1 }).limit(9)
       .then(async (research_posts) => {
+        var currentDate = new Date();
+        var postsToClose = [];
+
+        research_posts.forEach(function (post) {
+          var postDate = new Date(post.deadline);
+          if (post.status === 'Open' && currentDate > postDate) {
+            post.status = 'Closed';
+            postsToClose.push(post);
+          }
+        })
+
+        await Promise.all(
+          postsToClose.map(function (post) {
+            return Research.findByIdAndUpdate(post._id, {
+              $set: {
+                status: post.status
+              }
+            })
+          })
+        )
         res.send(research_posts);
       })
       .catch(err => res.send([new Research()]));
@@ -43,10 +63,10 @@ router.get('/', (req, res) => {
 // @desc  Create a research post
 // @access Public
 router.post('/', (req, res) => {
-  // if (!req.user || req.body.owner !== req.user.cruzid) {
-  //   res.send(null);
-  //   return;
-  // }
+  if (!req.user || req.body.owner !== req.user.cruzid) {
+    res.send(null);
+    return;
+  }
 
   const relevantFaculty = FacultyMember.findOne({
     'cruzid': {

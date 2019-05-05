@@ -20,42 +20,42 @@ class Home extends Component {
     this.getPosts();
   }
 
-  async closePosts() {
-    console.log("Checking deadlines")
-    var currentDate = new Date();
-    var postsToClose = [];
+  // async closePosts() {
+  //   console.log("Checking deadlines")
+  //   var currentDate = new Date();
+  //   var postsToClose = [];
 
-    this.state.posts.forEach(function (post) {
-      var postDate = new Date(post.deadline);
-      if (post.status === 'Open' && currentDate > postDate) {
-        post.status = 'Closed';
-        postsToClose.push(post);
-      }
-    });
+  //   this.state.posts.forEach(function (post) {
+  //     var postDate = new Date(post.deadline);
+  //     if (post.status === 'Open' && currentDate > postDate) {
+  //       post.status = 'Closed';
+  //       postsToClose.push(post);
+  //     }
+  //   });
 
-    console.log(postsToClose)
-    await Promise.all([
-      postsToClose.forEach(function (post) {
-        console.log("axios push");
-        const newPost = {
-          _id: post._id,
-          title: post.title,
-          owner: post.owner.cruzid,
-          cruzid: post.owner.cruzid,
-          tags: post.tags,
-          summary: post.summary,
-          description: post.description,
-          department: {
-            value: post.department._id,
-            label: post.department.name,
-          },
-          status: post.status,
-          deadline: post.deadline,
-        };
-        axios.post(`/api/research_posts?id=${post._id}`, newPost);
-      })
-    ]);
-  }
+  //   console.log(postsToClose)
+  //   await Promise.all([
+  //     postsToClose.forEach(function (post) {
+  //       console.log("axios push");
+  //       const newPost = {
+  //         _id: post._id,
+  //         title: post.title,
+  //         owner: post.owner.cruzid,
+  //         cruzid: post.owner.cruzid,
+  //         tags: post.tags,
+  //         summary: post.summary,
+  //         description: post.description,
+  //         department: {
+  //           value: post.department._id,
+  //           label: post.department.name,
+  //         },
+  //         status: post.status,
+  //         deadline: post.deadline,
+  //       };
+  //       axios.post(`/api/research_posts?id=${post._id}`, newPost);
+  //     })
+  //   ]);
+  // }
 
   getPosts() {
     this.setState({
@@ -69,7 +69,7 @@ class Home extends Component {
           posts: response.data,
           loading: false,
         }, () => console.log(this.state.loading));
-        this.closePosts();
+        // this.closePosts();
       })
       .catch((error) => {
         console.log(error);
