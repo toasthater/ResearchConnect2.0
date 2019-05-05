@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
       .populate('owner')
       .populate('department')
       .populate('applicants')
-      .sort({ date: -1 }).limit(9)
+      .sort({ date: -1 }).limit(20)
       .then(async (research_posts) => {
         var currentDate = new Date();
         var postsToClose = [];
