@@ -6,6 +6,7 @@ const fillResearchPost = require('./fillResearchHelper');
 // Schemas
 const Research = require('../../models/Research');
 const Department = require('../../models/Department');
+const Application = require('../../models/Application');
 const FacultyMember = require('../../models/FacultyMember');
 
 async function searchDepartments(name) {
@@ -93,6 +94,70 @@ async function searchTitle(name) {
   return ret;
 }
 
+  async function searchCruzID(name) {
+    let relevantFaculty = FacultyMember.find({
+        'cruzid': {
+            '$regex': name.toLowerCase(),
+            $options: 'i'
+        }
+    });
+
+    var ret;
+
+    await relevantFaculty.then(async (data) => {
+        let facIDs = []
+        for (let i = 0; i < data.length; i++) {
+            facIDs.push(data[i]._id);
+        }
+
+        let relevantPosts = Research.find({
+            'owner': facIDs
+        });
+
+        await relevantPosts.then((posts) => {
+            ret = posts;
+        });
+    });
+
+    for (let i = 0; i < ret.length; i++) {
+        ret[i] = await fillResearchPost(ret[i]);
+    }
+
+    return ret;
+  }
+
+  async function searchApplicant(studentID) {
+    let apIDs = []
+    await Research.find()
+    .then(async research => {
+      for(let i = 0; i < research.length; i++)
+      {
+        let promises = []
+        for(let j = 0; j < research[i].applicants.length; j++)
+        {
+          promises.push(Application.findById(research[i].applicants[j]).populate('student'));
+        }
+        
+        await Promise.all(promises).then(async applications => {
+          for(let x = 0; x < applications.length; x++)
+          {
+            if (!applications[x].student) {
+              continue;
+            }
+
+            if(applications[x].student.cruzid.toString() === studentID.toString() && applications[x].status.toString() === "accepted")
+            {
+                apIDs.push(await fillResearchPost(research[i]));
+                break;
+            }
+          }
+        });
+      }
+    });
+
+    return apIDs;
+  }
+
 async function searchTags(name) {
   const relevantPosts = [];
 
@@ -113,6 +178,7 @@ async function searchTags(name) {
 
   return relevantPosts;
 }
+
 router.get('/', (req, res) => {
   switch (req.query.type) {
     case 'Department':
@@ -154,6 +220,24 @@ router.get('/', (req, res) => {
           console.log(err);
         });
 
+      break;
+    case "Applicants":
+      searchApplicant(req.query.query)
+      .then((data) => {
+          res.send(data);
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+      break;
+    case "cruzid":
+      searchCruzID(req.query.query)
+      .then((data) => {
+          res.send(data);
+      })
+      .catch((err) => {
+          console.log(err);
+      });
       break;
     default:
       var promises = [

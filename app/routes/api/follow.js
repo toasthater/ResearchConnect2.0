@@ -4,6 +4,11 @@ const router = express.Router();
 const User = require('../../models/User');
 
 router.post('/', (req, res) => {
+  if (!req.user || !req.body.cruzid) {
+    res.send(null);
+    return;
+  }
+  
   User.findOne({ cruzid: req.body.cruzid }, (err, user) => {
     if (user.followers === undefined) user.followers = [];
 

@@ -4,23 +4,31 @@ const router = express.Router();
 
 const Research = require('../../models/Research');
 const Application = require('../../models/Application');
-const Student = require('../../models/Student');
 const User = require('../../models/User');
 const FacultyMember = require('../../models/FacultyMember');
 
 router.get('/', (req, res) => {
-  Application.find().then(research_posts => res.json(research_posts));
+    Application.find().then(applications => res.json(applications));
 });
 
 router.post('/', async (req, res) => {
+  if (!req.user || !req.query) {
+      res.send(null);
+      return;
+  }
+
   try {
     if (req.body.applicant) {
-      const newApplicant = await User.findById(req.body.applicant);
+      if (req.body.applicant.toString() !== req.user._id.toString() || !req.body.postID) {
+          res.send('Error applying to project');
+          return;
+      }
+
       const newStudent = await User.findOne({
-        cruzid: {
-          $regex: newApplicant.cruzid,
-          $options: 'i',
-        },
+          'cruzid': {
+              '$regex': req.user.cruzid,
+              $options: 'i'
+          }
       });
 
       const research = await Research.findById(req.body.postID);
@@ -34,9 +42,15 @@ router.post('/', async (req, res) => {
         }
       }
 
+      if (research.questions && research.questions.length > 0 && (!req.body.responses || req.body.responses.length != research.questions.length)) {
+          res.send("Improper amount of responses in application.");
+          return;
+      }
+
       const newApp = new Application({
-        research: req.body.postID,
-        student: newStudent._id,
+          research: req.body.postID,
+          student: newStudent._id,
+          responses: req.body.responses
       });
 
       await newApp.save();
@@ -49,6 +63,11 @@ router.post('/', async (req, res) => {
           console.log(err);
           res.send('Error accepting/declining application');
         } else {
+          if (!req.body.id || application.status !== 'pending') {
+            res.send("Error accepting/declining application");
+            return;
+          }
+
           const research = await Research.findById(application.research);
           if (!research) {
             application.remove();

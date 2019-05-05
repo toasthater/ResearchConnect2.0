@@ -41,24 +41,30 @@ router.get('/', (req, res) => {
 // @desc  Create a research post
 // @access Public
 router.post('/', (req, res) => {
-  const relevantFaculty = FacultyMember.findOne({
-    cruzid: {
-      $regex: req.body.owner.toLowerCase(),
-      $options: 'i',
-    },
-  });
+    if (!req.user || req.body.owner !== req.user.cruzid) {
+      res.send(null);
+      return;
+    }
+    
+    const relevantFaculty = FacultyMember.findOne({
+      'cruzid': {
+        $regex: req.body.owner.toLowerCase(),
+        $options: 'i'
+      }
+    });
 
     relevantFaculty.then(data => {
       const researchPost = new Research({
         title: req.body.title,
         owner: data._id,
-        cruzid: req.body.cruzid,
+        cruzid: req.body.owner,
         tags: req.body.tags,
         summary: req.body.summary,
         description: req.body.description,
         department: req.body.department.value,
         status: req.body.status ? req.body.status : "Open",
-        deadline: req.body.deadline
+        deadline: req.body.deadline,
+        questions: req.body.questions
       });
 
     if (req.body._id) {
@@ -73,6 +79,7 @@ router.post('/', (req, res) => {
           department: researchPost.department,
           status: researchPost.status,
           deadline: researchPost.deadline,
+          questions: req.body.questions
         },
       }, (err, research) => {
         if (err) {
@@ -92,9 +99,20 @@ router.post('/', (req, res) => {
 // @desc  Delete a research post
 // @access Public
 router.delete('/', (req, res) => {
+  if (!req.user || !req.query || !req.query.id) {
+    res.send(null);
+    return;
+  }
+  
   Research.findById(req.query.id)
-    .then(research => research.remove().then(() => res.json({ success: true })))
-    .catch(err => res.status(404).json({ success: true }));
+  .then(research => {
+    if (research.cruzid !== req.user.cruzid) {
+      res.send(null);
+      return;
+    }
+
+    research.remove().then(() => res.json({success: true}))
+  }).catch(err => res.status(404).json({success: true}));
 });
 
 module.exports = router;

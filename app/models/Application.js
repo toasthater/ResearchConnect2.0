@@ -11,13 +11,14 @@ const ApplicationSchema = new Schema({
   },
   student: {
     type: Schema.Types.ObjectId,
-    ref: 'Student',
+    ref: 'users',
     required: true,
   },
   status: {
     type: String,
     default: 'pending',
   },
+  responses: [String],
 });
 
 module.exports = Application = mongoose.model('application', ApplicationSchema);
