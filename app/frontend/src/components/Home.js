@@ -48,11 +48,11 @@ class Home extends Component {
       });
   }
 
-  formatPost() {
+  formatPost(mod, eq) {
     const { posts } = this.state;
     return (
-      <div className="flex-container">
-        {posts.map(post => (
+      <React.Fragment>
+        {posts.filter((_, index) => (index % mod) === eq).map(post => (
           <PostCard
             key={post._id}
             post={{
@@ -67,7 +67,7 @@ class Home extends Component {
             }}
           />
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -78,9 +78,20 @@ class Home extends Component {
 
     return (
       <section className="section">
+        <div className="container">
+          <div className="columns is-multiline">
+            <div className="column is-one-third">
+              {this.formatPost(3, 0)}
+            </div>
+            <div className="column is-one-third">
+              {this.formatPost(3, 1)}
+            </div>
+            <div className="column is-one-third">
+              {this.formatPost(3, 2)}
+            </div>
+          </div>
+        </div>
         <div className="App" />
-
-        {this.formatPost()}
 
       </section>
     );

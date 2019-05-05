@@ -60,7 +60,7 @@ class NavBar extends Component {
         const { open } = this.state;
 
         return (
-          <nav className={`navbar ${!this.props.auth ? 'is-white' : 'is-link'}`}>
+          <nav className={`navbar has-shadow is-spaced ${!this.props.auth ? 'is-white' : 'is-primary'}`}>
             <div className="container">
               <div className="navbar-brand">
                 <Link className="navbar-item " to="/">

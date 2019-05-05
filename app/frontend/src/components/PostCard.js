@@ -7,46 +7,77 @@ class PostCard extends PureComponent {
   render() {
     const { post } = this.props;
     return (
-      <div key={post.id} className="flex-item">
-        <div className="flex-item-inner">
-          <div className="flex-item-inner-content">
-            <div className="card rounded">
-              <div className="card-content">
-                <div className="card-img-top">
-                  <div className="circle">
-                    <div>
-                      <DepartmentImage type={post.type} />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="media-content">
-                    <p className="title is-5">{post.name}</p>
-                    <Link className="subtitle is-6 has-text-link" to={post.ownerProfile}>{post.professor}</Link>
-                  </div>
-                </div>
-
-                <div className="content">
-                  <span className="tag is-primary is-medium is-pink-bc is-centered">{post.department}</span>
-                  <br />
-                  <br />
-                  {post.summary}
-                  <div className="tags-section">
-                    {/* {post.tags.map(tag => (<span className="tag is-medium" key={tag}>{tag}</span>))} */}
-                  </div>
-                </div>
-              </div>
-
-              <footer className="card-footer">
-                <Link className="card-footer-item info" to={`/post?id=${post.id}`}>
-                                Learn More
-                </Link>
-              </footer>
-            </div>
+      <div key={post.id} className="card" style={{ borderRadius: '5px', marginBottom: '2.5em' }}>
+        <div className="card-image has-text-centered" style={{ top: '-1em' }}>
+          <figure className="image is-128x128" style={{ display: 'inline-block' }}>
+            <DepartmentImage type={post.type} />
+          </figure>
+        </div>
+        <div className="card-content" style={{ paddingTop: '0px' }}>
+          <p className="title is-4">{ post.name }</p>
+          <p className="subtitle is-6">
+            by <Link className="has-text-link" to={post.ownerProfile}>{post.professor}</Link>
+          </p>
+          <div className="content">
+            { post.summary }
           </div>
+          <div className="tag is-info" style={{ margin: '0.25em 0px' }}>{ post.department }</div>
+        </div>
+        <footer className="card-footer">
+          <Link className="card-footer-item has-text-success" to={`/post?id=${post.id}`}>
+            Learn More
+          </Link>
+        </footer>
+      </div>
+    );
+    return (
+      <div key={post.id} className="column is-one-third">
+        <div className="box">
+          <article className="media" style={{ alignItems: 'center' }}>
+            <div className="media-left">
+              <figure className="image is-128x128">
+                <DepartmentImage type={post.type} />
+              </figure>
+            </div>
+            <div className="media-content">
+              <div className="content">
+                <p>
+                  <strong>{ post.name }</strong> <small>by <Link className="subtitle is-6 has-text-link" to={post.ownerProfile}>{post.professor}</Link></small>
+                  <br />
+                  <div className="tag is-primary" style={{ margin: '0.25em 0px' }}>{ post.department }</div>
+                  <br />
+                  { post.summary }
+                </p>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     );
+    // return (
+    //   <div className="flex-item">
+    //     <div className="flex-item-inner">
+    //       <div className="flex-item-inner-content">
+    //         <div className="card rounded">
+    //           <div className="card-content">
+    //             <div className="card-img-top">
+    //               <div className="circle">
+    //                 <div>
+    //
+    //                 </div>
+    //               </div>
+    //             </div>
+
+    //           <footer className="card-footer">
+                // <Link className="card-footer-item info" to={`/post?id=${post.id}`}>
+                //                 Learn More
+                // </Link>
+    //           </footer>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
   }
 }
 
