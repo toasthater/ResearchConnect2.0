@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const fillResearchPost = require('./fillResearchHelper');
 
+
 // Research post model
 const Research = require('../../models/Research');
 const FacultyMember = require('../../models/FacultyMember');
@@ -29,43 +30,64 @@ router.get('/', (req, res) => {
       .populate('owner')
       .populate('department')
       .populate('applicants')
-      .sort({ date: -1 }).limit(9)
+      .sort({ date: -1 }).limit(20)
       .then(async (research_posts) => {
+        var currentDate = new Date();
+        var postsToClose = [];
+
+        research_posts.forEach(function (post) {
+          var postDate = new Date(post.deadline);
+          if (post.status === 'Open' && currentDate > postDate) {
+            post.status = 'Closed';
+            postsToClose.push(post);
+          }
+        })
+
+        await Promise.all(
+          postsToClose.map(function (post) {
+            return Research.findByIdAndUpdate(post._id, {
+              $set: {
+                status: post.status
+              }
+            })
+          })
+        )
         res.send(research_posts);
       })
       .catch(err => res.send([new Research()]));
   }
-});
+})
+
 
 // @route POST api/research_posts
 // @desc  Create a research post
 // @access Public
 router.post('/', (req, res) => {
-    if (!req.user || req.body.owner !== req.user.cruzid) {
-      res.send(null);
-      return;
-    }
-    
-    const relevantFaculty = FacultyMember.findOne({
-      'cruzid': {
-        $regex: req.body.owner.toLowerCase(),
-        $options: 'i'
-      }
-    });
+  if (!req.user || req.body.owner !== req.user.cruzid) {
+    res.send(null);
+    return;
+  }
 
-    relevantFaculty.then(data => {
-      const researchPost = new Research({
-        title: req.body.title,
-        owner: data._id,
-        cruzid: req.body.owner,
-        tags: req.body.tags,
-        summary: req.body.summary,
-        description: req.body.description,
-        department: req.body.department.value,
-        status: req.body.status ? req.body.status : "Open",
-        deadline: req.body.deadline,
-        questions: req.body.questions
-      });
+  const relevantFaculty = FacultyMember.findOne({
+    'cruzid': {
+      $regex: req.body.owner.toLowerCase(),
+      $options: 'i'
+    }
+  });
+
+  relevantFaculty.then(data => {
+    const researchPost = new Research({
+      title: req.body.title,
+      owner: data._id,
+      cruzid: req.body.owner,
+      tags: req.body.tags,
+      summary: req.body.summary,
+      description: req.body.description,
+      department: req.body.department.value,
+      status: req.body.status ? req.body.status : "Open",
+      deadline: req.body.deadline,
+      questions: req.body.questions
+    });
 
     if (req.body._id) {
       Research.findByIdAndUpdate(req.body._id, {
@@ -103,16 +125,16 @@ router.delete('/', (req, res) => {
     res.send(null);
     return;
   }
-  
-  Research.findById(req.query.id)
-  .then(research => {
-    if (research.cruzid !== req.user.cruzid) {
-      res.send(null);
-      return;
-    }
 
-    research.remove().then(() => res.json({success: true}))
-  }).catch(err => res.status(404).json({success: true}));
+  Research.findById(req.query.id)
+    .then(research => {
+      if (research.cruzid !== req.user.cruzid) {
+        res.send(null);
+        return;
+      }
+
+      research.remove().then(() => res.json({ success: true }))
+    }).catch(err => res.status(404).json({ success: true }));
 });
 
 module.exports = router;

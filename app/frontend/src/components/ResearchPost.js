@@ -44,9 +44,36 @@ class ResearchPost extends Component {
     this.setState({
       post: post.data,
       hasApplied: applied.data,
-      responses: responses });
+      responses: responses
+    });
+
+    // var currentDate = new Date()
+    // var postDate = new Date(post.data.deadline)
+    // if (post.data.status === 'Open' && currentDate > postDate) {
+    //   console.log("closed the post (past deadline)")
+    //   const post = this.state.post;
+    //   post.status = 'Closed';
+    //   this.setState(post);
+    //   const newPost = {
+    //     _id: this.state.post._id,
+    //     title: this.state.post.title,
+    //     owner: this.state.post.owner.cruzid,
+    //     cruzid: this.state.post.owner.cruzid,
+    //     tags: this.state.post.tags,
+    //     summary: this.state.post.summary,
+    //     description: this.state.post.description,
+    //     department: {
+    //       value: this.state.post.department._id,
+    //       label: this.state.post.department.name,
+    //     },
+    //     status: this.state.post.status,
+    //     deadline: this.state.post.deadline,
+    //   };
+    //   axios.post(`/api/research_posts?id=${this.state.post._id}`, newPost);
+    // }
+
   }
-  
+
   async goToApplicants() {
     if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
       return;
@@ -67,7 +94,7 @@ class ResearchPost extends Component {
       const val = await axios.post("/api/apply", { postID: args.id, applicant: this.props.auth._id });
       alert(val.data);
     } else {
-      this.setState({showModal: true});
+      this.setState({ showModal: true });
     }
   }
 
@@ -76,7 +103,7 @@ class ResearchPost extends Component {
       return;
     }
 
-    axios.delete(`/api/research_posts?id=${ this.state.post._id}`)
+    axios.delete(`/api/research_posts?id=${this.state.post._id}`)
       .then(res => this.props.history.push('/'))
       .catch((err) => {
         console.log(err);
@@ -116,7 +143,7 @@ class ResearchPost extends Component {
       status: this.state.post.status,
       deadline: this.state.post.deadline,
     };
-    axios.post(`/api/research_posts?id=${ this.state.post._id}`, newPost);
+    axios.post(`/api/research_posts?id=${this.state.post._id}`, newPost);
   }
 
   handleOpen() {
@@ -141,7 +168,7 @@ class ResearchPost extends Component {
       status: this.state.post.status,
       deadline: this.state.post.deadline,
     };
-    axios.post(`/api/research_posts?id=${ this.state.post._id}`, newPost);
+    axios.post(`/api/research_posts?id=${this.state.post._id}`, newPost);
   }
 
   editResponse = (e) => {
@@ -194,7 +221,7 @@ class ResearchPost extends Component {
       showModal: false
     });
   }
-  
+
   render() {
     if (this.state.post !== null && this.state.post.title === undefined) {
       this.props.history.push('/');
@@ -227,7 +254,7 @@ class ResearchPost extends Component {
           </div>
 
           <div className="column" align="center">
-            <Link to={`/profile/${ this.state.post.owner.cruzid}`}>
+            <Link to={`/profile/${this.state.post.owner.cruzid}`}>
               <div className="box has-text-link" style={{ background: '#DDDDDD' }}>
                 {this.state.post.owner.name}
               </div>
@@ -253,16 +280,16 @@ class ResearchPost extends Component {
 
               {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid && this.state.post.status === 'Open' &&
                 <button className="button is-warning" onClick={() => this.handleClose()} style={{ marginLeft: "1em" }}>Close</button>}
-              
+
               {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid && this.state.post.status === 'Closed' &&
                 <button className="button is-warning" onClick={() => this.handleOpen()} style={{ marginLeft: "1em" }}>Open</button>}
 
-              {this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) && 
+              {this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) &&
                 <button className="button is-danger" onClick={() => this.handleDelete()} style={{ marginLeft: "1em" }}>Delete</button>}
 
               {this.props.auth.isProfessor && (this.state.post.owner.cruzid === this.props.auth.cruzid) &&
                 <button className="button is-success" onClick={() => this.handleEdit()} style={{ marginLeft: "1em" }}>Edit</button>}
-              </div>
+            </div>
           </div>
           <Modal isOpen={this.state.showModal} contentLabel="Questionnaire">
             {this.getQuestions()}
@@ -270,20 +297,20 @@ class ResearchPost extends Component {
               <div className="column">
                 <button onClick={() => this.onSubmitModal()} className="button is-link">Submit</button>
               </div>
-              <div className="column"> 
+              <div className="column">
                 <button onClick={() => this.onCancelModal()} className="button is-danger is-link">Cancel</button>
               </div>
             </div>
           </Modal>
         </section>
       </div>
-) : <Spinner fullPage />
+    ) : <Spinner fullPage />
     );
   }
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth,
-  });
+  auth: state.auth,
+});
 
 export default connect(mapStateToProps, actions)(ResearchPost);

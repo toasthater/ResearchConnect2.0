@@ -61,6 +61,9 @@ class AddPostForm extends React.Component {
         });
     };
 
+    // for calendar change
+    onChange = deadline => this.setState({ deadline })
+
     changeQuestion = (e) => {
         e.persist();
         this.setState(state => {
@@ -104,7 +107,7 @@ class AddPostForm extends React.Component {
                 summary: '',
                 description: '',
                 department: { label: 'Academic Senate', value: '5c4ab51421e1383889614c73' },
-                deadline: new Date(),
+                deadline: this.state.deadline,
                 owner: this.props.auth.cruzid,
                 cruzid: this.props.auth.cruzid,
                 questions: [],
