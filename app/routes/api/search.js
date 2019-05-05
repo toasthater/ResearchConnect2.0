@@ -8,6 +8,22 @@ const Research = require('../../models/Research');
 const Department = require('../../models/Department');
 const Application = require('../../models/Application');
 const FacultyMember = require('../../models/FacultyMember');
+const User = require('../../models/User');
+
+async function searchUsers(name) {
+  const user = await User.findOne({
+    name: {
+      $regex: name.toLowerCase(),
+      $options: 'i',
+    },
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  return user.cruzid;
+}
 
 async function searchDepartments(name) {
   const relevantDepartments = Department.find({
@@ -237,6 +253,15 @@ router.get('/', (req, res) => {
       })
       .catch((err) => {
           console.log(err);
+      });
+      break;
+    case "User":
+      searchUsers(req.query.query)
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
       break;
     default:

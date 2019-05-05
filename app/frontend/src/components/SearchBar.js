@@ -16,6 +16,7 @@ class SearchBar extends Component {
                   <option>Professor</option>
                   <option>Title</option>
                   <option>Tag</option>
+                  <option>User</option>
                 </Field>
               </span>
             </p>

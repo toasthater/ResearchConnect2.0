@@ -18,7 +18,16 @@ class NavBar extends Component {
       if (type && query) {
         await this.props.searchPosts(type, query)
         .then((_) => {
-          this.props.history.push('/search_results');
+          if (type === "User") {
+            if (this.props.search) {
+              this.props.history.push('/profile/' + this.props.search);
+            } else {
+              this.props.history.push('/');
+              alert("User not found");
+            }
+          } else {
+            this.props.history.push('/search_results');
+          }
         });
       }
     }
