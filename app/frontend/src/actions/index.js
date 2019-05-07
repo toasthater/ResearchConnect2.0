@@ -10,6 +10,7 @@ import {
   FETCH_DEPARTMENT,
   UPDATE_PROFILE,
   POST_DATA,
+  NOTIFICATION
 } from './types';
 
 export const fetchUser = () => async (dispatch) => {
@@ -208,3 +209,16 @@ export const startPartialLoading = () => async (dispatch) => {
 export const stopPartialLoading = () => async (dispatch) => {
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
+
+export const send_email_notification = (cruzid) => async dispatch => {
+  const res = await axios({
+    method: "post",
+    url: "/api/email_notification/",
+    cruzid: cruzid
+  });
+
+  dispatch({
+    type: NOTIFICATION,
+    payload: res.data
+  })
+}

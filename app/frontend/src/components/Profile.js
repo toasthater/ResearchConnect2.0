@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {
- Tab, Tabs, TabList, TabPanel,
+  Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 import * as actions from '../actions';
 
@@ -61,10 +61,10 @@ class Profile extends Component {
         },
       })
       .then(response => this.setState({
-          profileLoaded: true,
-          profile: response.data,
-          isFollowDisabled: false,
-        }))
+        profileLoaded: true,
+        profile: response.data,
+        isFollowDisabled: false,
+      }))
       .catch(error => console.log(error));
   }
 
@@ -96,9 +96,9 @@ class Profile extends Component {
           axios
             .get('/api/search?type=cruzid&query=' + this.props.match.params.cruzid)
             .then(response => this.setState({
-                research: response.data,
-                researchLoaded: true,
-              }))
+              research: response.data,
+              researchLoaded: true,
+            }))
             .catch(error => console.log(error));
         } else {
           console.log('Fetching Student Profile...');
@@ -118,13 +118,13 @@ class Profile extends Component {
             .catch(error => console.log(error));
 
           axios.get('/api/search?type=Applicants&query=' + this.props.match.params.cruzid)
-          .then(response => {
-            this.setState({
-              research: response.data,
-              researchLoaded: true,
+            .then(response => {
+              this.setState({
+                research: response.data,
+                researchLoaded: true,
+              })
             })
-          })
-          .catch(error => console.log(error));
+            .catch(error => console.log(error));
         }
       })
       .catch(error => console.log(error));
@@ -133,9 +133,9 @@ class Profile extends Component {
   fetchResearchPosts = () => {
     const research_posts = this.state.research.map(research => (
       <div key={research._id} className="box">
-        <h1 align="left">{`Title: ${ research.title}`}</h1>
+        <h1 align="left">{`Title: ${research.title}`}</h1>
         <br />
-        <h2 align="left">{`Summary: ${ research.summary}`}</h2>
+        <h2 align="left">{`Summary: ${research.summary}`}</h2>
         <br />
         <Link className="card-footer-item info" to={`/post?id=${research._id}`}>Learn More</Link>
       </div>
@@ -175,19 +175,24 @@ class Profile extends Component {
   formatPost() {
     var posts = this.state.research;
     return (
-    <div className="flex item inner content">
+      <div className="flex item inner content">
         {posts.map(post => (<PostCard key={post._id} post={{
-            id: post._id,
-            type: post.department.type,
-            name: post.title,
-            professor: post.owner.name,
-            tags: post.tags,
-            summary: post.summary,
-            department: post.department.name,
-            ownerProfile: "/profile/" + post.owner.cruzid,
-            applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
+          id: post._id,
+          type: post.department.type,
+          name: post.title,
+          professor: post.owner.name,
+          tags: post.tags,
+          summary: post.summary,
+          department: post.department.name,
+          ownerProfile: "/profile/" + post.owner.cruzid,
+          applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
         }} />))}
-    </div>)
+      </div>)
+  }
+
+  handleEmails() {
+
+    this.props.send_email_notification("gkchoi")
   }
 
   render() {
@@ -198,6 +203,7 @@ class Profile extends Component {
     return (
       <section className="section">
         <div className="container has-text-centered">
+          <button type="button" onClick={() => this.handleEmails()}>Click to Send Email!</button><br /><br />
           <Tabs>
             <TabList>
               {!this.state.isProfessor && <Tab>Student</Tab>}
