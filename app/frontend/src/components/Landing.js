@@ -104,9 +104,9 @@ export default class Landing extends Component {
               <div className="column">
                 <div className="content is-large">
                   <ol style={{ wordBreak: 'break-word' }}>
-                    <li>asdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdff</li>
-                    <li>asasdfasdfaasdfasdfasdfsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfdf</li>
-                    <li>asasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfdf</li>
+                    <li>Get rid of your inbox clutter of students asking what research positions you have</li>
+                    <li>See all the data about all your applicants in one view, making it easier than ever to pick the best of the best</li>
+                    <li>Easily gain access to students frmo different majors to suit your needs</li>
                   </ol>
                 </div>
               </div>
@@ -123,9 +123,9 @@ export default class Landing extends Component {
               <div className="column">
                 <div className="content is-large">
                   <ol style={{ wordBreak: 'break-word' }}>
-                    <li>asdfasdfasdfaasdfasdfasdfsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
-                    <li>asdfasdfasasdfasdfasdfasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
-                    <li>asdfasdfasasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                    <li>Find which professors are looking for undergraduate students in one view. No more sending hundreds of cold emails</li>
+                    <li>Easily filter out the research that you are not applicable for or have no interest in</li>
+                    <li>Contact your favorite professors about their porjects in a simple application</li>
                   </ol>
                 </div>
               </div>
@@ -142,9 +142,9 @@ export default class Landing extends Component {
               <div className="column">
                 <div className="content is-large">
                   <ol style={{ wordBreak: 'break-word' }}>
-                    <li>asdfasdfasdfaasdfasdfasdfsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
-                    <li>asdfasdfasasdfasdfasdfasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
-                    <li>asdfasdfasasdfasdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</li>
+                    <li>Have a project that you need help with? Easily find hundred of students looking for experience</li>
+                    <li>Select the best students for your job, no more searching around or asking for referrals</li>
+                    <li>ResearchConnect is not limited to just research! If you want to host a seminar or form a group, ResearchConnect is a great place!</li>
                   </ol>
                 </div>
               </div>
