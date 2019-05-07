@@ -70,81 +70,87 @@ class StudentProfile extends Component {
     }
 
     return (
-      <div id={this.props.profile.cruzid} className="container" style={{ width: 768 }}>
-        <div className="column" align="center">
-          <h1 align="center">
-            <div align="center">
-              <figure className="image is-128x128">
-                <img
-                  className="is-rounded"
-                  src={
-                    this.props.profile.profile_pic
-                      ? this.props.profile.profile_pic
-                      : profileImg
-                  }
-                  alt={this.props.profile.name}
-                  width={200}
-                />
-              </figure>
-            </div>
-          </h1>
+      <div id={this.props.profile.cruzid} className="container">
+        <div className="columns">
+          <div className="column is-half is-offset-3">
+            <div className="column" align="center">
+              <h1 align="center">
+                <div align="center">
+                  <figure className="image is-128x128">
+                    <img
+                      className="is-rounded"
+                      src={
+                        this.props.profile.profile_pic
+                          ? this.props.profile.profile_pic
+                          : profileImg
+                      }
+                      alt={this.props.profile.name}
+                    />
+                  </figure>
+                </div>
+              </h1>
 
-          {!myProfile && (
-            <div>
+              {!myProfile && (
+                <div>
+                  <br />
+                  <button
+                    id={this.props.profile.cruzid}
+                    className={`button is-link ${ this.state.following ? '' : 'is-inverted'}`}
+                    disabled={this.state.isFollowDisabled}
+                    onClick={this.toggleFollow}
+                  >
+                    {this.state.following ? 'Following' : 'Follow'}
+                  </button>
+                  <br />
+                </div>
+              )}
+
               <br />
-              <button
-                id={this.props.profile.cruzid}
-                className={`button is-link ${ this.state.following ? '' : 'is-inverted'}`}
-                disabled={this.state.isFollowDisabled}
-                onClick={this.toggleFollow}
-              >
-                {this.state.following ? 'Following' : 'Follow'}
-              </button>
-              <br />
-            </div>
-          )}
 
-          <br />
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-6">Name</h2>
+                <h1 className="title is-4">{this.props.profile.name ? this.props.profile.name : 'No Name Listed'}</h1>
+              </div>
 
-          <div className="box">
-            {this.props.profile.name ? this.props.profile.name : 'No Name Listed'}
-          </div>
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-6">Email</h2>
+                <h1 className="title is-4">{this.props.profile.email ? this.props.profile.email : 'No Email Listed'}</h1>
+              </div>
 
-          <div className="box">
-            {this.props.profile.email ? this.props.profile.email : 'No Email Listed'}
-          </div>
+              {<div className="box">
+                <h2 className="subtitle is-uppercase is-6">Major</h2>
+                <h1 className="title is-4">{this.props.student.major ? this.props.student.major : 'No Major Listed'}</h1>
+              </div>}
 
-          {<div className="box">
-            {this.props.student.major ? this.props.student.major : 'No Major Listed'}
-          </div>}
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-6">Bio</h2>
+                <h1 className="title is-4">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</h1>
+              </div>
 
-          <div className="box">
-            <p align="left">Bio:</p>
-            <p align="left">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</p>
-          </div>
+              {myProfile && this.props.auth && (
+                <div className="box">
+                  <div>
+                    <h2 className="subtitle is-uppercase is-6" style={{ marginBottom: '0px' }}>Upload Resume</h2>
+                    <ResumeForm
+                      onSubmit={data => this.uploadResume(data.file)}
+                    />
+                  </div>
+                </div>
+              )}
 
-          {myProfile && this.props.auth && (
-            <div className="box">
               <div>
-                <p>Upload Resume:</p>
-                <ResumeForm
-                  onSubmit={data => this.uploadResume(data.file)}
-                />
+                <a
+                  href={this.props.resume}
+                  className="button is-info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download={`${this.props.profile.name }_Resume.pdf`}
+                  disabled={!this.props.resume}
+                >
+                  {this.props.resume ? 'Download Resume' : 'No Resume Available'}
+                </a>
               </div>
             </div>
-          )}
-
-          <div>
-            <a
-              href={this.props.resume}
-              className="button is-info"
-              target="_blank"
-              rel="noopener noreferrer"
-              download={`${this.props.profile.name }_Resume.pdf`}
-              disabled={!this.props.resume}
-            >
-              {this.props.resume ? 'Download Resume' : 'No Resume Available'}
-            </a>
           </div>
         </div>
       </div>

@@ -172,22 +172,28 @@ class Profile extends Component {
     );
   }
 
-  formatPost() {
-    var posts = this.state.research;
+  formatPost(mod, eq) {
+    const { research: posts } = this.state;
     return (
-    <div className="flex item inner content">
-        {posts.map(post => (<PostCard key={post._id} post={{
-            id: post._id,
-            type: post.department.type,
-            name: post.title,
-            professor: post.owner.name,
-            tags: post.tags,
-            summary: post.summary,
-            department: post.department.name,
-            ownerProfile: "/profile/" + post.owner.cruzid,
-            applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
-        }} />))}
-    </div>)
+      <React.Fragment>
+        {posts.filter((_, index) => (index % mod) === eq).map(post => (
+          <PostCard
+            key={post._id}
+            post={{
+              id: post._id,
+              type: post.department.type,
+              name: post.title,
+              professor: post.owner.name,
+              tags: post.tags,
+              summary: post.summary,
+              department: post.department.name,
+              ownerProfile: "/profile/" + post.owner.cruzid,
+              applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
+            }}
+          />
+        ))}
+      </React.Fragment>
+    )
   }
 
   render() {
@@ -211,9 +217,19 @@ class Profile extends Component {
             </TabPanel>
 
             <TabPanel>
-              <div>
-                {this.state.researchLoaded ? this.formatPost() : <Spinner fullPage />}
-              </div>
+              {this.state.researchLoaded ? (
+                <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
+                  <div className="column is-one-third">
+                    {this.formatPost(3, 0)}
+                  </div>
+                  <div className="column is-one-third">
+                    {this.formatPost(3, 1)}
+                  </div>
+                  <div className="column is-one-third">
+                    {this.formatPost(3, 2)}
+                  </div>
+                </div>
+              ) : <Spinner fullPage />}
             </TabPanel>
           </Tabs>
 

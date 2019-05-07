@@ -24,13 +24,13 @@ export default class Landing extends Component {
                     />
                   </a>
                   <br /><br />
-                  <div class="subtitle is-size-7 is-uppercase has-text-centered">
+                  <div className="subtitle is-size-7 is-uppercase has-text-centered">
                     Scroll down to see how ResearchConnect can help you!
                   </div>
                 </div>
                 <div className="column is-half">
-                  <figure class="image has-text-centered">
-                    <img class="is-rounded" src="https://via.placeholder.com/1000" style={{ height: '384px', width: '384px', display: 'inline-block' }}/>
+                  <figure className="image has-text-centered">
+                    <img className="is-rounded" src="https://via.placeholder.com/1000" style={{ height: '384px', width: '384px', display: 'inline-block' }}/>
                   </figure>
                 </div>
               </div>

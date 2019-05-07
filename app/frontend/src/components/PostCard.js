@@ -4,7 +4,7 @@ import DepartmentImage from './DepartmentImage';
 
 
 class PostCard extends PureComponent {
-  
+
   getApplicants() {
     var applicants = this.props.post.applicants;
     return (
@@ -44,62 +44,6 @@ class PostCard extends PureComponent {
         </footer>
       </div>
     );
-    return (
-      <div key={post.id} className="column is-one-third">
-        <div className="box">
-          <article className="media" style={{ alignItems: 'center' }}>
-            <div className="media-left">
-              <figure className="image is-128x128">
-                <DepartmentImage type={post.type} />
-              </figure>
-            </div>
-            <div className="media-content">
-              <div className="content">
-                <p>
-                  <strong>{ post.name }</strong> <small>by <Link className="subtitle is-6 has-text-link" to={post.ownerProfile}>{post.professor}</Link></small>
-                  <br />
-                  <div className="tag is-primary" style={{ margin: '0.25em 0px' }}>{ post.department }</div>
-                  <br />
-                  { post.summary }
-                </p>
-              </div>
-
-              {this.props.post.applicants && this.getApplicants()}
-
-              <footer className="card-footer">
-                <Link className="card-footer-item info" to={`/post?id=${post.id}`}>
-                  Learn More
-                </Link>
-              </footer>
-            </div>
-          </article>
-        </div>
-      </div>
-    );
-    // return (
-    //   <div className="flex-item">
-    //     <div className="flex-item-inner">
-    //       <div className="flex-item-inner-content">
-    //         <div className="card rounded">
-    //           <div className="card-content">
-    //             <div className="card-img-top">
-    //               <div className="circle">
-    //                 <div>
-    //
-    //                 </div>
-    //               </div>
-    //             </div>
-
-    //           <footer className="card-footer">
-                // <Link className="card-footer-item info" to={`/post?id=${post.id}`}>
-                //                 Learn More
-                // </Link>
-    //           </footer>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
   }
 }
 
