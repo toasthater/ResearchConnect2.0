@@ -16,14 +16,14 @@ async function fetchNotification(req, res) {
 
         Notification.findById(response.notification[i], function (err, notification) {
 
-          /*const temp = {
+          const temp = {
             _id: notification._id,
             type: notification.type,
             message: notification.message,
             from: notification.from
-          }*/
+          }
 
-          notifications.push(notification._id)
+          notifications.push(temp)
 
           if (i === response.notification.length - 1) {
 

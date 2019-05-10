@@ -7,9 +7,28 @@ import * as actions from '../actions';
 import UserSetupForm from './UserSetupForm';
 import EditProfileForm from './EditProfileForm';
 import axios from 'axios';
+import Spinner from './Spinner';
 import 'react-tabs/style/react-tabs.css';
 
 class EditProfile extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      notification: [],
+      notificationLoaded: false
+    }
+  }
+
+  componentDidMount() {
+    this.fetch_notifications()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //console.log(this.state)
+  }
+
   handleSubmitStudent(formData) {
     const data = {
       profile_id: this.props.profile._id,
@@ -31,21 +50,43 @@ class EditProfile extends Component {
     this.props.updateUser(body);
   }
 
-  show_notification() {
-
-    axios.get("/api/email_notification/", {
+  fetch_notifications() {
+    axios.get("/api/notification/", {
       params: {
         cruzid: "gkchoi",
         type: "applied"
       }
-    }).then(response => console.log(response.data))
+    }).then(response => {
+      this.setState({
+        notification: response.data,
+        notificationLoaded: true
+      })
+    })
   }
 
-  handleNotification() {
+  handleNotification = () => {
     this.props.notify_user("gkchoi", "applied")
   }
 
+  display_notifications = () => {
+
+    const notifications = this.state.notification.map(notification => (
+      <div className="box" key={notification._id}>
+        <p align="left">{`Message: ${notification.message}`}</p>
+        <br />
+      </div>
+    ));
+
+    return (
+      <ul>{notifications}</ul>
+    );
+  }
+
   render() {
+    if (!this.state.notificationLoaded) {
+      return <Spinner fullPage />;
+    }
+
     return (
       <section className="section">
         <div className="container has-text-centered">
@@ -73,7 +114,7 @@ class EditProfile extends Component {
               <p>Not Yet Implemented.</p>
             </TabPanel>
             <TabPanel>
-              <p>Not Yet Implemented.</p>
+              {this.display_notifications()}
             </TabPanel>
           </Tabs>
 
