@@ -210,15 +210,27 @@ export const stopPartialLoading = () => async (dispatch) => {
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
-export const send_email_notification = (cruzid) => async dispatch => {
-  const res = await axios({
-    method: "post",
-    url: "/api/email_notification/",
-    cruzid: cruzid
+export const fetch_notification = (cruzid, sendType) => async dispatch => {
+  //dispatch({ type: LOAD_NOTIFICATION, payload: false });
+
+  let res = await axios.get("/api/notification/", {
+    params: {
+      cruzid: cruzid,
+      type: sendType
+    }
   });
 
-  dispatch({
-    type: NOTIFICATION,
-    payload: res.data
-  })
-}
+  dispatch({ type: NOTIFICATION, payload: res.data });
+  //dispatch({ type: LOAD_NOTIFICATION, payload: true });
+};
+
+export const notify_user = (cruzid, type) => async dispatch => {
+  let res = await axios.post("/api/notification/", {
+    params: {
+      cruzid: cruzid,
+      type: type
+    }
+  });
+
+  dispatch({ type: NOTIFICATION, payload: res.data });
+};
