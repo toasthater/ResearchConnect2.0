@@ -190,11 +190,6 @@ class Profile extends Component {
       </div>)
   }
 
-  handleEmails() {
-
-    this.props.send_email_notification("gkchoi")
-  }
-
   render() {
     if (!this.state.profileLoaded || !this.state.userLoaded) {
       return <Spinner fullPage />;
@@ -203,7 +198,6 @@ class Profile extends Component {
     return (
       <section className="section">
         <div className="container has-text-centered">
-          <button type="button" onClick={() => this.handleEmails()}>Click to Send Email!</button><br /><br />
           <Tabs>
             <TabList>
               {!this.state.isProfessor && <Tab>Student</Tab>}
