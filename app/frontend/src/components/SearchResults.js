@@ -15,7 +15,7 @@ class SearchResults extends Component {
   formatPost() {
     const posts = this.props.search;
 
-    if (posts === undefined) {
+    if (!posts) {
       return (
         <div className="flex-container" />
       );

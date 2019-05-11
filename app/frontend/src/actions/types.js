@@ -10,3 +10,4 @@ export const FETCH_DEPARTMENT = 'fetch_department';
 export const LOAD_PROFILE = 'load_profile';
 export const UPDATE_PROFILE = 'update_profile';
 export const POST_DATA = 'post_data';
+export const NOTIFICATION = 'notification';

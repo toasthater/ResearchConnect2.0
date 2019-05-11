@@ -21,6 +21,7 @@
   "author": "ResearchConnect Team",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.13.2",

@@ -18,12 +18,22 @@ class NavBar extends Component {
       if (type && query) {
         await this.props.searchPosts(type, query)
         .then((_) => {
-          this.props.history.push('/search_results');
+          if (type === "User") {
+            if (this.props.search) {
+              this.props.history.push('/profile/' + this.props.search);
+            } else {
+              this.props.history.push('/');
+              alert("User not found");
+            }
+          } else {
+            this.props.history.push('/search_results');
+          }
         });
       }
     }
 
-    toggle = () => this.setState({ open: !this.state.isOpen });
+    toggle = () => {this.setState({ open: !this.state.open })};
+    close = () => {this.setState({ open: false })};
 
     renderLoginButton() {
       switch (this.props.auth) {
@@ -84,7 +94,7 @@ class NavBar extends Component {
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values); }} />}
                 <div className="navbar-end">
                   {this.props.auth && this.props.auth.isProfessor && (
-                    <NavLink className="navbar-item" to="/new">
+                    <NavLink className="navbar-item" to="/new" onClick={this.close}>
                       New Research
                     </NavLink>
 )}

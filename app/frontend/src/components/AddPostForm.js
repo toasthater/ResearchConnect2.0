@@ -61,6 +61,9 @@ class AddPostForm extends React.Component {
         });
     };
 
+    // for calendar change
+    onChange = deadline => this.setState({ deadline })
+
     changeQuestion = (e) => {
         e.persist();
         this.setState(state => {
@@ -104,7 +107,7 @@ class AddPostForm extends React.Component {
                 summary: '',
                 description: '',
                 department: { label: 'Academic Senate', value: '5c4ab51421e1383889614c73' },
-                deadline: new Date(),
+                deadline: this.state.deadline,
                 owner: this.props.auth.cruzid,
                 cruzid: this.props.auth.cruzid,
                 questions: [],
@@ -214,10 +217,10 @@ class AddPostForm extends React.Component {
                     {this.getQuestions()}
                     <div className="columns" align="center">
                         <div className="column"> 
-                            <button onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
+                            <button type="button" onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
                         </div>
                         <div className="column"> 
-                            <button onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
+                            <button type="button" onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
                         </div>
                     </div>
                 </div>
@@ -243,10 +246,10 @@ class AddPostForm extends React.Component {
 
               <div className="columns" align="center">
                 <div className="column">
-                  <button onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
+                  <button type="button" onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
                 </div>
                 <div className="column">
-                  <button onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
+                  <button type="button" onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
                 </div>
               </div>
             </div>
