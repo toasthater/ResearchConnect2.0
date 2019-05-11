@@ -125,8 +125,6 @@ class Home extends Component {
         </div>
         <div className="App" />
 
-        {this.formatPost()}
-
         <div className="container is-size-2 has-background-grey-light">
           <center>Search to discover more</center>
         </div>
