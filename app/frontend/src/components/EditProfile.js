@@ -6,7 +6,6 @@ import {
 import * as actions from '../actions';
 import UserSetupForm from './UserSetupForm';
 import EditProfileForm from './EditProfileForm';
-import axios from 'axios';
 import Spinner from './Spinner';
 import 'react-tabs/style/react-tabs.css';
 
@@ -16,18 +15,33 @@ class EditProfile extends Component {
     super(props)
 
     this.state = {
-      notification: [],
-      notificationLoaded: false
+      notification: this.props.auth.notification,
+      notificationLoaded: false,
+      reloadNotification: false,
     }
   }
 
   componentDidMount() {
-    this.fetch_notifications()
+    var cruzid = "gkchoi"
+
+    this.props.fetch_notification(cruzid).then(response => {
+      this.setState({
+        notification: response,
+        notificationLoaded: true
+      })
+    }).catch(err => console.log("err: " + err))
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //console.log(this.state)
+
+    if (this.state.notification && this.state.notification.length === 0) {
+
+    }
+
+    console.log(prevState)
+    console.log(this.state)
   }
+
 
   handleSubmitStudent(formData) {
     const data = {
@@ -50,30 +64,46 @@ class EditProfile extends Component {
     this.props.updateUser(body);
   }
 
-  fetch_notifications() {
-    axios.get("/api/notification/", {
-      params: {
-        cruzid: "gkchoi",
-        type: "applied"
-      }
-    }).then(response => {
-      this.setState({
-        notification: response.data,
-        notificationLoaded: true
-      })
-    })
+  handleSendNotification = () => {
+    var cruzid = "gkchoi"
+    var type = "applied"
+
+    this.props.notifyUser(cruzid, type);
   }
 
-  handleNotification = () => {
-    this.props.notify_user("gkchoi", "applied")
+  handleNotificationClear(cruzid, id) {
+    this.props.clearNotification(cruzid, id)
+      .then(response => {
+        this.setState({
+          reloadNotification: true
+        })
+
+        this.props.fetch_notification(cruzid).then(response => {
+          this.setState({
+            notification: response,
+            reloadNotification: false
+          })
+        })
+      })
   }
 
   display_notifications = () => {
+
+    var cruzid = "gkchoi"
+
+    if (this.state.notification.length === 0) {
+      return (
+        <ul><br />{"No notifications to show..."}</ul>
+      );
+    }
 
     const notifications = this.state.notification.map(notification => (
       <div className="box" key={notification._id}>
         <p align="left">{`Message: ${notification.message}`}</p>
         <br />
+        <p align="left">{`Sent Date: ${notification.date}`}</p>
+        <br />
+        <button type="button" onClick={() => this.handleNotificationClear(cruzid, notification._id)}>Delete</button>
       </div>
     ));
 
@@ -92,7 +122,7 @@ class EditProfile extends Component {
         <div className="container has-text-centered">
           <h1 className="is-size-1">Settings</h1>
 
-          <br /><button type="button" onClick={() => this.handleNotification()}>Apply Button</button><br /><br />
+          <br /><button type="button" onClick={() => this.handleSendNotification()}>Apply Button</button><br /><br />
 
           <Tabs>
             <TabList>
@@ -114,7 +144,7 @@ class EditProfile extends Component {
               <p>Not Yet Implemented.</p>
             </TabPanel>
             <TabPanel>
-              {this.display_notifications()}
+              {!this.state.reloadNotification ? this.display_notifications() : <Spinner fullPage />}
             </TabPanel>
           </Tabs>
 

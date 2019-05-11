@@ -1,4 +1,4 @@
-import { DONE_LOADING, PARTIAL_LOADING, LOAD_PROFILE } from '../actions/types';
+import { DONE_LOADING, PARTIAL_LOADING, LOAD_PROFILE, LOAD_NOTIFICATION } from '../actions/types';
 
 // Full loading done : 0
 // Full loading not done : 1
@@ -13,6 +13,8 @@ export default function (state = null, action) {
       return action.payload ? 0 : 1;
     case PARTIAL_LOADING:
       return action.payload ? 0 : 2;
+    case LOAD_NOTIFICATION:
+      return action.payload ? 0 : 1;
     default:
       return state;
   }

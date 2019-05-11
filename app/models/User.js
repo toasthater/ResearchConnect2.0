@@ -14,8 +14,8 @@ const UserSchema = new Schema({
   resume: String,
   following: [String],
   followers: [String],
-  //notification: [{ _id: String, type: String, from: String, message: String }]
-  notification: [{ type: Schema.Types.ObjectId, ref: 'notification' }]
+  notification: [String]
+  //notification: [{ type: Schema.Types.ObjectId, ref: 'notification' }]
 });
 
 module.exports = User = mongoose.model('users', UserSchema);
