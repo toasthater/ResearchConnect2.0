@@ -6,7 +6,7 @@
   "scripts": {
     "client-install": "npm install --prefix frontend",
     "start": "node server.js",
-    "server": "nodemon server.js",
+    "server": "nodemon server.js --ignore frontend/",
     "client": "npm start --prefix frontend",
     "lint": "eslint *.js services routes models",
     "test": "npm run test",
