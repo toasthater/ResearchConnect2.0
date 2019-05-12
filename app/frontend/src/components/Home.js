@@ -135,10 +135,6 @@ class Home extends Component {
           </div>
         </div>
         <div className="App" />
-
-        <div className="container is-size-2">
-          <center>Search to discover more!</center>
-        </div>
       </section>
     );
   }
