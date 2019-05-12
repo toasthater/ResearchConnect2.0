@@ -5,44 +5,11 @@ const User = require("../../models/User");
 const keys = require('../../config/keys');
 const SGmail = require('@sendgrid/mail')
 
-
-async function fetchNotification(req, res) {
-  const notifications = []
-
-  User.findOne({ cruzid: req.query.cruzid })
-    .then((response) => {
-
-      for (let i = 0; i < response.notification.length; i++) {
-
-        Notification.findById(response.notification[i], function (err, notification) {
-
-          /*const temp = {
-            _id: notification._id,
-            type: notification.type,
-            message: notification.message,
-            from: notification.from
-          }*/
-
-          notifications.push(notification._id)
-
-          if (i === response.notification.length - 1) {
-
-            res.send(notifications)
-          }
-        })
-      }
-    })
-}
-
-
-router.get('/', (req, res) => {
-
-  fetchNotification(req, res)
-
-})
-
-
-router.post("/", (req, res) => {
+/* Function for creating a new notification schema and store it in the
+ * database. Also push the ID of the notification to the user's database.
+ * 
+ * It also sends email to the recepient's email address to notify them. */
+async function createNewNotification(req, res) {
   var subject, message
 
   if (req.body.params.type === 'welcome') {
@@ -90,8 +57,8 @@ router.post("/", (req, res) => {
         text: response.message
       }
 
-      SGmail.setApiKey(keys.sendgridAPI);
-      SGmail.send(email)
+      //SGmail.setApiKey(keys.sendgridAPI);
+      //SGmail.send(email)
 
       user.save(function (err) {
         if (err) {
@@ -105,10 +72,87 @@ router.post("/", (req, res) => {
       });
     })
   })
+};
+
+//Function for removing the notification from the user's database, but it's
+//not removed from the Notification database (archieved?)
+async function removeNotification(req, res) {
+
+  User.findOne({ cruzid: req.body.params.cruzid }, (err, user) => {
+    if (user.notification === undefined) {
+      user.notification = []
+    }
+
+    if (user.notification.indexOf(req.body.params.id) > -1) {
+      user.notification.splice(user.notification.indexOf(req.body.params.id), 1)
+
+      user.save((err) => {
+        if (err) {
+          // Handle error
+          console.log("error: " + err)
+          res.send({ error: err.message });
+        } else {
+          // send success response
+          res.send(user.notification);
+        }
+      });
+    }
+
+    else {
+      console.log("Error: Could not find notification in user's data...")
+      res.send('Error')
+    }
+  });
+}
+
+router.get('/', (req, res) => {
+
+  const notifications = []
+
+  //Find the user using query cruzID to retrieve it's notification ID's
+  User.findOne({ cruzid: req.query.cruzid })
+    .then((response) => {
+
+      //Empty response using length, send back an empty response now instead
+      if (response.notification.length === 0) {
+        res.send([]);
+      }
+
+      //Search through all notifications in user's database
+      for (let i = 0; i < response.notification.length; i++) {
+
+        //Search each notification by it's ID number from the response above
+        Notification.findById(response.notification[i], function (err, notification) {
+
+          //Object body containing the fields we want returned
+          const temp = {
+            _id: notification._id,
+            type: notification.type,
+            message: notification.message,
+            from: notification.from,
+            date: notification.created
+          }
+
+          notifications.push(temp)
+
+          //If both length's are equal, then we have finished loading all notifications
+          if (notifications.length === response.notification.length) {
+            res.send(notifications);
+            return;
+          }
+        })
+      }
+    });
 });
 
-router.delete('/', (req, res) => {
+router.post("/", (req, res) => {
 
-})
+  if (req.body.params.type === 'applied') {
+    createNewNotification(req, res);
+  }
+  else if (req.body.params.type === 'clear') {
+    removeNotification(req, res);
+  }
+});
 
 module.exports = router;

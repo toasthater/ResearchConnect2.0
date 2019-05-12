@@ -6,10 +6,37 @@ import {
 import * as actions from '../actions';
 import UserSetupForm from './UserSetupForm';
 import EditProfileForm from './EditProfileForm';
-import axios from 'axios';
+import Spinner from './Spinner';
 import 'react-tabs/style/react-tabs.css';
 
 class EditProfile extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      notification: this.props.auth.notification,
+      notificationLoaded: false,
+      reloadNotification: false,
+    }
+  }
+
+  componentDidMount() {
+    var cruzid = this.props.auth.cruzid
+
+    this.props.fetch_notification(cruzid).then(response => {
+      this.setState({
+        notification: response,
+        notificationLoaded: true
+      })
+    }).catch(err => console.log("err: " + err))
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
+  }
+
+
   handleSubmitStudent(formData) {
     const data = {
       profile_id: this.props.profile._id,
@@ -31,27 +58,62 @@ class EditProfile extends Component {
     this.props.updateUser(body);
   }
 
-  show_notification() {
-
-    axios.get("/api/email_notification/", {
-      params: {
-        cruzid: "gkchoi",
-        type: "applied"
-      }
-    }).then(response => console.log(response.data))
+  handleSendNotification = () => {
+    //this.props.notifyUser(cruzid, type);
   }
 
-  handleNotification() {
-    this.props.notify_user("gkchoi", "applied")
+  handleNotificationClear(cruzid, id) {
+    this.props.clearNotification(cruzid, id)
+      .then(response => {
+        this.setState({
+          reloadNotification: true
+        })
+
+        this.props.fetch_notification(cruzid).then(response => {
+          this.setState({
+            notification: response,
+            reloadNotification: false
+          })
+        })
+      })
+  }
+
+  display_notifications = () => {
+
+    var cruzid = this.props.auth.cruzid
+
+    if (this.state.notification.length === 0) {
+      return (
+        <ul><br />{"No notifications to show..."}</ul>
+      );
+    }
+
+    const notifications = this.state.notification.map(notification => (
+      <div className="box" key={notification._id}>
+        <p align="left">{`Message: ${notification.message}`}</p>
+        <br />
+        <p align="left">{`Sent Date: ${notification.date}`}</p>
+        <br />
+        <button type="button" onClick={() => this.handleNotificationClear(cruzid, notification._id)}>Delete</button>
+      </div>
+    ));
+
+    return (
+      <ul>{notifications}</ul>
+    );
   }
 
   render() {
+    if (!this.state.notificationLoaded) {
+      return <Spinner fullPage />;
+    }
+
     return (
       <section className="section">
         <div className="container has-text-centered">
           <h1 className="is-size-1">Settings</h1>
 
-          <br /><button type="button" onClick={() => this.handleNotification()}>Apply Button</button><br /><br />
+          {/*<br /><button type="button" onClick={() => this.handleSendNotification()}>Apply Button</button><br /><br />*/}
 
           <Tabs>
             <TabList>
@@ -73,7 +135,7 @@ class EditProfile extends Component {
               <p>Not Yet Implemented.</p>
             </TabPanel>
             <TabPanel>
-              <p>Not Yet Implemented.</p>
+              {!this.state.reloadNotification ? this.display_notifications() : <Spinner fullPage />}
             </TabPanel>
           </Tabs>
 

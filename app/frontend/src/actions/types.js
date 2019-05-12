@@ -11,3 +11,4 @@ export const LOAD_PROFILE = 'load_profile';
 export const UPDATE_PROFILE = 'update_profile';
 export const POST_DATA = 'post_data';
 export const NOTIFICATION = 'notification';
+export const LOAD_NOTIFICATION = 'load_notification'
