@@ -214,8 +214,6 @@ export const fetch_notification = (cruzid) => async dispatch => {
     }
   });
 
-  //dispatch({ type: NOTIFICATION, payload: res.data });
-
   return res.data;
 };
 
@@ -231,9 +229,6 @@ export const notifyUser = (cruzid, type) => async dispatch => {
 };
 
 export const clearNotification = (cruzid, notificationID) => async dispatch => {
-  //console.log(cruzid)
-  //console.log(notificationID)
-
   let res = await axios.post("/api/notification/", {
     params: {
       id: notificationID,

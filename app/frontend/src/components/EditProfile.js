@@ -22,7 +22,7 @@ class EditProfile extends Component {
   }
 
   componentDidMount() {
-    var cruzid = "gkchoi"
+    var cruzid = this.props.auth.cruzid
 
     this.props.fetch_notification(cruzid).then(response => {
       this.setState({
@@ -34,12 +34,6 @@ class EditProfile extends Component {
 
   componentDidUpdate(prevProps, prevState) {
 
-    if (this.state.notification && this.state.notification.length === 0) {
-
-    }
-
-    console.log(prevState)
-    console.log(this.state)
   }
 
 
@@ -65,10 +59,7 @@ class EditProfile extends Component {
   }
 
   handleSendNotification = () => {
-    var cruzid = "gkchoi"
-    var type = "applied"
-
-    this.props.notifyUser(cruzid, type);
+    //this.props.notifyUser(cruzid, type);
   }
 
   handleNotificationClear(cruzid, id) {
@@ -89,7 +80,7 @@ class EditProfile extends Component {
 
   display_notifications = () => {
 
-    var cruzid = "gkchoi"
+    var cruzid = this.props.auth.cruzid
 
     if (this.state.notification.length === 0) {
       return (
@@ -122,7 +113,7 @@ class EditProfile extends Component {
         <div className="container has-text-centered">
           <h1 className="is-size-1">Settings</h1>
 
-          <br /><button type="button" onClick={() => this.handleSendNotification()}>Apply Button</button><br /><br />
+          {/*<br /><button type="button" onClick={() => this.handleSendNotification()}>Apply Button</button><br /><br />*/}
 
           <Tabs>
             <TabList>
