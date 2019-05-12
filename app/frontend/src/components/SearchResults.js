@@ -8,14 +8,10 @@ class SearchResults extends Component {
     this.setState({ search: [] });
   }
 
-  async componentDidUpdate() {
-    console.log(this.props.search);
-  }
-
   formatPost() {
     const posts = this.props.search;
 
-    if (!posts) {
+    if (!posts || !Array.isArray(posts)) {
       return (
         <div className="flex-container" />
       );

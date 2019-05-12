@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-const fillResearchPost = require('./fillResearchHelper');
 
 
 // Research post model
@@ -13,12 +12,16 @@ const FacultyMember = require('../../models/FacultyMember');
 // @access Public
 router.get('/', (req, res) => {
   if (req.query.id) {
-    Research.findById(req.query.id, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.send(new Research());
-      } else {
-        var currentDate = new Date();
+    var query = Research.findById(req.query.id);
+    if (req.query.fill) {
+      query = query
+        .populate('owner')
+        .populate('department')
+        .populate('applicants');
+    }
+
+    query.then(result => {
+      var currentDate = new Date();
         var postDate = new Date(result.deadline);
         if (result.status === 'Open' && currentDate > postDate) {
           result.status = 'Closed';
@@ -29,14 +32,10 @@ router.get('/', (req, res) => {
           })
         }
 
-        if (req.query.fill) {
-          fillResearchPost(result)
-            .then(data => res.send(data))
-            .catch(err => res.send(new Research()));
-        } else {
-          res.send(result);
-        }
-      }
+        res.send(result);
+    }).catch(err => {
+      console.log(err);
+      res.send(new Research());
     });
   } else {
     Research.find({})
