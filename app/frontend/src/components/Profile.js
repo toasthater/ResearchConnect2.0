@@ -15,6 +15,13 @@ import PostCard from './PostCard';
 class Profile extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.match.params.cruzid !== this.props.match.params.cruzid) {
+      this.setState({
+        followingLoaded: false,
+        profileLoaded: false,
+        researchLoaded: false,
+        userLoaded: false,
+      });
+
       this.setProfileStates();
       this.setRelevantStates();
     }
@@ -76,6 +83,27 @@ class Profile extends Component {
       },
     })
       .then((response) => {
+        if (this.props.auth.cruzid === this.props.match.params.cruzid && response.data.following) {
+          var promises = [];
+          for (var i = 0; i < response.data.following.length; i++) {
+            promises.push(axios.get('/api/search?type=cruzid&query=' + response.data.following[i]));
+          }
+          
+          Promise.all(promises).then(responses => {
+            var posts = [];
+            for (var i = 0; i < responses.length; i++) {
+              for (var j = 0; j < responses[i].data.length; j++) {
+                posts.push(responses[i].data[j]);
+              }
+            }
+
+            this.setState({
+              followedResearch: posts,
+              followingLoaded: true,
+            });
+          }).catch(err => console.log(err));
+        }
+        
         if (response.data.isProfessor === true) {
           console.log('Fetching Professor Profile...');
 
@@ -172,8 +200,7 @@ class Profile extends Component {
     );
   }
 
-  formatPost() {
-    var posts = this.state.research;
+  formatPost(posts) {
     return (
       <div className="flex item inner content">
         {posts.map(post => (<PostCard key={post._id} post={{
@@ -203,6 +230,7 @@ class Profile extends Component {
               {!this.state.isProfessor && <Tab>Student</Tab>}
               {this.state.isProfessor && <Tab>Professor</Tab>}
               <Tab>Projects</Tab>
+              {this.props.auth.cruzid === this.props.match.params.cruzid&& <Tab>Following</Tab>}
             </TabList>
 
             <TabPanel>
@@ -212,9 +240,14 @@ class Profile extends Component {
 
             <TabPanel>
               <div>
-                {this.state.researchLoaded ? this.formatPost() : <Spinner fullPage />}
+                {this.state.researchLoaded ? this.formatPost(this.state.research) : <Spinner fullPage />}
               </div>
             </TabPanel>
+
+            {this.props.auth.cruzid === this.props.match.params.cruzid && 
+            <TabPanel>
+              {this.state.followingLoaded ? this.formatPost(this.state.followedResearch) : <Spinner fullPage />}
+            </TabPanel>}
           </Tabs>
 
         </div>
