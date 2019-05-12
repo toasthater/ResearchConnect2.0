@@ -11,6 +11,7 @@ module.exports = {
   mongoURI: process.env.MONGO_URL,
   googleClientID: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  sendgridAPI: process.env.SENDGRID_API_KEY,
   cookieKey: process.env.COOKIE_KEY,
   cloudinary: {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
