@@ -3,7 +3,53 @@ const router = express.Router();
 const Notification = require("../../models/Notification");
 const User = require("../../models/User");
 const keys = require('../../config/keys');
-const SGmail = require('@sendgrid/mail')
+const SGmail = require('@sendgrid/mail');
+const Researchs = require("../../models/Research");
+const cron = require("node-cron");
+
+const moment = require('moment')
+
+//Send a reminder email to all research posts with applicants in it still, every 24 hours
+cron.schedule("* */24 * * *", function () {
+  var async = require('async');
+  var cruzIdList = []
+
+  Researchs.find({}, function (err, result) {
+    async.eachSeries(result, function (researchPost, next) {
+      //console.log(result)
+      if (researchPost.applicants.length > 0) {
+        var ownerCruzID = JSON.stringify(researchPost.cruzid)
+
+        if (cruzIdList.indexOf(ownerCruzID) === -1) {
+          cruzIdList.push(ownerCruzID)
+        }
+      }
+      next()
+    })
+
+    //Done with searching for all ID's of professors that need to be notified
+    if (cruzIdList.length > 0) {
+      for (let i = 0; i < cruzIdList.length; i++) {
+        var userID = JSON.parse(cruzIdList[i])
+
+        User.findOne({ cruzid: userID }, function (err, userData) {
+          //console.log("Sending a reminder to: " + userData.email)
+
+          const reminderEmail = {
+            to: userData.email,
+            from: 'ResearchConnect <admin@researchconnect.net>',
+            subject: "Reminder: New applicants",
+            text: "This is a reminder that you that new applicants have applied to your research."
+          }
+
+          //SGmail.setApiKey(keys.sendgridAPI);
+          //SGmail.send(reminderEmail)
+        })
+      }
+    }
+  })
+});
+
 
 /* Function for creating a new notification schema and store it in the
  * database. Also push the ID of the notification to the user's database.
@@ -57,8 +103,8 @@ async function createNewNotification(req, res) {
         text: response.message
       }
 
-      //SGmail.setApiKey(keys.sendgridAPI);
-      //SGmail.send(email)
+      SGmail.setApiKey(keys.sendgridAPI);
+      SGmail.send(email)
 
       user.save(function (err) {
         if (err) {
@@ -124,13 +170,16 @@ router.get('/', (req, res) => {
         //Search each notification by it's ID number from the response above
         Notification.findById(response.notification[i], function (err, notification) {
 
+          var newDate = moment(notification.created).format('M/DD/YYYY');
+          //console.log(newDate)
+
           //Object body containing the fields we want returned
           const temp = {
             _id: notification._id,
             type: notification.type,
             message: notification.message,
             from: notification.from,
-            date: notification.created
+            date: newDate
           }
 
           notifications.push(temp)
