@@ -103,8 +103,8 @@ async function createNewNotification(req, res) {
         text: response.message
       }
 
-      //SGmail.setApiKey(keys.sendgridAPI);
-      //SGmail.send(email)
+      SGmail.setApiKey(keys.sendgridAPI);
+      SGmail.send(email)
 
       user.save(function (err) {
         if (err) {

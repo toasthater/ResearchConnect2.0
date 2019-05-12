@@ -58,10 +58,6 @@ class EditProfile extends Component {
     this.props.updateUser(body);
   }
 
-  handleSendNotification = () => {
-    //this.props.notifyUser(cruzid, type);
-  }
-
   handleNotificationClear(cruzid, id) {
     this.props.clearNotification(cruzid, id)
       .then(response => {
@@ -112,8 +108,6 @@ class EditProfile extends Component {
       <section className="section">
         <div className="container has-text-centered">
           <h1 className="is-size-1">Settings</h1>
-
-          {/*<br /><button type="button" onClick={() => this.handleSendNotification()}>Apply Button</button><br /><br />*/}
 
           <Tabs>
             <TabList>
