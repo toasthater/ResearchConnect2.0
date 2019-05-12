@@ -105,7 +105,7 @@ class Home extends Component {
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, posts } = this.state;
     if (loading) {
       return <Spinner fullPage />;
     }
@@ -128,6 +128,11 @@ class Home extends Component {
             </div>
             <div className="column is-one-third">
               {this.formatPost(3, 1)}
+              { posts.length ? null : (
+                <div className="has-text-centered title">
+                  Nothing matched that filter! Try something else
+                </div>
+              ) }
             </div>
             <div className="column is-one-third">
               {this.formatPost(3, 2)}
