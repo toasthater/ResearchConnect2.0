@@ -31,7 +31,7 @@ class Home extends Component {
       return (
         post.summary.toLowerCase().includes(f) ||
         post.department.name.toLowerCase().includes(f) ||
-        post.cruzid.toLowerCase().includes(f) ||
+        post.owner.cruzid.toLowerCase().includes(f) ||
         post.owner.name.toLowerCase().includes(f) ||
         post.description.toLowerCase().includes(f) ||
         post.title.toLowerCase().includes(f) ||

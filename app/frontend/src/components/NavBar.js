@@ -51,7 +51,7 @@ class NavBar extends Component {
               </NavLink>
               <div className="navbar-dropdown is-right is-boxed">
                 <Link className="navbar-item" to={`/profile/${ this.props.auth.cruzid}`}>
-                  Account
+                  Profile
                 </Link>
                 <Link className="navbar-item" to="/settings">
                   Settings
