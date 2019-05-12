@@ -140,6 +140,9 @@ class Home extends Component {
           </div>
         </div>
         <div className="App" />
+        <div className="container is-size-3">
+          <center>That's all folks, come back later to see new posts!</center>
+        </div>
       </section>
     );
   }
