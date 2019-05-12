@@ -18,7 +18,7 @@ class Home extends Component {
 
   handleFilterChange = (event) => {
     const { value } = event.target;
-    const { posts } = this.state;
+    const { allPosts } = this.state;
     const f = value.trim().toLowerCase();
     if (!f) {
       return this.setState(prevState => ({
@@ -26,7 +26,7 @@ class Home extends Component {
       }));
     }
 
-    const filteredPosts = posts.filter((post) => {
+    const filteredPosts = allPosts.filter((post) => {
       console.log(post)
       return (
         post.summary.toLowerCase().includes(f) ||
@@ -117,7 +117,7 @@ class Home extends Component {
             <div className="column" style={{ marginBottom: '1em' }}>
               <div className="field">
                 <div className="control">
-                  <input className="input is-medium" type="text" placeholder="Filter by title, professor, tags, and department... Try 'computer science' or 'unity'" onChange={this.handleFilterChange} />
+                  <input className={`input is-medium ${!posts.length ? 'is-danger' : ''}`} type="text" placeholder="Filter by title, professor, tags, and department... Try 'computer science' or 'unity'" onChange={this.handleFilterChange} />
                 </div>
               </div>
             </div>
@@ -140,9 +140,11 @@ class Home extends Component {
           </div>
         </div>
         <div className="App" />
-        <div className="container is-size-3">
-          <center>That's all folks, come back later to see new posts!</center>
-        </div>
+        { posts.length ? (
+          <div className="container is-size-3">
+            <center>That's all folks, come back later to see new posts!</center>
+          </div>
+        ) : null }
       </section>
     );
   }
