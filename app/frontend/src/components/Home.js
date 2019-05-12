@@ -10,9 +10,43 @@ class Home extends Component {
     super(props);
 
     this.state = {
+      allPosts: [],
       posts: [],
       loading: false,
     };
+  }
+
+  handleFilterChange = (event) => {
+    const { value } = event.target;
+    const { posts } = this.state;
+    const f = value.trim().toLowerCase();
+    if (!f) {
+      return this.setState(prevState => ({
+        posts: prevState.allPosts,
+      }));
+    }
+
+    const filteredPosts = posts.filter((post) => {
+      console.log(post)
+      return (
+        post.summary.toLowerCase().includes(f) ||
+        post.department.name.toLowerCase().includes(f) ||
+        post.cruzid.toLowerCase().includes(f) ||
+        post.owner.name.toLowerCase().includes(f) ||
+        post.description.toLowerCase().includes(f) ||
+        post.title.toLowerCase().includes(f) ||
+        post.tags.reduce((acc, t) => {
+          if (acc) {
+            return acc;
+          }
+          return t.toLowerCase().includes(f);
+        }, false) ||
+        false
+      )
+    });
+    return this.setState({
+      posts: filteredPosts,
+    });
   }
 
   componentDidMount() {
@@ -20,52 +54,18 @@ class Home extends Component {
     this.getPosts();
   }
 
-  // async closePosts() {
-  //   console.log("Checking deadlines")
-  //   var currentDate = new Date();
-  //   var postsToClose = [];
-
-  //   this.state.posts.forEach(function (post) {
-  //     var postDate = new Date(post.deadline);
-  //     if (post.status === 'Open' && currentDate > postDate) {
-  //       post.status = 'Closed';
-  //       postsToClose.push(post);
-  //     }
-  //   });
-
-  //   console.log(postsToClose)
-  //   await Promise.all([
-  //     postsToClose.forEach(function (post) {
-  //       console.log("axios push");
-  //       const newPost = {
-  //         _id: post._id,
-  //         title: post.title,
-  //         owner: post.owner.cruzid,
-  //         cruzid: post.owner.cruzid,
-  //         tags: post.tags,
-  //         summary: post.summary,
-  //         description: post.description,
-  //         department: {
-  //           value: post.department._id,
-  //           label: post.department.name,
-  //         },
-  //         status: post.status,
-  //         deadline: post.deadline,
-  //       };
-  //       axios.post(`/api/research_posts?id=${post._id}`, newPost);
-  //     })
-  //   ]);
-  // }
-
   getPosts() {
+    const { posts, loading } = this.state;
     this.setState({
-      posts: this.state.posts,
+      allPosts: posts,
+      posts,
       loading: true,
     });
 
     axios.get('/api/research_posts?fill=true')
       .then((response) => {
         this.setState({
+          allPosts: response.data,
           posts: response.data,
           loading: false,
         }, () => console.log(this.state.loading));
@@ -74,7 +74,8 @@ class Home extends Component {
       .catch((error) => {
         console.log(error);
         this.setState({
-          posts: this.state.posts,
+          allPosts: posts,
+          posts,
           loading: false,
         });
       });
@@ -104,13 +105,23 @@ class Home extends Component {
   }
 
   render() {
-    if (this.state.loading) {
+    const { loading } = this.state;
+    if (loading) {
       return <Spinner fullPage />;
     }
 
     return (
       <section className="section">
         <div className="container">
+          <div className="columns">
+            <div className="column" style={{ marginBottom: '1em' }}>
+              <div className="field">
+                <div className="control">
+                  <input className="input is-medium" type="text" placeholder="Filter by title, professor, tags, and department... Try 'computer science' or 'unity'" onChange={this.handleFilterChange} />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="columns is-multiline">
             <div className="column is-one-third">
               {this.formatPost(3, 0)}
