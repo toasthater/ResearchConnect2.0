@@ -37,6 +37,7 @@
     "COOKIE_KEY": "@research_connect_2_cookie_key",
     "CLOUDINARY_CLOUD_NAME": "@research_connect_2_cloudinary_cloud_name",
     "CLOUDINARY_API_KEY": "@research_connect_2_cloudinary_api_key",
-    "CLOUDINARY_API_SECRET": "@research_connect_2_cloudinary_api_secret"
+    "CLOUDINARY_API_SECRET": "@research_connect_2_cloudinary_api_secret",
+    "SENDGRID_API_KEY": "@research_connect_2_sendgrid_key"
   }
 }

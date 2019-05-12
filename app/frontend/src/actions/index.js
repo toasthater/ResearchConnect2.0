@@ -9,8 +9,9 @@ import {
   FETCH_POST,
   FETCH_DEPARTMENT,
   UPDATE_PROFILE,
-  POST_DATA,
-  NOTIFICATION
+  POST_DATA
+  //NOTIFICATION,
+  //LOAD_NOTIFICATION
 } from './types';
 
 export const fetchUser = () => async (dispatch) => {
@@ -153,8 +154,6 @@ export const fetchStudent = cruzid => async (dispatch) => {
 };
 
 export const fetchProfile = cruzid => async (dispatch) => {
-  // dispatch({ type: LOAD_PROFILE, payload: true });
-
   let res = await axios.get('/api/students/', {
     params: {
       cruzid,
@@ -169,9 +168,7 @@ export const fetchProfile = cruzid => async (dispatch) => {
     });
   }
 
-
   dispatch({ type: FETCH_PROFILE, payload: res.data });
-  // dispatch({ type: LOAD_PROFILE, payload: false });
 };
 
 export const updateProfile = profile => async (dispatch) => {
@@ -210,21 +207,17 @@ export const stopPartialLoading = () => async (dispatch) => {
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };
 
-export const fetch_notification = (cruzid, sendType) => async dispatch => {
-  //dispatch({ type: LOAD_NOTIFICATION, payload: false });
-
+export const fetch_notification = (cruzid) => async dispatch => {
   let res = await axios.get("/api/notification/", {
     params: {
-      cruzid: cruzid,
-      type: sendType
+      cruzid: cruzid
     }
   });
 
-  dispatch({ type: NOTIFICATION, payload: res.data });
-  //dispatch({ type: LOAD_NOTIFICATION, payload: true });
+  return res.data;
 };
 
-export const notify_user = (cruzid, type) => async dispatch => {
+export const notifyUser = (cruzid, type) => async dispatch => {
   let res = await axios.post("/api/notification/", {
     params: {
       cruzid: cruzid,
@@ -232,5 +225,17 @@ export const notify_user = (cruzid, type) => async dispatch => {
     }
   });
 
-  dispatch({ type: NOTIFICATION, payload: res.data });
+  return res.data;
+};
+
+export const clearNotification = (cruzid, notificationID) => async dispatch => {
+  let res = await axios.post("/api/notification/", {
+    params: {
+      id: notificationID,
+      cruzid: cruzid,
+      type: 'clear'
+    }
+  });
+
+  return res.data;
 };

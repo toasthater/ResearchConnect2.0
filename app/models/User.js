@@ -15,7 +15,6 @@ const UserSchema = new Schema({
   following: [String],
   followers: [String],
   notification: [String]
-  //notification: [{ _id: String, type: String, from: String, message: String }]
   //notification: [{ type: Schema.Types.ObjectId, ref: 'notification' }]
 });
 

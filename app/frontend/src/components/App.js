@@ -23,11 +23,11 @@ NavLink.defaultProps.activeClassName = 'is-active';
 const PrivateRoute = ({
   loggedIn, accountSetup, component, ...rest
 }) => (
-  <Route
-    {...rest}
-    component={loggedIn ? (accountSetup ? component : Setup) : Landing}
-  />
-);
+    <Route
+      {...rest}
+      component={loggedIn ? (accountSetup ? component : Setup) : Landing}
+    />
+  );
 
 class App extends Component {
   componentDidMount() {
@@ -109,14 +109,14 @@ class App extends Component {
           }}
         />
       </>
-    ) : this.props.loadState === 1 ? (
+    ) : (this.props.loadState === 1) ? (
       <Spinner fullPage />
     ) : (
-      <>
-        <NavBar />
-        <Spinner fullPage />
-      </>
-    );
+          <>
+            <NavBar />
+            <Spinner fullPage />
+          </>
+        );
   }
 }
 
