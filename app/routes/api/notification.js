@@ -7,6 +7,8 @@ const SGmail = require('@sendgrid/mail');
 const Researchs = require("../../models/Research");
 const cron = require("node-cron");
 
+const moment = require('moment')
+
 //Send a reminder email to all research posts with applicants in it still, every 24 hours
 cron.schedule("* */24 * * *", function () {
   var async = require('async');
@@ -168,13 +170,16 @@ router.get('/', (req, res) => {
         //Search each notification by it's ID number from the response above
         Notification.findById(response.notification[i], function (err, notification) {
 
+          var newDate = moment(notification.created).format('M/DD/YYYY');
+          //console.log(newDate)
+
           //Object body containing the fields we want returned
           const temp = {
             _id: notification._id,
             type: notification.type,
             message: notification.message,
             from: notification.from,
-            date: notification.created
+            date: newDate
           }
 
           notifications.push(temp)
