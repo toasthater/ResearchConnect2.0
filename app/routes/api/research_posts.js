@@ -1,7 +1,5 @@
 const express = require('express');
-
 const router = express.Router();
-
 
 // Research post model
 const Research = require('../../models/Research');
@@ -22,17 +20,25 @@ router.get('/', (req, res) => {
 
     query.then(result => {
       var currentDate = new Date();
-        var postDate = new Date(result.deadline);
-        if (result.status === 'Open' && currentDate > postDate) {
-          result.status = 'Closed';
-          Research.findByIdAndUpdate(result._id, {
-            $set: {
-              status: result.status
-            }
-          })
-        }
+      var postDate = new Date(result.deadline);
+      if (result.status === 'Open' && currentDate > postDate) {
+        result.status = 'Closed';
+        Research.findByIdAndUpdate(result._id, {
+          $set: {
+            status: result.status
+          }
+        })
+      }
 
+      if (req.user.isProfessor) {
         res.send(result);
+      }
+      else {
+        var filteredPost = result.toObject();
+        delete filteredPost.applicants;
+
+        res.send(filteredPost);
+      }
     }).catch(err => {
       console.log(err);
       res.send(new Research());
@@ -46,8 +52,17 @@ router.get('/', (req, res) => {
       .then(async (research_posts) => {
         var currentDate = new Date();
         var postsToClose = [];
+        var filteredPost = [];
 
         research_posts.forEach(function (post) {
+
+          if (!req.user.isProfessor) {
+            var tempPost = post.toObject();
+            delete tempPost.applicants;
+
+            filteredPost.push(tempPost);
+          }
+
           var postDate = new Date(post.deadline);
           if (post.status === 'Open' && currentDate > postDate) {
             post.status = 'Closed';
@@ -64,7 +79,12 @@ router.get('/', (req, res) => {
             })
           })
         )
-        res.send(research_posts);
+
+        if (req.user.isProfessor) {
+          res.send(research_posts);
+        } else {
+          res.send(filteredPost);
+        }
       })
       .catch(err => res.send([new Research()]));
   }
