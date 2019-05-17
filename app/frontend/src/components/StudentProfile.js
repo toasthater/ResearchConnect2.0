@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import profileImg from '../assets/profile.png';
 import ResumeForm from './ResumeForm';
@@ -16,6 +16,8 @@ class StudentProfile extends Component {
     this.state = {
       loading: true,
       isFollowDisabled: this.props.isFollowDisabled,
+      endorsements: this.props.student.endorsements,
+      showEndorsements: false,
     };
   }
 
@@ -62,6 +64,54 @@ class StudentProfile extends Component {
     this.props.uploadResume(resume);
   }
 
+  endorsed() {
+    return this.state.endorsements && this.state.endorsements.includes(this.props.auth.cruzid);
+  }
+
+  setEndorsed(val) {
+    var { endorsements } = this.state;
+    if (!endorsements) {
+      endorsements = [];
+    }
+    
+    var request = null;
+
+    if (val && !this.endorsed()) {
+      request = {
+        id: this.props.student.id,
+        endorse: true,
+      };
+
+      endorsements.push(this.props.auth.cruzid);
+    } else if (!val && this.endorsed()) {
+      request = {
+        id: this.props.student.id,
+        endorse: false,
+      };
+
+      endorsements = endorsements.filter(value => value !== this.props.auth.cruzid);
+    }
+
+    if (request) {
+      axios.post('/api/endorse', request).then().catch(err => {
+        console.log(err);
+      });
+
+      this.setState({
+        endorsements: endorsements,
+      });
+    }
+  }
+
+  getEndorsers() {
+    return (
+      <div className="flex item inner content">
+        {this.state.endorsements.map(endorser => (
+          <Link key={endorser} className="subtitle is-6 has-text-link" to={"/profile/" + endorser}>{endorser}</Link>
+        ))}
+      </div>)
+  }
+
   render() {
     const myProfile = this.props.profile.cruzid === this.props.auth.cruzid;
 
@@ -88,23 +138,35 @@ class StudentProfile extends Component {
               </figure>
             </div>
           </h1>
-
-          {!myProfile && (
+          
+          {this.props.auth.isProfessor && (
             <div>
+              <button
+                className={`button is-link ${ this.endorsed() ? '' : 'is-inverted'}`}
+                onClick={() => this.setEndorsed(!this.endorsed())}
+              >
+                {this.endorsed() ? 'Endorsed' : 'Endorse'}
+              </button>
               <br />
               <button
-                id={this.props.profile.cruzid}
-                className={`button is-link ${ this.state.following ? '' : 'is-inverted'}`}
-                disabled={this.state.isFollowDisabled}
-                onClick={this.toggleFollow}
+                className='button is-link'
+                onClick={() => this.setState({ showEndorsements: !this.state.showEndorsements })}
+                disabled={!this.state.endorsements || this.state.endorsements.length == 0}
               >
-                {this.state.following ? 'Following' : 'Follow'}
+                {'Endorsed by ' + (this.state.endorsements ? this.state.endorsements.length : 0) + ' professors'}
               </button>
+              <br />
               <br />
             </div>
           )}
 
           <br />
+          
+          {this.state.showEndorsements &&
+          <div>
+            {this.getEndorsers()}
+            <br />
+          </div>}
 
           <div className="box">
             {this.props.profile.name ? this.props.profile.name : 'No Name Listed'}

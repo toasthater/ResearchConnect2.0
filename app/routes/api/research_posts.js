@@ -15,7 +15,12 @@ router.get('/', (req, res) => {
       query = query
         .populate('owner')
         .populate('department')
-        .populate('applicants');
+        .populate({
+          path: 'applicants',
+          populate: {
+            path: 'student',
+          }
+        });
     }
 
     query.then(result => {
@@ -47,7 +52,12 @@ router.get('/', (req, res) => {
     Research.find({})
       .populate('owner')
       .populate('department')
-      .populate('applicants')
+      .populate({
+        path: 'applicants',
+        populate: {
+          path: 'student',
+        }
+      })
       .sort({ date: -1 }).limit(20)
       .then(async (research_posts) => {
         var currentDate = new Date();

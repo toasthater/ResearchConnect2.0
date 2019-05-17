@@ -18,7 +18,8 @@ const follow = require('./routes/api/follow');
 const studentMember = require("./routes/api/students");
 const resume = require("./routes/api/resume");
 const hasApplied = require("./routes/api/hasApplied");
-const notification = require("./routes/api/notification")
+const notification = require("./routes/api/notification");
+const endorse = require('./routes/api/endorse');
 
 require('./models/User');
 require('./models/Student');
@@ -62,6 +63,7 @@ app.use("/api/resume", resume);
 app.use("/api/apply", require("./routes/api/applications"));
 app.use("/api/hasApplied", hasApplied);
 app.use("/api/notification", notification);
+app.use("/api/endorse", endorse);
 
 // DB config
 const db = require('./config/keys').mongoURI;

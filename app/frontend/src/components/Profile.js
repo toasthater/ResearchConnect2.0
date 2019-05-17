@@ -20,6 +20,7 @@ class Profile extends Component {
         profileLoaded: false,
         researchLoaded: false,
         userLoaded: false,
+        departmentLoaded: false,
       });
 
       this.setProfileStates();
@@ -38,6 +39,10 @@ class Profile extends Component {
         researchLoaded: false,
         profile: this.props.auth,
         research: [],
+        followingLoaded: false,
+        followedResearch: [],
+        departmentLoaded: false,
+        departmentResearch: [],
       };
     } else {
       this.state = {
@@ -102,6 +107,10 @@ class Profile extends Component {
               followingLoaded: true,
             });
           }).catch(err => console.log(err));
+        } else {
+          this.setState({
+            followingLoaded: true,
+          })
         }
         
         if (response.data.isProfessor === true) {
@@ -142,6 +151,19 @@ class Profile extends Component {
                 isProfessor: false,
                 userLoaded: true,
               });
+              
+              if (response.data.major) {
+                axios.get('/api/search?type=Department&query=' + response.data.major).then(response => {
+                  this.setState({
+                    departmentLoaded: true,
+                    departmentResearch: response.data,
+                  })
+                })
+              } else {
+                this.setState({
+                  departmentLoaded: true,
+                });
+              }
             })
             .catch(error => console.log(error));
 
@@ -178,9 +200,16 @@ class Profile extends Component {
     return (
       <StudentProfile
         id={this.state.profile.cruzid}
-        auth={{ cruzid: this.props.auth.cruzid }}
+        auth={{
+          cruzid: this.props.auth.cruzid,
+          isProfessor: this.props.auth.isProfessor,
+        }}
         profile={this.state.profile}
-        student={{ major: this.state.student.major }}
+        student={{
+          major: this.state.student.major,
+          endorsements: this.state.student.endorsements,
+          id: this.state.student._id,
+        }}
         resume={this.state.profile.resume}
         isFollowDisabled={this.state.isFollowDisabled}
         uploadResume={this.props.uploadResume}
@@ -230,7 +259,8 @@ class Profile extends Component {
               {!this.state.isProfessor && <Tab>Student</Tab>}
               {this.state.isProfessor && <Tab>Professor</Tab>}
               <Tab>Projects</Tab>
-              {this.props.auth.cruzid === this.props.match.params.cruzid&& <Tab>Following</Tab>}
+              {this.props.auth.cruzid === this.props.match.params.cruzid && <Tab>Following</Tab>}
+              {this.props.auth.cruzid === this.props.match.params.cruzid && <Tab>Major</Tab>}
             </TabList>
 
             <TabPanel>
@@ -240,14 +270,33 @@ class Profile extends Component {
 
             <TabPanel>
               <div>
-                {this.state.researchLoaded ? this.formatPost(this.state.research) : <Spinner fullPage />}
+              {this.state.researchLoaded ?
+                  ((this.state.research && this.state.research.length > 0) ?
+                    this.formatPost(this.state.research)
+                    : <p>No research to show</p>)
+                  : <Spinner fullPage />}
               </div>
             </TabPanel>
 
             {this.props.auth.cruzid === this.props.match.params.cruzid && 
-            <TabPanel>
-              {this.state.followingLoaded ? this.formatPost(this.state.followedResearch) : <Spinner fullPage />}
-            </TabPanel>}
+            <>
+              <TabPanel>
+                {this.state.followingLoaded ?
+                  ((this.state.followedResearch && this.state.followedResearch.length > 0) ?
+                    this.formatPost(this.state.followedResearch)
+                    : <p>No research to show</p>)
+                  : <Spinner fullPage />}
+              </TabPanel>
+
+              <TabPanel>
+              {this.state.departmentLoaded ?
+                  ((this.state.departmentResearch && this.state.departmentResearch.length > 0) ?
+                    this.formatPost(this.state.departmentResearch)
+                    : <p>No research to show</p>)
+                  : <Spinner fullPage />}
+              </TabPanel>
+            </>
+            }
           </Tabs>
 
         </div>
