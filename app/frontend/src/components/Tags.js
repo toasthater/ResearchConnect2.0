@@ -75,7 +75,7 @@ class Tags extends React.Component {
     return (
       <div className="form">
         <div className="tags_in">
-          <div class="tags">
+          <div className="tags">
             {tags.map((tag, i) => (
               <div key={tag + i} className="tag_in tag is-medium">
                 {tag}
