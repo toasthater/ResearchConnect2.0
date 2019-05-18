@@ -30,7 +30,7 @@ export default class Landing extends Component {
                 </div>
                 <div className="column is-half">
                   <figure className="image has-text-centered">
-                    <img className="is-rounded" src="https://via.placeholder.com/1000" style={{ height: '384px', width: '384px', display: 'inline-block' }}/>
+                    <img className="is-rounded" src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1141&q=80" style={{ height: '384px', width: '384px', display: 'inline-block' }}/>
                   </figure>
                 </div>
               </div>
@@ -106,7 +106,7 @@ export default class Landing extends Component {
                   <ol style={{ wordBreak: 'break-word' }}>
                     <li>Get rid of your inbox clutter of students asking what research positions you have</li>
                     <li>See all the data about all your applicants in one view, making it easier than ever to pick the best of the best</li>
-                    <li>Easily gain access to students frmo different majors to suit your needs</li>
+                    <li>Easily gain access to students from different majors to suit your needs</li>
                   </ol>
                 </div>
               </div>
@@ -125,7 +125,7 @@ export default class Landing extends Component {
                   <ol style={{ wordBreak: 'break-word' }}>
                     <li>Find which professors are looking for undergraduate students in one view. No more sending hundreds of cold emails</li>
                     <li>Easily filter out the research that you are not applicable for or have no interest in</li>
-                    <li>Contact your favorite professors about their porjects in a simple application</li>
+                    <li>Contact your favorite professors about their projects in a simple application</li>
                   </ol>
                 </div>
               </div>
