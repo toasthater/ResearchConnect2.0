@@ -87,6 +87,8 @@ class ProfessorProfile extends Component {
                 </div>
               </h1>
 
+              <hr />
+
               {!myProfile && (
                 <div>
                   <button
@@ -102,27 +104,27 @@ class ProfessorProfile extends Component {
               )}
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Name</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Name</h2>
                 <h1 className="title is-4">{this.props.profile.name ? this.props.profile.name : 'No Name Listed'}</h1>
               </div>
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Title</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Title</h2>
                 <h1 className="title is-4">{this.props.professor.title ? this.props.professor.title : 'No Title Listed'}</h1>
               </div>
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Email</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Email</h2>
                 <h1 className="title is-4">{this.props.profile.email ? this.props.profile.email : 'No Email Listed'}</h1>
               </div>
 
               {<div className="box">
-                <h2 className="subtitle is-uppercase is-6">Department</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Department</h2>
                 <h1 className="title is-4">{this.props.professor.department ? this.props.professor.department : 'No Department Listed'}</h1>
               </div>}
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Bio</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Bio</h2>
                 <h1 className="title is-4">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</h1>
               </div>
             </div>

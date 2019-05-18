@@ -90,6 +90,8 @@ class StudentProfile extends Component {
                 </div>
               </h1>
 
+              <hr />
+
               {!myProfile && (
                 <div>
                   <br />
@@ -108,29 +110,29 @@ class StudentProfile extends Component {
               <br />
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Name</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Name</h2>
                 <h1 className="title is-4">{this.props.profile.name ? this.props.profile.name : 'No Name Listed'}</h1>
               </div>
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Email</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Email</h2>
                 <h1 className="title is-4">{this.props.profile.email ? this.props.profile.email : 'No Email Listed'}</h1>
               </div>
 
               {<div className="box">
-                <h2 className="subtitle is-uppercase is-6">Major</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Major</h2>
                 <h1 className="title is-4">{this.props.student.major ? this.props.student.major : 'No Major Listed'}</h1>
               </div>}
 
               <div className="box">
-                <h2 className="subtitle is-uppercase is-6">Bio</h2>
+                <h2 className="subtitle is-uppercase is-size-7">Bio</h2>
                 <h1 className="title is-4">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</h1>
               </div>
 
               {myProfile && this.props.auth && (
                 <div className="box">
                   <div>
-                    <h2 className="subtitle is-uppercase is-6" style={{ marginBottom: '0px' }}>Upload Resume</h2>
+                    <h2 className="subtitle is-uppercase is-size-7" style={{ marginBottom: '0px' }}>Upload Resume</h2>
                     <ResumeForm
                       onSubmit={data => this.uploadResume(data.file)}
                     />

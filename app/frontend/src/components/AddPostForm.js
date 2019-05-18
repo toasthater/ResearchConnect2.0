@@ -7,20 +7,6 @@ import Select from 'react-select';
 import Tags from './Tags';
 import * as actions from '../actions';
 
-let rawDepartmentList;
-const departmentList = [];
-axios.get('/api/department').then((response) => { rawDepartmentList = response.data; populateList(rawDepartmentList); });
-
-function populateList(list) {
-    for (let i = 0; i < list.length; i++) {
-        const id = list[i]._id;
-        const { name } = list[i];
-
-        departmentList.push({ label: name, value: id });
-    }
-}
-
-
 class AddPostForm extends React.Component {
     state = {
         title: '',
@@ -31,7 +17,8 @@ class AddPostForm extends React.Component {
         deadline: new Date(),
         owner: this.props.auth.cruzid,
         valid: false,
-        questions: []
+        questions: [],
+        departmentList: [],
     }
 
     componentDidMount() {
@@ -53,6 +40,26 @@ class AddPostForm extends React.Component {
 
             this.props.savePost(null);
         }
+
+        let rawDepartmentList;
+        const departmentList = [];
+        function populateList(list) {
+            for (let i = 0; i < list.length; i++) {
+                const id = list[i]._id;
+                const { name } = list[i];
+
+                departmentList.push({ label: name, value: id });
+            }
+        }
+
+        axios.get('/api/department').then((response) => {
+          rawDepartmentList = response.data;
+          populateList(rawDepartmentList);
+          this.setState({
+            departmentList,
+          });
+        });
+
     }
 
     change = (e) => {
@@ -138,7 +145,7 @@ class AddPostForm extends React.Component {
 
     addQuestion = (e) => {
         e.preventDefault();
-        
+
         this.setState({ questions: [ ...this.state.questions, "" ]});
     }
 
@@ -155,9 +162,9 @@ class AddPostForm extends React.Component {
         }
     }
 
-    getQuestions = () => { 
+    getQuestions = () => {
         var questions = this.state.questions.map((question, i) =>
-            <input type="text" key={i} name={i} className="input" placeholder={"Question #" + i} value={this.state.questions[i]} onChange={e => this.changeQuestion(e)} style={{marginBottom: "1em"}}></input>
+            <input type="text" key={i} name={i} autoFocus className="input" placeholder={"Question #" + (i + 1)} value={this.state.questions[i]} onChange={e => this.changeQuestion(e)} style={{marginBottom: "1em"}}></input>
         );
 
         return <div>{questions}</div>
@@ -178,79 +185,79 @@ class AddPostForm extends React.Component {
             return '';
         }
 
+        const { departmentList } = this.state;
+
         return (
           <form>
-            <div className="container" style={{ width: 768, marginTop: '5em' }}>
-              <div className="field" align="center">
-                <label className="label">Title</label>
-                <div className="control">
-                  <input name="title" className="input" type="text" maxLength="50" placeholder="Title, 50 char limit" value={this.state.title} onChange={e => this.change(e)} />
-                </div>
+            <div className="field" align="center">
+              <label className="label">Title</label>
+              <div className="control">
+                <input name="title" className="input" type="text" maxLength="50" placeholder="Title, 50 char limit" value={this.state.title} onChange={e => this.change(e)} />
               </div>
-
-              <div className="field" align="center">
-                <label className="label">Department</label>
-                <div className="control">
-                  <div className="Select">
-                    <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="field" align="center">
-                <label className="label">Summary</label>
-                <div className="control">
-                  <input type="text" name="summary" className="input" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)} />
-                </div>
-              </div>
-
-              <div className="field" align="center">
-                <label className="label">Description</label>
-                <div className="control">
-                  <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)} />
-                </div>
-              </div>
-
-              <div className="field" align="center">
-                <label className="label">Questionnaire</label>
-                <div className="control">
-                    {this.getQuestions()}
-                    <div className="columns" align="center">
-                        <div className="column"> 
-                            <button type="button" onClick={e => this.addQuestion(e)} className="button is-link">Add Question</button>
-                        </div>
-                        <div className="column"> 
-                            <button type="button" onClick={e => this.removeQuestion(e)} className="button is-danger is-link">Remove Question</button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-              <div className="field" align="center">
-                <label className="label">Tags</label>
-                <div className="control">
-                  <Tags getTags={this.getTags} tagsChange={this.tagsChange} />
+            <div className="field" align="center">
+              <label className="label">Department</label>
+              <div className="control">
+                <div className="Select">
+                  <Select options={departmentList} name="department" value={this.state.department} onChange={e => this.changeDept(e)} />
                 </div>
               </div>
+            </div>
 
-              <div className="field" align="center">
-                <label className="label">Deadline</label>
-                <div align="center">
-                  <Calendar
-                    onChange={this.onChange}
-                    value={this.state.deadline}
-                  />
-                  {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
-                </div>
+            <div className="field" align="center">
+              <label className="label">Summary</label>
+              <div className="control">
+                <input type="text" name="summary" className="input" maxLength="150" placeholder="Summary, 150 char limit" value={this.state.summary} onChange={e => this.change(e)} />
               </div>
+            </div>
 
-              <div className="columns" align="center">
-                <div className="column">
-                  <button type="button" onClick={e => this.onCancel(e)} className="button is-danger is-link">Cancel</button>
-                </div>
-                <div className="column">
-                  <button type="button" onClick={e => this.onSubmit(e)} className="button is-link">Submit</button>
-                </div>
+            <div className="field" align="center">
+              <label className="label">Description</label>
+              <div className="control">
+                <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)} />
+              </div>
+            </div>
+
+            <div className="field" align="center">
+              <label className="label">Questionnaire</label>
+              <div className="control">
+                  {this.getQuestions()}
+                  <div className="columns" align="center">
+                      <div className="column">
+                          <button type="button" onClick={e => this.removeQuestion(e)} className="button is-danger is-outlined is-fullwidth">Remove Question</button>
+                      </div>
+                      <div className="column">
+                          <button type="button" onClick={e => this.addQuestion(e)} className="button is-link is-fullwidth">Add Question</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+            <div className="field" align="center">
+              <label className="label">Tags</label>
+              <div className="control">
+                <Tags getTags={this.getTags} tagsChange={this.tagsChange} />
+              </div>
+            </div>
+
+            <div className="field" align="center">
+              <label className="label">Deadline</label>
+              <div align="center">
+                <Calendar
+                  onChange={this.onChange}
+                  value={this.state.deadline}
+                />
+                {/* <input name="deadline" className="input" type="date" value={this.state.deadline} onChange={e => this.change(e)}></input> */}
+              </div>
+            </div>
+
+            <div className="columns" align="center">
+              <div className="column">
+                <button type="button" onClick={e => this.onCancel(e)} className="button is-danger is-outlined is-fullwidth">Cancel</button>
+              </div>
+              <div className="column">
+                <button type="button" onClick={e => this.onSubmit(e)} className="button is-fullwidth is-link">Submit</button>
               </div>
             </div>
           </form>

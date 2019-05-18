@@ -201,6 +201,9 @@ class Profile extends Component {
       return <Spinner fullPage />;
     }
 
+    const { research: posts } = this.state;
+    console.log(posts)
+
     return (
       <section className="section">
         <div className="container has-text-centered">
@@ -218,16 +221,22 @@ class Profile extends Component {
 
             <TabPanel>
               {this.state.researchLoaded ? (
-                <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
-                  <div className="column is-one-third">
-                    {this.formatPost(3, 0)}
-                  </div>
-                  <div className="column is-one-third">
-                    {this.formatPost(3, 1)}
-                  </div>
-                  <div className="column is-one-third">
-                    {this.formatPost(3, 2)}
-                  </div>
+                <div>
+                  { posts.length ? (
+                    <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
+                      <div className="column is-one-third">
+                        {this.formatPost(3, 0)}
+                      </div>
+                      <div className="column is-one-third">
+                        {this.formatPost(3, 1)}
+                      </div>
+                      <div className="column is-one-third">
+                        {this.formatPost(3, 2)}
+                      </div>
+                    </div>
+                  ) : (
+                    <h1 className="title">Nothing here yet!</h1>
+                  )}
                 </div>
               ) : <Spinner fullPage />}
             </TabPanel>

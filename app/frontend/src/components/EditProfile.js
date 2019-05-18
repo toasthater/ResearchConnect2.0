@@ -58,10 +58,6 @@ class EditProfile extends Component {
     this.props.updateUser(body);
   }
 
-  handleSendNotification = () => {
-    //this.props.notifyUser(cruzid, type);
-  }
-
   handleNotificationClear(cruzid, id) {
     this.props.clearNotification(cruzid, id)
       .then(response => {
@@ -113,8 +109,6 @@ class EditProfile extends Component {
         <div className="container has-text-centered">
           <h1 className="is-size-1">Settings</h1>
 
-          {/*<br /><button type="button" onClick={() => this.handleSendNotification()}>Apply Button</button><br /><br />*/}
-
           <Tabs>
             <TabList>
               <Tab>User</Tab>
@@ -132,7 +126,7 @@ class EditProfile extends Component {
               </TabPanel>
             )}
             <TabPanel>
-              <p>Not Yet Implemented.</p>
+              <div className="subtitle">Coming Soon!</div>
             </TabPanel>
             <TabPanel>
               {!this.state.reloadNotification ? this.display_notifications() : <Spinner fullPage />}
