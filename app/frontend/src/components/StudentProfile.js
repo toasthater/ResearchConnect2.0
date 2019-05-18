@@ -73,7 +73,7 @@ class StudentProfile extends Component {
     if (!endorsements) {
       endorsements = [];
     }
-    
+
     var request = null;
 
     if (val && !this.endorsed()) {
@@ -105,11 +105,14 @@ class StudentProfile extends Component {
 
   getEndorsers() {
     return (
-      <div className="flex item inner content">
-        {this.state.endorsements.map(endorser => (
-          <Link key={endorser} className="subtitle is-6 has-text-link" to={"/profile/" + endorser}>{endorser}</Link>
-        ))}
-      </div>)
+      <table class="table is-bordered">
+        <tbody>
+          {this.state.endorsements.map(endorser => (
+            <tr><td><Link key={endorser} className="subtitle is-6 has-text-link" to={"/profile/" + endorser}>{endorser}</Link></td></tr>
+          ))}
+        </tbody>
+        <br />
+      </table>)
   }
 
   render() {
@@ -142,16 +145,42 @@ class StudentProfile extends Component {
 
               <hr />
 
+              {this.props.auth.isProfessor && (
+                <div className="columns">
+                  <div className="column is-one-third">
+                    <button
+                      className={`button is-fullwidth ${ this.endorsed() ? 'is-danger is-outlined' : 'is-link'}`}
+                      onClick={() => this.setEndorsed(!this.endorsed())}
+                    >
+                      {this.endorsed() ? 'Unendorse' : 'Endorse'}
+                    </button>
+                  </div>
+                  <div className="column">
+                    <button
+                      className='button is-link is-fullwidth is-outlined'
+                      onClick={() => this.setState({ showEndorsements: !this.state.showEndorsements })}
+                      disabled={!this.state.endorsements || this.state.endorsements.length == 0}
+                    >
+                      {'Endorsed by ' + (this.state.endorsements ? this.state.endorsements.length : 0) + ' professors'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {this.state.showEndorsements &&
+              <div>
+                {this.getEndorsers()}
+              </div>}
+
               {!myProfile && (
                 <div>
-                  <br />
                   <button
                     id={this.props.profile.cruzid}
-                    className={`button is-link ${ this.state.following ? '' : 'is-inverted'}`}
+                    className={`button ${ this.state.following ? 'is-link' : 'is-danger is-outlined'}`}
                     disabled={this.state.isFollowDisabled}
                     onClick={this.toggleFollow}
                   >
-                    {this.state.following ? 'Following' : 'Follow'}
+                    {this.state.following ? 'Following' : 'Unfollow'}
                   </button>
                   <br />
                 </div>
