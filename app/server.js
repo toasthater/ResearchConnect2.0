@@ -77,7 +77,7 @@ mongoose
     connectTimeoutMS: 10000,
     socketTimeoutMS: 45000,
   })
-  .then(() => console.log("MongoDB connected...."))
+  .then(() => console.log('MongoDB connected....'))
   .catch(err => console.log(err));
 
 if (process.env.NODE_ENV === 'production') {

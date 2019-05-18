@@ -75,26 +75,26 @@ class Tags extends React.Component {
     return (
       <div className="form">
         <div className="tags_in">
-          <ul>
+          <div className="tags">
             {tags.map((tag, i) => (
-              <li key={tag + i} className="tag_in">
+              <div key={tag + i} className="tag_in tag is-medium">
                 {tag}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
           <input
             type="text"
             placeholder="Add tag..."
             value={value}
             onChange={this.handleChange}
             ref="tag"
-            className="tag-input"
+            className="tag-input input"
             onKeyUp={this.handleKeyUp}
             onKeyDown={this.handleKeyDown}
           />
         </div>
-        <small>
-          Press
+        <p className="help">
+        Press
           {' '}
           <code>enter</code>
           {' '}
@@ -107,7 +107,7 @@ to add a tag. Press
           <code>backspace</code>
           {' '}
 to edit previous tag.
-        </small>
+        </p>
       </div>
     );
   }

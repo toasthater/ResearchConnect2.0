@@ -51,7 +51,7 @@ class NavBar extends Component {
               </NavLink>
               <div className="navbar-dropdown is-right is-boxed">
                 <Link className="navbar-item" to={`/profile/${ this.props.auth.cruzid}`}>
-                  Account
+                  Profile
                 </Link>
                 <Link className="navbar-item" to="/settings">
                   Settings
@@ -70,11 +70,13 @@ class NavBar extends Component {
         const { open } = this.state;
 
         return (
-          <nav className={`navbar is-fixed-top ${!this.props.auth ? 'is-transparent' : 'is-link'}`}>
+          <nav className={`navbar has-shadow is-spaced ${!this.props.auth ? 'is-white' : 'is-primary'}`}>
             <div className="container">
               <div className="navbar-brand">
                 <Link className="navbar-item " to="/">
                   <img src={brandingImg} alt="Logo" />
+                  &nbsp;&nbsp;
+                  <strong>ResearchConnect</strong>
                 </Link>
                 <div
                   className={`navbar-burger burger ${open ? 'is-active' : ''}`}
@@ -88,11 +90,7 @@ class NavBar extends Component {
                 </div>
               </div>
               <div className={`navbar-menu ${open ? 'is-active' : ''}`}>
-                <div className="navbar-start">
-                  <NavLink className="navbar-item" to="/about">
-                    About
-                  </NavLink>
-                </div>
+                <div className="navbar-start" />
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values); }} />}
                 <div className="navbar-end">
                   {this.props.auth && this.props.auth.isProfessor && (

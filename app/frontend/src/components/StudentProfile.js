@@ -73,7 +73,7 @@ class StudentProfile extends Component {
     if (!endorsements) {
       endorsements = [];
     }
-    
+
     var request = null;
 
     if (val && !this.endorsed()) {
@@ -105,11 +105,14 @@ class StudentProfile extends Component {
 
   getEndorsers() {
     return (
-      <div className="flex item inner content">
-        {this.state.endorsements.map(endorser => (
-          <Link key={endorser} className="subtitle is-6 has-text-link" to={"/profile/" + endorser}>{endorser}</Link>
-        ))}
-      </div>)
+      <table class="table is-bordered">
+        <tbody>
+          {this.state.endorsements.map(endorser => (
+            <tr><td><Link key={endorser} className="subtitle is-6 has-text-link" to={"/profile/" + endorser}>{endorser}</Link></td></tr>
+          ))}
+        </tbody>
+        <br />
+      </table>)
   }
 
   render() {
@@ -120,93 +123,115 @@ class StudentProfile extends Component {
     }
 
     return (
-      <div id={this.props.profile.cruzid} className="container" style={{ width: 768 }}>
-        <div className="column" align="center">
-          <h1 align="center">
-            <div align="center">
-              <figure className="image is-128x128">
-                <img
-                  className="is-rounded"
-                  src={
-                    this.props.profile.profile_pic
-                      ? this.props.profile.profile_pic
-                      : profileImg
-                  }
-                  alt={this.props.profile.name}
-                  width={200}
-                />
-              </figure>
-            </div>
-          </h1>
-          
-          {this.props.auth.isProfessor && (
-            <div>
-              <button
-                className={`button is-link ${ this.endorsed() ? '' : 'is-inverted'}`}
-                onClick={() => this.setEndorsed(!this.endorsed())}
-              >
-                {this.endorsed() ? 'Endorsed' : 'Endorse'}
-              </button>
-              <br />
-              <button
-                className='button is-link'
-                onClick={() => this.setState({ showEndorsements: !this.state.showEndorsements })}
-                disabled={!this.state.endorsements || this.state.endorsements.length == 0}
-              >
-                {'Endorsed by ' + (this.state.endorsements ? this.state.endorsements.length : 0) + ' professors'}
-              </button>
-              <br />
-              <br />
-            </div>
-          )}
+      <div id={this.props.profile.cruzid} className="container">
+        <div className="columns">
+          <div className="column is-half is-offset-3">
+            <div className="column" align="center">
+              <h1 align="center">
+                <div align="center">
+                  <figure className="image is-128x128">
+                    <img
+                      className="is-rounded"
+                      src={
+                        this.props.profile.profile_pic
+                          ? this.props.profile.profile_pic
+                          : profileImg
+                      }
+                      alt={this.props.profile.name}
+                    />
+                  </figure>
+                </div>
+              </h1>
 
-          <br />
-          
-          {this.state.showEndorsements &&
-          <div>
-            {this.getEndorsers()}
-            <br />
-          </div>}
+              <hr />
 
-          <div className="box">
-            {this.props.profile.name ? this.props.profile.name : 'No Name Listed'}
-          </div>
+              {this.props.auth.isProfessor && (
+                <div className="columns">
+                  <div className="column is-one-third">
+                    <button
+                      className={`button is-fullwidth ${ this.endorsed() ? 'is-danger is-outlined' : 'is-link'}`}
+                      onClick={() => this.setEndorsed(!this.endorsed())}
+                    >
+                      {this.endorsed() ? 'Unendorse' : 'Endorse'}
+                    </button>
+                  </div>
+                  <div className="column">
+                    <button
+                      className='button is-link is-fullwidth is-outlined'
+                      onClick={() => this.setState({ showEndorsements: !this.state.showEndorsements })}
+                      disabled={!this.state.endorsements || this.state.endorsements.length == 0}
+                    >
+                      {'Endorsed by ' + (this.state.endorsements ? this.state.endorsements.length : 0) + ' professors'}
+                    </button>
+                  </div>
+                </div>
+              )}
 
-          <div className="box">
-            {this.props.profile.email ? this.props.profile.email : 'No Email Listed'}
-          </div>
-
-          {<div className="box">
-            {this.props.student.major ? this.props.student.major : 'No Major Listed'}
-          </div>}
-
-          <div className="box">
-            <p align="left">Bio:</p>
-            <p align="left">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</p>
-          </div>
-
-          {myProfile && this.props.auth && (
-            <div className="box">
+              {this.state.showEndorsements &&
               <div>
-                <p>Upload Resume:</p>
-                <ResumeForm
-                  onSubmit={data => this.uploadResume(data.file)}
-                />
+                {this.getEndorsers()}
+              </div>}
+
+              {!myProfile && (
+                <div>
+                  <button
+                    id={this.props.profile.cruzid}
+                    className={`button ${ this.state.following ? 'is-link' : 'is-danger is-outlined'}`}
+                    disabled={this.state.isFollowDisabled}
+                    onClick={this.toggleFollow}
+                  >
+                    {this.state.following ? 'Following' : 'Unfollow'}
+                  </button>
+                  <br />
+                </div>
+              )}
+
+              <br />
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Name</h2>
+                <h1 className="title is-4">{this.props.profile.name ? this.props.profile.name : 'No Name Listed'}</h1>
+              </div>
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Email</h2>
+                <h1 className="title is-4">{this.props.profile.email ? this.props.profile.email : 'No Email Listed'}</h1>
+              </div>
+
+              {<div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Major</h2>
+                <h1 className="title is-4">{this.props.student.major ? this.props.student.major : 'No Major Listed'}</h1>
+              </div>}
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Bio</h2>
+                <h1 className="title is-4">{this.props.profile.bio ? this.props.profile.bio : 'No Available Bio'}</h1>
+              </div>
+
+              {myProfile && this.props.auth && (
+                <div className="box">
+                  <div>
+                    <h2 className="subtitle is-uppercase is-size-7" style={{ marginBottom: '0px' }}>Upload Resume</h2>
+                    <ResumeForm
+                      onSubmit={data => this.uploadResume(data.file)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <a
+                  href={this.props.resume}
+                  className="button is-info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download={`${this.props.profile.name }_Resume.pdf`}
+                  disabled={!this.props.resume}
+                >
+                  {this.props.resume ? 'Download Resume' : 'No Resume Available'}
+                </a>
               </div>
             </div>
-          )}
-
-          <div>
-            <a
-              href={this.props.resume}
-              className="button is-info"
-              target="_blank"
-              rel="noopener noreferrer"
-              download={`${this.props.profile.name }_Resume.pdf`}
-              disabled={!this.props.resume}
-            >
-              {this.props.resume ? 'Download Resume' : 'No Resume Available'}
-            </a>
           </div>
         </div>
       </div>

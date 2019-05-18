@@ -21,6 +21,7 @@
   ],
   "rules": {
     "template-curly-spacing" : "off",
-    "indent": "off"
+    "indent": "off",
+    "react/jsx-filename-extension": "off"
   }
 }

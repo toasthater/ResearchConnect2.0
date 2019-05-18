@@ -229,27 +229,37 @@ class Profile extends Component {
     );
   }
 
-  formatPost(posts) {
+  formatPost(mod, eq) {
+    const { research: posts } = this.state;
     return (
-      <div className="flex item inner content">
-        {posts.map(post => (<PostCard key={post._id} post={{
-          id: post._id,
-          type: post.department.type,
-          name: post.title,
-          professor: post.owner.name,
-          tags: post.tags,
-          summary: post.summary,
-          department: post.department.name,
-          ownerProfile: "/profile/" + post.owner.cruzid,
-          applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
-        }} />))}
-      </div>)
+      <React.Fragment>
+        {posts.filter((_, index) => (index % mod) === eq).map(post => (
+          <PostCard
+            key={post._id}
+            post={{
+              id: post._id,
+              type: post.department.type,
+              name: post.title,
+              professor: post.owner.name,
+              tags: post.tags,
+              summary: post.summary,
+              department: post.department.name,
+              ownerProfile: "/profile/" + post.owner.cruzid,
+              applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
+            }}
+          />
+        ))}
+      </React.Fragment>
+    )
   }
 
   render() {
     if (!this.state.profileLoaded || !this.state.userLoaded) {
       return <Spinner fullPage />;
     }
+
+    const { research: posts } = this.state;
+    console.log(posts)
 
     return (
       <section className="section">
@@ -269,13 +279,25 @@ class Profile extends Component {
             </TabPanel>
 
             <TabPanel>
-              <div>
-              {this.state.researchLoaded ?
-                  ((this.state.research && this.state.research.length > 0) ?
-                    this.formatPost(this.state.research)
-                    : <p>No research to show</p>)
-                  : <Spinner fullPage />}
-              </div>
+              {this.state.researchLoaded ? (
+                <div>
+                  { posts.length ? (
+                    <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
+                      <div className="column is-one-third">
+                        {this.formatPost(3, 0)}
+                      </div>
+                      <div className="column is-one-third">
+                        {this.formatPost(3, 1)}
+                      </div>
+                      <div className="column is-one-third">
+                        {this.formatPost(3, 2)}
+                      </div>
+                    </div>
+                  ) : (
+                    <h1 className="title">Nothing here yet!</h1>
+                  )}
+                </div>
+              ) : <Spinner fullPage />}
             </TabPanel>
 
             {this.props.auth.cruzid === this.props.match.params.cruzid && 

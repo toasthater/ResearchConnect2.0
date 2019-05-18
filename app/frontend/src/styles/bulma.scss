@@ -1,7 +1,8 @@
+@import '~bulma/sass/utilities/initial-variables';
+
 // Set your brand colors
-$purple: #692a2a;
+$purple: #3f51b5;
 $pink: #FA7C91;
-// $brown: #b5b5b5;
 $beige-light: #D0D1CD;
 $beige-lighter: #EFF0EB;
 $blue: #7289da;
@@ -12,40 +13,19 @@ $black: #16171a;
 
 
 // Update Bulma's global variables
-$family-sans-serif: "Nunito", sans-serif;
-// $grey-dark: $brown;
 $grey-dark: #282b30;
 $grey-light: $beige-light;
-$primary: $purple;
-$link: $green;
+$primary: $blue;
+$info: $pink;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
 
 // Update some of Bulma's component variables
-$body-background-color: $beige-lighter;
+$body-background-color: #ffffff;
 $control-border-width: 2px;
-$input-border-color: transparent;
-$input-shadow: none;
 $navbar-item-color: $pink;
-// $navbar-item-color
 $modal-content-width: auto;
 
 // Import only what you need from Bulma
-@import '~bulma/sass/utilities/_all.sass';
-@import '~bulma/sass/base/_all.sass';
-@import '~bulma/sass/elements/box.sass';
-@import '~bulma/sass/elements/button.sass';
-@import '~bulma/sass/elements/container.sass';
-@import '~bulma/sass/elements/form.sass';
-@import '~bulma/sass/elements/title.sass';
-@import '~bulma/sass/elements/content.sass';
-@import '~bulma/sass/components/modal.sass';
-@import '~bulma/sass/components/message.sass';
-@import '~bulma/sass/elements/image.sass';
-@import '~bulma/sass/components/card.sass';
-@import '~bulma/sass/components/navbar.sass';
-@import '~bulma/sass/components/tabs.sass';
-@import '~bulma/sass/layout/hero.sass';
-@import '~bulma/sass/components/level.sass';
-@import '~bulma/sass/grid/columns.sass';
-@import '~bulma/sass/layout/section.sass';
+@import '~bulma/bulma.sass';
+@import '~bulma-steps/src/sass/index.sass';

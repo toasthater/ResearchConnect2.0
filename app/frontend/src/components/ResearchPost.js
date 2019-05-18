@@ -229,47 +229,49 @@ class ResearchPost extends Component {
     }
 
     return (this.state.post !== null ? (
-      <div className="hero">
-        <section className="container" style={{ width: 768 }}>
-          <div className="column" align="center">
-            <div className="circle-img">
-              <DepartmentImage type={this.state.post.department.type} />
-            </div>
-
-            <div className="box" style={{ background: '#DDDDDD' }}>
-              <div className="is-title">{this.state.post.title}</div>
-            </div>
-
-            <div className="box" style={{ background: '#DDDDDD' }}>
-              {this.state.post.summary}
-            </div>
-
-            <div className="box" style={{ background: '#DDDDDD' }}>
-              {this.state.post.description}
-            </div>
-
-            <div className="box" style={{ background: '#DDDDDD', display: 'grid' }}>
-              {this.state.post.tags.map(tag => (<span className="tag is-medium" key={tag}>{tag}</span>))}
-            </div>
-          </div>
-
-          <div className="column" align="center">
-            <Link to={`/profile/${this.state.post.owner.cruzid}`}>
-              <div className="box has-text-link" style={{ background: '#DDDDDD' }}>
-                {this.state.post.owner.name}
+      <div className="section">
+        <section className="container">
+          <div className="columns">
+            <div className="column is-half is-offset-one-quarter" align="center">
+              <div className="circle-img">
+                <DepartmentImage type={this.state.post.department.type} />
               </div>
-            </Link>
-          </div>
 
-          <div className="box" style={{ background: '#DDDDDD', display: 'grid' }}>
-            <span className="status is-medium" align="center">{this.state.post.status}</span>
+              <br />
 
-          </div>
+              <h1 className="title" style={{ marginBottom: '0px' }}>{ this.state.post.title }</h1>
+              <Link to={`/profile/${this.state.post.owner.cruzid}`}>
+                <a className="subtitle">by {this.state.post.owner.name}</a>
+              </Link>
+              <br /><br />
+              <div class="tags" style={{ display: 'flex', justifyContent: 'center' }}>
+                {this.state.post.tags.map(tag => (<span className="tag is-medium" key={tag}>{tag}</span>))}
+              </div>
 
-          <div className="column" align="center">
-            <div className="box" style={{ background: '#DDDDDD' }}>
-              {this.state.post.department.name}
+              <hr />
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Department</h2>
+                <h1 className="title is-5">{this.state.post.department.name}</h1>
+              </div>
+
+              {/* <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Summary</h2>
+                <h1 className="title is-5">{this.state.post.summary}</h1>
+              </div> */}
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Description</h2>
+                <h1 className="title is-5">{this.state.post.description}</h1>
+              </div>
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Status</h2>
+                <h1 className="title is-5">{this.state.post.status}</h1>
+              </div>
             </div>
+          </div>
+          <div className="column" align="center">
             <br />
             <div align="center">
               {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid &&

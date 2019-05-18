@@ -30,7 +30,7 @@ class SearchBar extends Component {
               />
             </p>
             <p className="control">
-              <button type="submit" className="button is-inverted is-link">
+              <button type="submit" className="button is-inverted is-primary">
                         Search
               </button>
             </p>

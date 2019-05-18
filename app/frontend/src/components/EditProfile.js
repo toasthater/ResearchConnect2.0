@@ -126,7 +126,7 @@ class EditProfile extends Component {
               </TabPanel>
             )}
             <TabPanel>
-              <p>Not Yet Implemented.</p>
+              <div className="subtitle">Coming Soon!</div>
             </TabPanel>
             <TabPanel>
               {!this.state.reloadNotification ? this.display_notifications() : <Spinner fullPage />}

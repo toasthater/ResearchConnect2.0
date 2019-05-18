@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import NavBar from './NavBar';
 import Landing from './Landing';
 import Home from './Home';
-import About from './About';
 import Profile from './Profile';
 import ResearchPost from './ResearchPost';
 import Spinner from './Spinner';
@@ -50,7 +49,6 @@ class App extends Component {
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}
             />
-            <Route exact path="/about" component={About} />
             <PrivateRoute
               exact
               path="/profile/:cruzid"

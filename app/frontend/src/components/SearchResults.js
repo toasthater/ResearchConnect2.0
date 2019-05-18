@@ -8,18 +8,29 @@ class SearchResults extends Component {
     this.setState({ search: [] });
   }
 
-  formatPost() {
+  async componentDidUpdate() {
+    console.log(this.props.search);
+  }
+
+  formatPost(mod, eq) {
     const posts = this.props.search;
 
-    if (!posts || !Array.isArray(posts)) {
+    if (!posts || posts.length === 0) {
+      if (eq === 1) {
+        return (
+          <div className="has-text-centered title">
+            Sorry, we couldn't find any matches! :(
+          </div>
+        );
+      }
       return (
-        <div className="flex-container" />
+        <div />
       );
     }
 
     return (
-      <div className="flex-container">
-        {posts.map(post => (
+      <React.Fragment>
+        {posts.filter((_, index) => (index % mod) === eq).map(post => (
           <PostCard
             key={post._id}
             post={{
@@ -34,15 +45,27 @@ class SearchResults extends Component {
             }}
           />
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 
   render() {
     return (
-      <div>
-        {this.formatPost()}
-      </div>
+      <section className="section">
+        <div className="container">
+          <div className="columns is-multiline">
+            <div className="column is-one-third">
+              {this.formatPost(3, 0)}
+            </div>
+            <div className="column is-one-third">
+              {this.formatPost(3, 1)}
+            </div>
+            <div className="column is-one-third">
+              {this.formatPost(3, 2)}
+            </div>
+          </div>
+        </div>
+      </section>
     );
   }
 }
