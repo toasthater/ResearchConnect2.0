@@ -31,7 +31,8 @@ class Applicants extends Component {
   }
 
   formatApplicant() {
-    const applicants = this.state.post.applicants;
+    const applicants = this.state.post.applicants.filter(applicant => applicant.student);
+    console.log(applicants);
     return (
       <div className="flex-container">
         {applicants.map(applicant => (

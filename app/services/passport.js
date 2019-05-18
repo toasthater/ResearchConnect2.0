@@ -35,6 +35,10 @@ passport.use(
         return done(null, existingUser);
       }
 
+      if (!profile.emails[0].value.endsWith("@ucsc.edu")) {
+        return done(null, null);
+      }
+
       // Get cruzid from email
       const profile_cruzid = profile.emails[0].value.split('@')[0];
 

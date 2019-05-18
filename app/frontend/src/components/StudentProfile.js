@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import profileImg from '../assets/profile.png';
 import ResumeForm from './ResumeForm';
@@ -16,6 +16,8 @@ class StudentProfile extends Component {
     this.state = {
       loading: true,
       isFollowDisabled: this.props.isFollowDisabled,
+      endorsements: this.props.student.endorsements,
+      showEndorsements: false,
     };
   }
 
@@ -60,6 +62,54 @@ class StudentProfile extends Component {
 
   uploadResume(resume) {
     this.props.uploadResume(resume);
+  }
+
+  endorsed() {
+    return this.state.endorsements && this.state.endorsements.includes(this.props.auth.cruzid);
+  }
+
+  setEndorsed(val) {
+    var { endorsements } = this.state;
+    if (!endorsements) {
+      endorsements = [];
+    }
+    
+    var request = null;
+
+    if (val && !this.endorsed()) {
+      request = {
+        id: this.props.student.id,
+        endorse: true,
+      };
+
+      endorsements.push(this.props.auth.cruzid);
+    } else if (!val && this.endorsed()) {
+      request = {
+        id: this.props.student.id,
+        endorse: false,
+      };
+
+      endorsements = endorsements.filter(value => value !== this.props.auth.cruzid);
+    }
+
+    if (request) {
+      axios.post('/api/endorse', request).then().catch(err => {
+        console.log(err);
+      });
+
+      this.setState({
+        endorsements: endorsements,
+      });
+    }
+  }
+
+  getEndorsers() {
+    return (
+      <div className="flex item inner content">
+        {this.state.endorsements.map(endorser => (
+          <Link key={endorser} className="subtitle is-6 has-text-link" to={"/profile/" + endorser}>{endorser}</Link>
+        ))}
+      </div>)
   }
 
   render() {

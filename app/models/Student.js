@@ -9,7 +9,8 @@ const StudentSchema = new Schema({
     required: true,
   },
   major: String,
-  resume: String
+  resume: String,
+  endorsements: [String],
 });
 
 module.exports = Student = mongoose.model('students', StudentSchema);

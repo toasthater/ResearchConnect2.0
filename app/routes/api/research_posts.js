@@ -1,8 +1,5 @@
 const express = require('express');
-
 const router = express.Router();
-const fillResearchPost = require('./fillResearchHelper');
-
 
 // Research post model
 const Research = require('../../models/Research');
@@ -13,42 +10,69 @@ const FacultyMember = require('../../models/FacultyMember');
 // @access Public
 router.get('/', (req, res) => {
   if (req.query.id) {
-    Research.findById(req.query.id, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.send(new Research());
-      } else {
-        var currentDate = new Date();
-        var postDate = new Date(result.deadline);
-        if (result.status === 'Open' && currentDate > postDate) {
-          result.status = 'Closed';
-          Research.findByIdAndUpdate(result._id, {
-            $set: {
-              status: result.status
-            }
-          })
-        }
+    var query = Research.findById(req.query.id);
+    if (req.query.fill) {
+      query = query
+        .populate('owner')
+        .populate('department')
+        .populate({
+          path: 'applicants',
+          populate: {
+            path: 'student',
+          }
+        });
+    }
 
-        if (req.query.fill) {
-          fillResearchPost(result)
-            .then(data => res.send(data))
-            .catch(err => res.send(new Research()));
-        } else {
-          res.send(result);
-        }
+    query.then(result => {
+      var currentDate = new Date();
+      var postDate = new Date(result.deadline);
+      if (result.status === 'Open' && currentDate > postDate) {
+        result.status = 'Closed';
+        Research.findByIdAndUpdate(result._id, {
+          $set: {
+            status: result.status
+          }
+        })
       }
+
+      if (req.user.isProfessor) {
+        res.send(result);
+      }
+      else {
+        var filteredPost = result.toObject();
+        delete filteredPost.applicants;
+
+        res.send(filteredPost);
+      }
+    }).catch(err => {
+      console.log(err);
+      res.send(new Research());
     });
   } else {
     Research.find({})
       .populate('owner')
       .populate('department')
-      .populate('applicants')
-      .sort({ date: -1 })
+      .populate({
+        path: 'applicants',
+        populate: {
+          path: 'student',
+        }
+      })
+      .sort({ date: -1 }).limit(20)
       .then(async (research_posts) => {
         var currentDate = new Date();
         var postsToClose = [];
+        var filteredPost = [];
 
         research_posts.forEach(function (post) {
+
+          if (!req.user.isProfessor) {
+            var tempPost = post.toObject();
+            delete tempPost.applicants;
+
+            filteredPost.push(tempPost);
+          }
+
           var postDate = new Date(post.deadline);
           if (post.status === 'Open' && currentDate > postDate) {
             post.status = 'Closed';
@@ -65,7 +89,12 @@ router.get('/', (req, res) => {
             })
           })
         )
-        res.send(research_posts);
+
+        if (req.user.isProfessor) {
+          res.send(research_posts);
+        } else {
+          res.send(filteredPost);
+        }
       })
       .catch(err => res.send([new Research()]));
   }

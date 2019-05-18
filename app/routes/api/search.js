@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-const fillResearchPost = require('./fillResearchHelper');
 
 // Schemas
 const Research = require('../../models/Research');
@@ -43,16 +42,15 @@ async function searchDepartments(name) {
 
     const relevantPosts = Research.find({
       department: deptIDs,
-    });
+    })
+    .populate('owner')
+    .populate('department')
+    .populate('applicants');;
 
     await relevantPosts.then((posts) => {
       ret = posts;
     });
   });
-
-  for (let i = 0; i < ret.length; i++) {
-    ret[i] = await fillResearchPost(ret[i]);
-  }
 
   return ret;
 }
@@ -75,16 +73,15 @@ async function searchFaculty(name) {
 
     const relevantPosts = Research.find({
       owner: facIDs,
-    });
+    })
+    .populate('owner')
+    .populate('department')
+    .populate('applicants');;
 
     await relevantPosts.then((posts) => {
       ret = posts;
     });
   });
-
-  for (let i = 0; i < ret.length; i++) {
-    ret[i] = await fillResearchPost(ret[i]);
-  }
 
   return ret;
 }
@@ -95,7 +92,10 @@ async function searchTitle(name) {
       $regex: name.toLowerCase(),
       $options: 'i',
     },
-  });
+  })
+  .populate('owner')
+  .populate('department')
+  .populate('applicants');
 
   let ret;
 
@@ -103,81 +103,82 @@ async function searchTitle(name) {
     ret = data;
   });
 
-  for (let i = 0; i < ret.length; i++) {
-    ret[i] = await fillResearchPost(ret[i]);
-  }
+  return ret;
+}
+
+async function searchCruzID(name) {
+  let relevantFaculty = FacultyMember.find({
+      'cruzid': {
+          '$regex': name.toLowerCase(),
+          $options: 'i'
+      }
+  });
+
+  var ret;
+
+  await relevantFaculty.then(async (data) => {
+      let facIDs = []
+      for (let i = 0; i < data.length; i++) {
+          facIDs.push(data[i]._id);
+      }
+
+      let relevantPosts = Research.find({
+          'owner': facIDs
+      })
+      .populate('owner')
+      .populate('department')
+      .populate('applicants');
+
+      await relevantPosts.then((posts) => {
+          ret = posts;
+      });
+  });
 
   return ret;
 }
 
-  async function searchCruzID(name) {
-    let relevantFaculty = FacultyMember.find({
-        'cruzid': {
-            '$regex': name.toLowerCase(),
-            $options: 'i'
-        }
-    });
-
-    var ret;
-
-    await relevantFaculty.then(async (data) => {
-        let facIDs = []
-        for (let i = 0; i < data.length; i++) {
-            facIDs.push(data[i]._id);
-        }
-
-        let relevantPosts = Research.find({
-            'owner': facIDs
-        });
-
-        await relevantPosts.then((posts) => {
-            ret = posts;
-        });
-    });
-
-    for (let i = 0; i < ret.length; i++) {
-        ret[i] = await fillResearchPost(ret[i]);
-    }
-
-    return ret;
-  }
-
-  async function searchApplicant(studentID) {
-    let apIDs = []
-    await Research.find()
-    .then(async research => {
-      for(let i = 0; i < research.length; i++)
+async function searchApplicant(studentID) {
+  let apIDs = []
+  await Research.find()
+  .populate('owner')
+  .populate('department')
+  .populate('applicants')
+  .then(async research => {
+    for(let i = 0; i < research.length; i++)
+    {
+      let promises = []
+      for(let j = 0; j < research[i].applicants.length; j++)
       {
-        let promises = []
-        for(let j = 0; j < research[i].applicants.length; j++)
-        {
-          promises.push(Application.findById(research[i].applicants[j]).populate('student'));
-        }
-        
-        await Promise.all(promises).then(async applications => {
-          for(let x = 0; x < applications.length; x++)
-          {
-            if (!applications[x].student) {
-              continue;
-            }
-
-            if(applications[x].student.cruzid.toString() === studentID.toString() && applications[x].status.toString() === "accepted")
-            {
-                apIDs.push(await fillResearchPost(research[i]));
-                break;
-            }
-          }
-        });
+        promises.push(Application.findById(research[i].applicants[j]).populate('student'));
       }
-    });
+      
+      await Promise.all(promises).then(async applications => {
+        for(let x = 0; x < applications.length; x++)
+        {
+          if (!applications[x].student) {
+            continue;
+          }
 
-    return apIDs;
-  }
+          if(applications[x].student.cruzid.toString() === studentID.toString() && applications[x].status.toString() === "accepted")
+          {
+              apIDs.push(research[i]);
+              break;
+          }
+        }
+      });
+    }
+  });
+
+  return apIDs;
+}
 
 async function searchTags(name) {
   const relevantPosts = [];
 
-  const allResearch = Research.find();
+  const allResearch = Research.find()
+  .populate('owner')
+  .populate('department')
+  .populate('applicants');
 
   let posts = [];
   await allResearch.then((data) => {
@@ -186,8 +187,8 @@ async function searchTags(name) {
 
   for (let i = 0; i < posts.length; i++) {
     for (let j = 0; j < posts[i].tags.length; j++) {
-      if (name.toString().localeCompare(posts[i].tags[j].toString()) === 0) {
-        relevantPosts.push(await fillResearchPost(posts[i]));
+      if (name.toLowerCase().localeCompare(posts[i].tags[j].toLowerCase()) === 0) {
+        relevantPosts.push(posts[i]);
       }
     }
   }
