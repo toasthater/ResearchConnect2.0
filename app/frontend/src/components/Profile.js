@@ -262,7 +262,7 @@ class Profile extends Component {
     };
     if (val) {
       // if he's a professor, make him a student
-      axios.post('/api/faculty_members', request).then().catch(err => {
+      axios.post('/api/students',request).then().catch(err => {
         console.log(err);
       });
     } 

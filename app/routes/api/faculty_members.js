@@ -33,20 +33,17 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  console.log(req.body)
   if (!req.body.isAdmin) {
     res.send(null);
     return;
   }
 
   if (req.body.cruzid && req.body.name) {
-    console.log("Im in the if statement")
     FacultyMember.updateOne(
       { cruzid: req.body.cruzid },
       {
         cruzid: req.body.cruzid,
         name: req.body.name,
-        // $inc:  {__v: 1}
       },
       { upsert: true }
     ).then(research => res.json(research));
