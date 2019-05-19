@@ -149,7 +149,7 @@ class StudentProfile extends Component {
                 <div className="columns">
                   <div className="column is-one-third">
                     <button
-                      className={`button is-fullwidth ${ this.endorsed() ? 'is-danger is-outlined' : 'is-link'}`}
+                      className={`button is-fullwidth ${this.endorsed() ? 'is-danger is-outlined' : 'is-link'}`}
                       onClick={() => this.setEndorsed(!this.endorsed())}
                     >
                       {this.endorsed() ? 'Unendorse' : 'Endorse'}
@@ -168,15 +168,15 @@ class StudentProfile extends Component {
               )}
 
               {this.state.showEndorsements &&
-              <div>
-                {this.getEndorsers()}
-              </div>}
+                <div>
+                  {this.getEndorsers()}
+                </div>}
 
               {!myProfile && (
                 <div>
                   <button
                     id={this.props.profile.cruzid}
-                    className={`button ${ this.state.following ? 'is-link' : 'is-danger is-outlined'}`}
+                    className={`button ${this.state.following ? 'is-link' : 'is-danger is-outlined'}`}
                     disabled={this.state.isFollowDisabled}
                     onClick={this.toggleFollow}
                   >
@@ -225,7 +225,7 @@ class StudentProfile extends Component {
                   className="button is-info"
                   target="_blank"
                   rel="noopener noreferrer"
-                  download={`${this.props.profile.name }_Resume.pdf`}
+                  download={`${this.props.profile.name}_Resume.pdf`}
                   disabled={!this.props.resume}
                 >
                   {this.props.resume ? 'Download Resume' : 'No Resume Available'}

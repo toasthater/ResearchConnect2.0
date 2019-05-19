@@ -93,7 +93,7 @@ class Profile extends Component {
           for (var i = 0; i < response.data.following.length; i++) {
             promises.push(axios.get('/api/search?type=cruzid&query=' + response.data.following[i]));
           }
-          
+
           Promise.all(promises).then(responses => {
             var posts = [];
             for (var i = 0; i < responses.length; i++) {
@@ -112,7 +112,7 @@ class Profile extends Component {
             followingLoaded: true,
           })
         }
-        
+
         if (response.data.isProfessor === true) {
           console.log('Fetching Professor Profile...');
 
@@ -151,7 +151,7 @@ class Profile extends Component {
                 isProfessor: false,
                 userLoaded: true,
               });
-              
+
               if (response.data.major) {
                 axios.get('/api/search?type=Department&query=' + response.data.major).then(response => {
                   this.setState({
@@ -263,6 +263,16 @@ class Profile extends Component {
 
     return (
       <section className="section">
+        {this.props.auth.isAdmin && (
+          <div className="column is-one-third">
+            <button
+              className={`button is-fullwidth ${this.state.isProfessor  ? 'is-danger is-outlined' : 'is-link'}`}
+              onClick={() => this.makeProfessor(!this.state.isProfessor )}
+            >
+              {this.state.isProfessor  ? 'Make Student' : 'Make Professor'}
+            </button>
+          </div>
+        )}
         <div className="container has-text-centered">
           <Tabs>
             <TabList>
@@ -281,7 +291,7 @@ class Profile extends Component {
             <TabPanel>
               {this.state.researchLoaded ? (
                 <div>
-                  { posts.length ? (
+                  {posts.length ? (
                     <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
                       <div className="column is-one-third">
                         {this.formatPost(3, 0)}
@@ -294,30 +304,30 @@ class Profile extends Component {
                       </div>
                     </div>
                   ) : (
-                    <h1 className="title">Nothing here yet!</h1>
-                  )}
+                      <h1 className="title">Nothing here yet!</h1>
+                    )}
                 </div>
               ) : <Spinner fullPage />}
             </TabPanel>
 
-            {this.props.auth.cruzid === this.props.match.params.cruzid && 
-            <>
-              <TabPanel>
-                {this.state.followingLoaded ?
-                  ((this.state.followedResearch && this.state.followedResearch.length > 0) ?
-                    this.formatPost(this.state.followedResearch)
-                    : <p>No research to show</p>)
-                  : <Spinner fullPage />}
-              </TabPanel>
+            {this.props.auth.cruzid === this.props.match.params.cruzid &&
+              <>
+                <TabPanel>
+                  {this.state.followingLoaded ?
+                    ((this.state.followedResearch && this.state.followedResearch.length > 0) ?
+                      this.formatPost(this.state.followedResearch)
+                      : <p>No research to show</p>)
+                    : <Spinner fullPage />}
+                </TabPanel>
 
-              <TabPanel>
-              {this.state.departmentLoaded ?
-                  ((this.state.departmentResearch && this.state.departmentResearch.length > 0) ?
-                    this.formatPost(this.state.departmentResearch)
-                    : <p>No research to show</p>)
-                  : <Spinner fullPage />}
-              </TabPanel>
-            </>
+                <TabPanel>
+                  {this.state.departmentLoaded ?
+                    ((this.state.departmentResearch && this.state.departmentResearch.length > 0) ?
+                      this.formatPost(this.state.departmentResearch)
+                      : <p>No research to show</p>)
+                    : <Spinner fullPage />}
+                </TabPanel>
+              </>
             }
           </Tabs>
 
