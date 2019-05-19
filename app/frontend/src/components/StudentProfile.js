@@ -159,7 +159,7 @@ class StudentProfile extends Component {
                     <button
                       className='button is-link is-fullwidth is-outlined'
                       onClick={() => this.setState({ showEndorsements: !this.state.showEndorsements })}
-                      disabled={!this.state.endorsements || this.state.endorsements.length == 0}
+                      disabled={!this.state.endorsements || this.state.endorsements.length === 0}
                     >
                       {'Endorsed by ' + (this.state.endorsements ? this.state.endorsements.length : 0) + ' professors'}
                     </button>

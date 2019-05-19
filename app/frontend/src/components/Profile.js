@@ -125,6 +125,7 @@ class Profile extends Component {
               this.setState({
                 professor: response.data,
                 isProfessor: true,
+                profValue: true,
                 userLoaded: true,
               });
             })
@@ -149,6 +150,7 @@ class Profile extends Component {
               this.setState({
                 student: response.data,
                 isProfessor: false,
+                profValue: false,
                 userLoaded: true,
               });
 
@@ -253,25 +255,36 @@ class Profile extends Component {
     )
   }
 
-  makeProfessor(val) {
+  async makeProfessor(val) {
     console.log(this.state)
     var request = {
-      isAdmin: this.props.auth.isAdmin ? this.props.auth.isAdmin: false,
+      isAdmin: this.props.auth.isAdmin ? this.props.auth.isAdmin : false,
       name: this.state.profile.name,
       cruzid: this.state.cruzid,
+      isProfessor: !val
     };
     if (val) {
       // if he's a professor, make him a student
-      axios.post('/api/students',request).then().catch(err => {
+      axios.post('/api/students', request).then().catch(err => {
         console.log(err);
       });
-    } 
+    }
     else {
       // if he's a student, make him a professor
       axios.post('/api/faculty_members', request).then().catch(err => {
         console.log(err);
       });
     }
+
+    // toggle professor
+    await axios.post('/api/toggleProfessor', request).then().catch(err => {
+      console.log(err);
+    });
+
+    // update state
+    this.setState({
+      profValue: !val
+    });
   }
 
   render() {
@@ -285,13 +298,15 @@ class Profile extends Component {
     return (
       <section className="section">
         {this.props.auth.isAdmin && (
-          <div className="column is-one-third">
-            <button
-              className={`button is-fullwidth ${this.state.isProfessor ? 'is-danger is-outlined' : 'is-link'}`}
-              onClick={() => this.makeProfessor(this.state.isProfessor)}
-            >
-              {this.state.isProfessor ? 'Make Student' : 'Make Professor'}
-            </button>
+          <div className="columns is-centered">
+            <div className="column is-one-third">
+              <button
+                className={`button is-fullwidth ${this.state.profValue ? 'is-danger is-outlined' : 'is-link'}`}
+                onClick={() => this.makeProfessor(this.state.profValue)}
+              >
+                {this.state.profValue ? 'Make Student' : 'Make Professor'}
+              </button>
+            </div>
           </div>
         )}
         <div className="container has-text-centered">

@@ -6,7 +6,6 @@ const Student = require('../../models/Student');
 
 // router.get("/:cruzid", async (req, res) =>
 router.get('/', async (req, res) => {
-  console.log(req.query)
   if (req.query.cruzid !== undefined) {
     const relevantStudents = Student.findOne({
       cruzid: {
@@ -36,7 +35,6 @@ router.post('/', async (req, res) => {
 
   try {
     await userProfile.then(async (student) => {
-      console.log("in the await")
       if (student !== null && student.cruzid !== null) {
         console.log('Updating profile...');
 
