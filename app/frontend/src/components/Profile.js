@@ -265,6 +265,7 @@ class Profile extends Component {
     };
     if (val) {
       // if he's a professor, make him a student
+      // closes all the open posts by this professor
       axios.post('/api/students', request).then().catch(err => {
         console.log(err);
       });
