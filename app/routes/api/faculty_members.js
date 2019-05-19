@@ -32,4 +32,25 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.post('/', (req, res) => {
+  console.log(req.body)
+  if (!req.user || !req.user.isAdmin) {
+    res.send(null);
+    return;
+  }
+  if (req.body.cruzid && req.body.profile.name) {
+    facultymember.save().then(research => res.json(research));
+  }
+  // if (req.body.cruzid && req.body.name) {
+  //   FacultyMember.update(
+  //     { cruzid: req.body.cruzid },
+  //     {
+  //       cruzid: req.body.cruzid,
+  //       name: req.body.name
+  //     },
+  //     { upsert: true }
+  //   ).then(research => res.update)
+  // }
+});
+
 module.exports = router;

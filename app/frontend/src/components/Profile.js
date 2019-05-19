@@ -253,6 +253,26 @@ class Profile extends Component {
     )
   }
 
+  makeProfessor(val) {
+    console.log(this.state)
+    var request = {
+      name: this.state.profile.name,
+      cruzid: this.state.cruzid,
+    };
+    if (val) {
+      // if he's a professor, make him a student
+      axios.post('/api/faculty_members', request).then().catch(err => {
+        console.log(err);
+      });
+    } 
+    else {
+      // if he's a student, make him a professor
+      axios.post('/api/faculty_members', request).then().catch(err => {
+        console.log(err);
+      });
+    }
+  }
+
   render() {
     if (!this.state.profileLoaded || !this.state.userLoaded) {
       return <Spinner fullPage />;
@@ -266,10 +286,10 @@ class Profile extends Component {
         {this.props.auth.isAdmin && (
           <div className="column is-one-third">
             <button
-              className={`button is-fullwidth ${this.state.isProfessor  ? 'is-danger is-outlined' : 'is-link'}`}
-              onClick={() => this.makeProfessor(!this.state.isProfessor )}
+              className={`button is-fullwidth ${this.state.isProfessor ? 'is-danger is-outlined' : 'is-link'}`}
+              onClick={() => this.makeProfessor(this.state.isProfessor)}
             >
-              {this.state.isProfessor  ? 'Make Student' : 'Make Professor'}
+              {this.state.isProfessor ? 'Make Student' : 'Make Professor'}
             </button>
           </div>
         )}
