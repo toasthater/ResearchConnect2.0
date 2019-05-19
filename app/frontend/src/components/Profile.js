@@ -256,6 +256,7 @@ class Profile extends Component {
   makeProfessor(val) {
     console.log(this.state)
     var request = {
+      isAdmin: this.props.auth.isAdmin ? this.props.auth.isAdmin: false,
       name: this.state.profile.name,
       cruzid: this.state.cruzid,
     };
