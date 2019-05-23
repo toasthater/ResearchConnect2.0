@@ -4,24 +4,27 @@ const Notification = require("../../models/Notification");
 const User = require("../../models/User");
 const keys = require('../../config/keys');
 const SGmail = require('@sendgrid/mail');
-const Researchs = require("../../models/Research");
-const cron = require("node-cron");
+const Researches = require("../../models/Research");
 
 const moment = require('moment')
 
 //Send a reminder email to all research posts with applicants in it still, every 24 hours
-cron.schedule("* */24 * * *", function () {
+/*
+cron.schedule("* *", function () {
   var async = require('async');
   var cruzIdList = []
+  var postTitleList = []
 
-  Researchs.find({}, function (err, result) {
+  Researches.find({}, function (err, result) {
     async.eachSeries(result, function (researchPost, next) {
       //console.log(result)
       if (researchPost.applicants.length > 0) {
         var ownerCruzID = JSON.stringify(researchPost.cruzid)
+        var ownerPostTitle = JSON.stringify(researchPost.title)
 
         if (cruzIdList.indexOf(ownerCruzID) === -1) {
-          cruzIdList.push(ownerCruzID)
+          cruzIdList.push(ownerCruzID);
+          postTitleList.push(ownerPostTitle);
         }
       }
       next()
@@ -31,15 +34,35 @@ cron.schedule("* */24 * * *", function () {
     if (cruzIdList.length > 0) {
       for (let i = 0; i < cruzIdList.length; i++) {
         var userID = JSON.parse(cruzIdList[i])
+        var postTitle = JSON.parse(postTitleList[i])
 
         User.findOne({ cruzid: userID }, function (err, userData) {
-          //console.log("Sending a reminder to: " + userData.email)
 
           const reminderEmail = {
-            to: userData.email,
-            from: 'ResearchConnect <admin@researchconnect.net>',
-            subject: "Reminder: New applicants",
-            text: "This is a reminder that you that new applicants have applied to your research."
+            personalizations: [
+              {
+                to: [
+                  {
+                    email: userData.email,
+                    name: userData.name
+                  }
+                ],
+
+                dynamic_template_data: {
+                  recipient_name: userData.name,
+                  research_title: postTitle
+                }
+              }
+            ],
+            from: {
+              email: "admin@researchconnect.net",
+              name: "ResearchConnect"
+            },
+            reply_to: {
+              email: "admin@researchconnect.net",
+              name: "ResearchConnect"
+            },
+            template_id: "d-366c49281d5943cb86cff4343db3cd90"
           }
 
           //SGmail.setApiKey(keys.sendgridAPI);
@@ -49,30 +72,42 @@ cron.schedule("* */24 * * *", function () {
     }
   })
 });
-
-
+*/
 /* Function for creating a new notification schema and store it in the
  * database. Also push the ID of the notification to the user's database.
  * 
  * It also sends email to the recepient's email address to notify them. */
 async function createNewNotification(req, res) {
-  var subject, message
+  var subject, message, templateID, applicant
 
-  if (req.body.params.type === 'welcome') {
-    subject = "Welcome!",
-      message = "Welcome to Research Connect!"
-  }
-  else if (req.body.params.type === 'applied') {
-    subject = "New Student Applicant",
-      message = "A student has applied to your research!"
+  let researchPost = await Researches.findById(req.body.params.postID);
+  let recipientUser = await User.findOne({ cruzid: req.body.params.cruzid });
+  let researchOwner = await User.findOne({ cruzid: researchPost.cruzid });
+
+  if (req.body.params.type === 'applied') {
+    subject = "New Applicant"
+    message = "A student has applied to your " + researchPost.title + " post."
+    templateID = 'd-d368a58506994f63a4b4e29f138f9569'
+    applicant = req.user
+    //scheduleTime = 0
   }
   else if (req.body.params.type === 'accepted') {
-    subject = "Accepted: Research Project",
-      message = "You have been accepted to the research project!"
+    subject = "Application Accepted"
+    message = "Your application for " + researchPost.title + " has been accepted."
+    templateID = 'd-8fdceda611e74b0b83bb33438d34eba3'
+    //scheduleTime = 0
   }
   else if (req.body.params.type === 'declined') {
-    subject = "Declined: Research Project",
-      message = "You have been declined to the research project!"
+    subject = "Application Declined"
+    message = "Your application for " + researchPost.title + " has been declined."
+    templateID = 'd-3a640d1cef3a467b804b0710d786cc92'
+    //scheduleTime = 0
+  }
+  else if (req.body.params.type === 'interview') {
+    subject = "Interview Scheduled"
+    message = "Interview has been scheduled for the research project " + researchPost.title + "."
+    templateID = 'd-7f803775393441cfb35db4782a0446c0'
+    //scheduleTime = "24:00"
   }
   else {
     console.log("invalid query type...")
@@ -81,42 +116,82 @@ async function createNewNotification(req, res) {
   const new_notification = new Notification({
     type: req.body.params.type,
     cruzid: req.body.params.cruzid,
-    to: req.body.params.cruzid + "@ucsc.edu",
+    to: recipientUser.email,
     from: "ResearchConnect <admin@researchconnect.net>",
     subject: subject,
     message: message,
+    title: researchPost.title,
+    recipientName: recipientUser.name,
+    recipientResume: recipientUser.resume ? recipientUser.resume : "No resume available"
+    //scheduleTime = 0
   }).save();
 
   new_notification.then(response => {
 
-    User.findOne({ cruzid: req.body.params.cruzid }, function (err, user) {
+    if (recipientUser.notification === undefined || recipientUser.notification === null)
+      recipientUser.notification = []
 
-      if (user.notification === undefined || user.notification === null)
-        user.notification = []
+    recipientUser.notification.push(response._id)
 
-      user.notification.push(response._id)
+    const email = {
+      personalizations: [
+        {
+          to: [
+            {
+              email: recipientUser.email,
+              name: recipientUser.name
+            }
+          ],
 
-      const email = {
-        to: response.to,
-        from: response.from,
-        subject: response.subject,
-        text: response.message
+          dynamic_template_data: {
+            recipient_name: recipientUser.name,
+            research_owner: researchOwner.name,
+            research_title: researchPost.title,
+
+            //Used in the "Accepted" sendGrid email template
+            applicant_name: req.user.name,
+            applicant_email: req.user.email,
+            applicant_resume: req.user.resume ? req.user.resume : "No resume available",
+
+            //Used in the "Interview" sendGrid email template
+            schedule_time: "24:00:01"
+          }
+        }
+      ],
+      from: {
+        email: "admin@researchconnect.net",
+        name: "ResearchConnect"
+      },
+      reply_to: {
+        email: "admin@researchconnect.net",
+        name: "ResearchConnect"
+      },
+      template_id: templateID
+    }
+
+    SGmail.setApiKey(keys.sendgridAPI);
+    SGmail.send(email);
+
+    //Applying to application sends an email to the applicant as well
+    if (req.body.params.type === 'applied') {
+
+      email.personalizations[0].to[0].email = req.user.email
+      email.personalizations[0].to[0].name = req.user.name
+      email.template_id = "d-7baf5179e5884663b7840101b30aed2f"
+
+      SGmail.send(email);
+    }
+
+    recipientUser.save(function (err) {
+      if (err) {
+        //console.log("Error: Could not save user data: " + err)
+        res.send({ status: err })
       }
-
-      SGmail.setApiKey(keys.sendgridAPI);
-      SGmail.send(email)
-
-      user.save(function (err) {
-        if (err) {
-          //console.log("Error: Could not save user data: " + err)
-          res.send({ status: err })
-        }
-        else {
-          //console.log("Successfully updated the user data")
-          res.send({ status: "success" })
-        }
-      });
-    })
+      else {
+        //console.log("Successfully updated the user data")
+        res.send({ status: "success" })
+      }
+    });
   })
 };
 
@@ -171,7 +246,6 @@ router.get('/', (req, res) => {
         Notification.findById(response.notification[i], function (err, notification) {
 
           var newDate = moment(notification.created).format('M/DD/YYYY');
-          //console.log(newDate)
 
           //Object body containing the fields we want returned
           const temp = {
@@ -179,7 +253,12 @@ router.get('/', (req, res) => {
             type: notification.type,
             message: notification.message,
             from: notification.from,
-            date: newDate
+            date: newDate,
+
+            subject: notification.subject,
+            title: notification.title,
+            applicantName: notification.recipientName,
+            applicantResume: notification.recipientResume
           }
 
           notifications.push(temp)
@@ -196,11 +275,11 @@ router.get('/', (req, res) => {
 
 router.post("/", (req, res) => {
 
-  if (req.body.params.type === 'applied') {
-    createNewNotification(req, res);
-  }
-  else if (req.body.params.type === 'clear') {
+  if (req.body.params.type === 'clear') {
     removeNotification(req, res);
+  }
+  else {
+    createNewNotification(req, res);
   }
 });
 

@@ -33,7 +33,7 @@ class EditProfile extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-
+    console.log(this.state)
   }
 
 
@@ -86,11 +86,27 @@ class EditProfile extends Component {
 
     const notifications = this.state.notification.map(notification => (
       <div className="box" key={notification._id}>
-        <p align="left">{`Message: ${notification.message}`}</p>
+        <p align="left"><strong>Subject:</strong> {`${notification.subject}`}</p>
         <br />
-        <p align="left">{`Sent Date: ${notification.date}`}</p>
+        <p align="left"><strong>Message:</strong> {`${notification.message}`}</p>
         <br />
-        <button type="button" onClick={() => this.handleNotificationClear(cruzid, notification._id)}>Delete</button>
+
+        {(notification.type === 'applied') &&
+          <div>
+            <p align="left"><strong>Applicant Information:</strong></p>
+            <p align="left">{`Name: ${notification.applicantName}`}</p>
+
+            <p align='left'>Resume:&nbsp;
+            <a href={notification.applicantResume} target="_blank">resume.pdf</a>
+            </p>
+
+            <br />
+          </div>
+        }
+
+        <p align="left"><strong>Send Date:</strong> {`${notification.date}`}</p>
+        <br />
+        <button type="button" onClick={() => this.handleNotificationClear(cruzid, notification._id)}>Clear</button>
       </div>
     ));
 
@@ -107,7 +123,7 @@ class EditProfile extends Component {
     return (
       <section className="section">
         <div className="container has-text-centered">
-          <h1 className="is-size-1">Settings</h1>
+          <h1 className="is-size-1">Settings</h1><br />
 
           <Tabs>
             <TabList>
