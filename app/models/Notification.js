@@ -5,11 +5,14 @@ const Schema = mongoose.Schema;
 const Notification = new Schema({
   type: String,
   cruzid: String,
-
   to: String,
   from: String,
   subject: String,
   message: String,
+  title: String,
+  interviewTime: Date,
+  recipientName: String,
+  recipientResume: String,
   created: {
     type: Date,
     default: Date.now

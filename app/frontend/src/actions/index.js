@@ -239,3 +239,51 @@ export const clearNotification = (cruzid, notificationID) => async dispatch => {
 
   return res.data;
 };
+
+export const sendApplied = (postID, professorID) => async dispatch => {
+  let res = await axios.post("/api/notification/", {
+    params: {
+      postID: postID,
+      cruzid: professorID,
+      type: "applied"
+    }
+  });
+
+  return res.data;
+};
+
+export const sendAccepted = (postID, studentID) => async dispatch => {
+  let res = await axios.post("/api/notification/", {
+    params: {
+      postID: postID,
+      cruzid: studentID,
+      type: "accepted"
+    }
+  });
+
+  return res.data;
+};
+
+export const sendDeclined = (postID, studentID) => async dispatch => {
+  let res = await axios.post("/api/notification/", {
+    params: {
+      postID: postID,
+      cruzid: studentID,
+      type: "declined"
+    }
+  });
+
+  return res.data;
+};
+
+export const sendInterview = (postID, studentID) => async dispatch => {
+  let res = await axios.post("/api/notification/", {
+    params: {
+      postID: postID,
+      cruzid: studentID,
+      type: "interview"
+    }
+  });
+
+  return res.data;
+};
