@@ -2,20 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import PostCard from './PostCard';
+import UserCard from './UserCard';
 
 class SearchResults extends Component {
   componentDidMount() {
     this.setState({ search: [] });
   }
-
-  async componentDidUpdate() {
-    console.log(this.props.search);
-  }
-
+  
   formatPost(mod, eq) {
-    const posts = this.props.search;
+    const results = this.props.search;
 
-    if (!posts || posts.length === 0) {
+    if (!results || results.length === 0) {
       if (eq === 1) {
         return (
           <div className="has-text-centered title">
@@ -30,18 +27,31 @@ class SearchResults extends Component {
 
     return (
       <React.Fragment>
-        {posts.filter((_, index) => (index % mod) === eq).map(post => (
-          <PostCard
-            key={post._id}
+        {results.filter((_, index) => (index % mod) === eq).map(item => (
+          item.googleId ?
+          <UserCard
+            key={item._id}
+            user={{
+              id: item._id,
+              profile_pic: item.profile_pic,
+              name: item.name,
+              isAdmin: item.isAdmin,
+              isProfessor: item.isProfessor,
+              bio: item.bio,
+              cruzid: item.cruzid,
+            }}
+          />
+          : <PostCard
+            key={item._id}
             post={{
-              id: post._id,
-              type: post.department.type,
-              name: post.title,
-              professor: post.owner.name,
-              tags: post.tags,
-              summary: post.summary,
-              department: post.department.name,
-              ownerProfile: `/profile/${post.owner.cruzid}`,
+              id: item._id,
+              type: item.department.type,
+              name: item.title,
+              professor: item.owner.name,
+              tags: item.tags,
+              summary: item.summary,
+              department: item.department.name,
+              ownerProfile: `/profile/${item.owner.cruzid}`,
             }}
           />
         ))}

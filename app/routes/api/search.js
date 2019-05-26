@@ -10,18 +10,14 @@ const FacultyMember = require('../../models/FacultyMember');
 const User = require('../../models/User');
 
 async function searchUsers(name) {
-  const user = await User.findOne({
+  const users = await User.find({
     name: {
       $regex: name.toLowerCase(),
       $options: 'i',
     },
   });
 
-  if (!user) {
-    return null;
-  }
-
-  return user.cruzid;
+  return users;
 }
 
 async function searchDepartments(name) {
