@@ -12,6 +12,10 @@ class ApplicantCard extends PureComponent {
     }
 
     getQuestions = () => {
+      if (!this.props.questions) {
+        return <div></div>;
+      }
+
       let q = this.props.questions.map((question, i) =>
         <div key={"Question " + i} align="center" style={{ marginBottom: "1em" }}>
           <h1 className="subtitle">{"Question #" + (i + 1)}</h1>

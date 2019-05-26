@@ -6,12 +6,14 @@ import UserCard from './UserCard';
 
 class SearchResults extends Component {
   componentDidMount() {
+    // Initialize state
     this.setState({ search: [] });
   }
   
   formatPost(mod, eq) {
     const results = this.props.search;
 
+    // Place a message in the center column if there are no results
     if (!results || results.length === 0) {
       if (eq === 1) {
         return (
@@ -25,6 +27,8 @@ class SearchResults extends Component {
       );
     }
 
+    // googleId always exists in users, but not posts, so it can be used to check the type of the result
+    // (index % mod) === eq filters posts into 3 distinct data sets, one for each column of the page
     return (
       <React.Fragment>
         {results.filter((_, index) => (index % mod) === eq).map(item => (
@@ -60,6 +64,7 @@ class SearchResults extends Component {
   }
 
   render() {
+    // Return formatted data
     return (
       <section className="section">
         <div className="container">

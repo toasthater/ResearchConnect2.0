@@ -3,7 +3,10 @@ import { Field, reduxForm } from 'redux-form';
 
 class SearchBar extends Component {
   render() {
+    // On submit method passed down by parent component
     const { handleSubmit } = this.props;
+
+    // Create search type dropdown, input field, submit button
     return (
       <div className="navbar-item">
         <form name="search" onSubmit={handleSubmit}>
@@ -31,7 +34,7 @@ class SearchBar extends Component {
             </p>
             <p className="control">
               <button type="submit" className="button is-inverted is-primary">
-                        Search
+                Search
               </button>
             </p>
           </div>
