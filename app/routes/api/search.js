@@ -9,6 +9,7 @@ const Application = require('../../models/Application');
 const FacultyMember = require('../../models/FacultyMember');
 const User = require('../../models/User');
 
+// Search through users and return relevant data
 async function searchUsers(name) {
   const user = await User.findOne({
     name: {
@@ -24,6 +25,7 @@ async function searchUsers(name) {
   return user.cruzid;
 }
 
+// Used for department search
 async function searchDepartments(name) {
   const relevantDepartments = Department.find({
     name: {
@@ -55,6 +57,7 @@ async function searchDepartments(name) {
   return ret;
 }
 
+// Used for Professor Search
 async function searchFaculty(name) {
   const relevantFaculty = FacultyMember.find({
     name: {
@@ -86,6 +89,7 @@ async function searchFaculty(name) {
   return ret;
 }
 
+// Search for relevant titles
 async function searchTitle(name) {
   const relevantPosts = Research.find({
     title: {
@@ -106,6 +110,7 @@ async function searchTitle(name) {
   return ret;
 }
 
+// Search using a cruzid
 async function searchCruzID(name) {
   let relevantFaculty = FacultyMember.find({
       'cruzid': {
@@ -137,6 +142,7 @@ async function searchCruzID(name) {
   return ret;
 }
 
+// Used privately for looking for applicants
 async function searchApplicant(studentID) {
   let apIDs = []
   await Research.find()
@@ -172,6 +178,7 @@ async function searchApplicant(studentID) {
   return apIDs;
 }
 
+// Used for searching for relevant tags
 async function searchTags(name) {
   const relevantPosts = [];
 
@@ -196,6 +203,9 @@ async function searchTags(name) {
   return relevantPosts;
 }
 
+// @route GET api/search
+// @desc  GET relevant search results
+// @access Public
 router.get('/', (req, res) => {
   switch (req.query.type) {
     case 'Department':
@@ -272,6 +282,8 @@ router.get('/', (req, res) => {
         searchTitle(req.query.query),
       ];
 
+      
+      // For default search only add relevant post once
       Promise.all(promises).then((data) => {
         const posts = [];
 

@@ -12,6 +12,7 @@ class SearchResults extends Component {
     console.log(this.props.search);
   }
 
+  // Search through requested posts and if they exist format them
   formatPost(mod, eq) {
     const posts = this.props.search;
 
@@ -28,6 +29,7 @@ class SearchResults extends Component {
       );
     }
 
+    // Return a HTML body with formated posts
     return (
       <React.Fragment>
         {posts.filter((_, index) => (index % mod) === eq).map(post => (

@@ -7,10 +7,12 @@ const Application = require('../../models/Application');
 const User = require('../../models/User');
 const FacultyMember = require('../../models/FacultyMember');
 
+// Fetch the relevant applicant by searching through the schema
 router.get('/', (req, res) => {
     Application.find().then(applications => res.json(applications));
 });
 
+// Add relevant applicant to the correct research or accept/decline an applicant
 router.post('/', async (req, res) => {
   if (!req.user || !req.query) {
       res.send(null);
@@ -18,6 +20,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
+    // If the post request is from the applicant
     if (req.body.applicant) {
       if (req.body.applicant.toString() !== req.user._id.toString() || !req.body.postID) {
           res.send('Error applying to project');
@@ -57,6 +60,7 @@ router.post('/', async (req, res) => {
 
       research.applicants = [...research.applicants, newApp._id];
       research.save().then(research => res.send('Application successful'));
+      // If the post request is the professor
     } else {
       Application.findById(req.body.id, async (err, application) => {
         if (err || application === null) {
@@ -92,6 +96,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Delete an applicant
 router.delete('/:id', (req, res) => {
   Application.findById(req.params.id)
     .then(application => application.remove().then(() => res.json({ success: true })))

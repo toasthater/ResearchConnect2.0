@@ -8,15 +8,22 @@ const Student = require('../../models/Student');
 
 const router = express.Router();
 
+// @route POST api/resume
+// @desc  POST new resume to user
+// @access Public
 router.post('/', (req, res) => {
   if (!req.user || !req.busboy) {
     res.send(null);
     return;
   }
 
+  // Busboy is used to parse HTML form data
   req.busboy.on('file', (fieldname, file, filename, name, encoding, mimetype) => {
+    // These two lines are used to create a temporary path on the local machine for Cloudinary purposes
     const tmpPath = path.join(os.tmpdir(), `${req.user.id}.pdf`);
     file.pipe(fs.createWriteStream(tmpPath));
+
+    // Cloudinary is another database where we store resumes and pictures
     const upload = cloudinary.v2.uploader.upload(tmpPath, {
       public_id: req.user.id,
       unique_filename: false,
@@ -27,6 +34,7 @@ router.post('/', (req, res) => {
       }
     });
 
+    // After the upload is done store the URL onto the User
     upload.then((data) => {
       User.findByIdAndUpdate(req.user.id, { $set: { resume: data.url } }, (err, result) => {
         if (err) {

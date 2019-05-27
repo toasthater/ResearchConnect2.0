@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../../models/User');
 
+// @route POST /api/follow"
+// @desc  Edit current user schema to follow relevant professor and changes professor schema to have them added to follower
+// @access Public
 router.post('/', (req, res) => {
   if (!req.user || !req.body.cruzid) {
     res.send(null);
