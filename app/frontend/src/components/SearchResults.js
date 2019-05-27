@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import PostCard from './PostCard';
+import UserCard from './UserCard';
 
 class SearchResults extends Component {
   componentDidMount() {
+    // Initialize state
     this.setState({ search: [] });
   }
 
@@ -14,9 +16,10 @@ class SearchResults extends Component {
 
   // Search through requested posts and if they exist format them
   formatPost(mod, eq) {
-    const posts = this.props.search;
+    const results = this.props.search;
 
-    if (!posts || posts.length === 0) {
+    // Place a message in the center column if there are no results
+    if (!results || results.length === 0) {
       if (eq === 1) {
         return (
           <div className="has-text-centered title">
@@ -29,21 +32,39 @@ class SearchResults extends Component {
       );
     }
 
+<<<<<<< HEAD
     // Return a HTML body with formated posts
+=======
+    // googleId always exists in users, but not posts, so it can be used to check the type of the result
+    // (index % mod) === eq filters posts into 3 distinct data sets, one for each column of the page
+>>>>>>> 5346396d2786ae99ae32daa46a6b88873d2c392b
     return (
       <React.Fragment>
-        {posts.filter((_, index) => (index % mod) === eq).map(post => (
-          <PostCard
-            key={post._id}
+        {results.filter((_, index) => (index % mod) === eq).map(item => (
+          item.googleId ?
+          <UserCard
+            key={item._id}
+            user={{
+              id: item._id,
+              profile_pic: item.profile_pic,
+              name: item.name,
+              isAdmin: item.isAdmin,
+              isProfessor: item.isProfessor,
+              bio: item.bio,
+              cruzid: item.cruzid,
+            }}
+          />
+          : <PostCard
+            key={item._id}
             post={{
-              id: post._id,
-              type: post.department.type,
-              name: post.title,
-              professor: post.owner.name,
-              tags: post.tags,
-              summary: post.summary,
-              department: post.department.name,
-              ownerProfile: `/profile/${post.owner.cruzid}`,
+              id: item._id,
+              type: item.department.type,
+              name: item.title,
+              professor: item.owner.name,
+              tags: item.tags,
+              summary: item.summary,
+              department: item.department.name,
+              ownerProfile: `/profile/${item.owner.cruzid}`,
             }}
           />
         ))}
@@ -52,6 +73,7 @@ class SearchResults extends Component {
   }
 
   render() {
+    // Return formatted data
     return (
       <section className="section">
         <div className="container">

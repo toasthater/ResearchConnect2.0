@@ -11,18 +11,14 @@ const User = require('../../models/User');
 
 // Search through users and return relevant data
 async function searchUsers(name) {
-  const user = await User.findOne({
+  const users = await User.find({
     name: {
       $regex: name.toLowerCase(),
       $options: 'i',
     },
   });
 
-  if (!user) {
-    return null;
-  }
-
-  return user.cruzid;
+  return users;
 }
 
 // Used for department search
