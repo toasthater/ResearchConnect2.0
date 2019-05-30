@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "alias": "researchconnect.now.sh",
+  "alias": "www.researchconnect.me",
   "name": "researchconnect",
   "builds": [
     { "src": "app/server.js", "use": "@now/node-server" },
