@@ -8,13 +8,13 @@ class PostCard extends PureComponent {
   getApplicants() {
     var applicants = this.props.post.applicants;
     return (
-    <div className="flex item inner content">
-      {applicants.map(applicant =>
-        <div key={applicant}>
-          <Link className="subtitle is-6 has-text-link" to={"/profile/" + applicant}>{applicant}</Link>
-          <br />
-        </div>)}
-    </div>
+      <div className="flex item inner content">
+        {applicants.map(applicant =>
+          <div key={applicant}>
+            <Link className="subtitle is-6 has-text-link" to={"/profile/" + applicant}>{applicant}</Link>
+            <br />
+          </div>)}
+      </div>
     );
   }
 
@@ -28,15 +28,19 @@ class PostCard extends PureComponent {
           </figure>
         </div>
         <div className="card-content" style={{ paddingTop: '0px' }}>
-          <p className="title is-4">{ post.name }</p>
+          <p className="title is-4">{post.name}</p>
           <p className="subtitle is-6">
             by <Link className="has-text-link" to={post.ownerProfile}>{post.professor}</Link>
           </p>
           <div className="content">
-            { post.summary }
+            {post.summary}
           </div>
-          <div className="tag is-info" style={{ margin: '0.25em 0px' }}>{ post.department }</div>
+          <p className="subtitle is-6">
+            Start Date: <a className="has-text-link">{(post.date.getMonth() + 1) + '/' + post.date.getDate() + '/' + post.date.getFullYear()} </a>
+          </p>
+          <div className="tag is-info" style={{ margin: '0.25em 0px' }}>{post.department}</div>
         </div>
+
         <footer className="card-footer">
           <Link className="card-footer-item has-text-success" to={`/post?id=${post.id}`}>
             Learn More

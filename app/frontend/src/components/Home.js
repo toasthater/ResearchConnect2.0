@@ -97,6 +97,7 @@ class Home extends Component {
               summary: post.summary,
               department: post.department.name,
               ownerProfile: `/profile/${post.owner.cruzid}`,
+              date: new Date(post.deadline),
             }}
           />
         ))}
