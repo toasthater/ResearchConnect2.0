@@ -8,6 +8,10 @@ import Spinner from './Spinner';
 import DepartmentImage from './DepartmentImage';
 import Modal from 'react-modal';
 
+const md = require('markdown-it')({
+  breaks: true
+});
+
 Modal.defaultStyles.overlay.top = "5%";
 Modal.defaultStyles.content.background = "#efebeb";
 
@@ -262,7 +266,10 @@ class ResearchPost extends Component {
 
               <div className="box">
                 <h2 className="subtitle is-uppercase is-size-7">Description</h2>
-                <h1 className="title is-5">{this.state.post.description}</h1>
+                {console.log(this.state.post.description)}
+                <h1 className="title is-5">
+                  <div dangerouslySetInnerHTML={{ __html: md.render(this.state.post.description) }} />
+                </h1>
               </div>
 
               <div className="box">

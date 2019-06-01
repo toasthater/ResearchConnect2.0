@@ -215,7 +215,7 @@ class AddPostForm extends React.Component {
             <div className="field" align="center">
               <label className="label">Description</label>
               <div className="control">
-                <textarea name="description" className="textarea" placeholder="Description" value={this.state.description} onChange={e => this.change(e)} />
+                <textarea name="description" className="textarea" placeholder="Description - Supports Markdown!" value={this.state.description} onChange={e => this.change(e)} />
               </div>
             </div>
 
