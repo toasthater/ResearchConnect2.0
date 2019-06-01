@@ -97,7 +97,11 @@ class EditProfile extends Component {
             <p align="left">{`Name: ${notification.applicantName}`}</p>
 
             <p align='left'>Resume:&nbsp;
-            <a href={notification.applicantResume} target="_blank">resume.pdf</a>
+
+            {notification.applicantResume === 'None' ?
+                <a href={notification.applicantResume} target="_blank">resume.pdf</a> :
+                <a>No resume available</a>}
+
             </p>
 
             <br />

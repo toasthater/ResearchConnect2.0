@@ -18,6 +18,15 @@ class ApplicantCard extends PureComponent {
     }
   }
 
+  handleInterviewSubmission() {
+
+
+    console.log(this.props)
+
+    this.props.sendInterview(this.props.postID, this.props.applicant.cruzid)
+
+  }
+
   getQuestions = () => {
     if (!this.props.questions) {
       return <div></div>;
@@ -84,6 +93,19 @@ class ApplicantCard extends PureComponent {
                       >
                         {applicant.student.resume ? 'Download Resume' : 'No Resume Available'}
                       </a>
+                      <br /><br />
+
+                      <a
+                        align="center"
+                        href={'#' + this.props.match.url}
+                        className="button is-info"
+                        onClick={() => this.handleInterviewSubmission()}
+                      //target="_blank"
+                      //rel="noopener noreferrer"
+                      >
+                        Interview
+                      </a>
+
                     </div>
                   </footer>
                 </div>

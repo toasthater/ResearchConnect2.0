@@ -13,31 +13,47 @@ const moment = require('moment')
  * 
  * It also sends email to the recepient's email address to notify them. */
 async function createNewNotification(req, res) {
-  var subject, message, templateID
+  var subject, message, templateID, to, from, fromName, fromEmail
 
   let researchPost = await Researches.findById(req.body.params.postID);
   let recipientUser = await User.findOne({ cruzid: req.body.params.cruzid });
   let researchOwner = await User.findOne({ cruzid: researchPost.cruzid });
 
   if (req.body.params.type === 'applied') {
+    to = recipientUser.email
+    from = 'ResearchConnect <notify@researchconnect.me>'
+    fromName = 'ResearchConnect'
+    fromEmail = 'notify@researchconnect.me'
     subject = 'New Applicant'
     message = 'A student has applied to your ' + researchPost.title + ' post.'
     templateID = 'd-d368a58506994f63a4b4e29f138f9569'
     applicant = req.user
   }
   else if (req.body.params.type === 'accepted') {
+    to = recipientUser.email
+    from = 'ResearchConnect <notify@researchconnect.me>'
+    fromName = 'ResearchConnect'
+    fromEmail = 'notify@researchconnect.me'
     subject = "Application Accepted"
     message = "Your application for " + researchPost.title + " has been accepted."
     templateID = 'd-8fdceda611e74b0b83bb33438d34eba3'
   }
   else if (req.body.params.type === 'declined') {
+    to = recipientUser.email
+    from = 'ResearchConnect <notify@researchconnect.me>'
+    fromName = 'ResearchConnect'
+    fromEmail = 'notify@researchconnect.me'
     subject = "Application Declined"
     message = "Your application for " + researchPost.title + " has been declined."
     templateID = 'd-3a640d1cef3a467b804b0710d786cc92'
   }
 
-  //
+  //This one send an email to the student to initiate the interview process
   else if (req.body.params.type === 'interview') {
+    to = recipientUser.email
+    from = researchOwner.email
+    fromName = researchOwner.name
+    fromEmail = researchOwner.email
     subject = "Schedule an interview with " + recipientUser.name
     message = "Please schedule an interview for the research post " + researchPost.title + "."
     templateID = 'd-7f803775393441cfb35db4782a0446c0'
@@ -49,14 +65,17 @@ async function createNewNotification(req, res) {
   const new_notification = new Notification({
     type: req.body.params.type,
     cruzid: req.body.params.cruzid,
-    to: recipientUser.email,
-    from: 'ResearchConnect <notify@researchconnect.me>',
+    to: to,
+    from: from,
     subject: subject,
     message: message,
     title: researchPost.title,
-    recipientName: recipientUser.name,
-    recipientResume: recipientUser.resume ? recipientUser.resume : "No resume available"
+    recipientName: req.user.name,
+    recipientResume: req.user.resume ? req.user.resume : "None"
+    //recipientUser.resume ? recipientUser.resume : "No resume available"
   }).save();
+
+  console.log(new_notification)
 
   new_notification.then(response => {
 
@@ -89,12 +108,12 @@ async function createNewNotification(req, res) {
         }
       ],
       from: {
-        email: "admin@researchconnect.net",
-        name: "ResearchConnect"
+        email: fromEmail,
+        name: fromName
       },
       reply_to: {
-        email: "admin@researchconnect.net",
-        name: "ResearchConnect"
+        email: fromEmail,
+        name: fromName
       },
       template_id: templateID
     }
@@ -111,7 +130,8 @@ async function createNewNotification(req, res) {
       SGmail.send(email);
     }
 
-    if (req.body.params.type === 'interview') {
+    //This one should send email to the student
+    /*if (req.body.params.type === 'interview') {
       email.personalizations[0].to[0].email = req.user.email
       email.personalizations[0].to[0].name = req.user.name
 
@@ -124,7 +144,7 @@ async function createNewNotification(req, res) {
       email.template_id = "d-7baf5179e5884663b7840101b30aed2f"
 
       SGmail.send(email);
-    }
+    }*/
 
     recipientUser.save(function (err) {
       if (err) {

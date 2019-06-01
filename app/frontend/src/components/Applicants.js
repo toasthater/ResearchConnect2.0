@@ -57,6 +57,7 @@ class Applicants extends Component {
             postID={this.state.post._id}
             sendAccepted={this.props.sendAccepted}
             sendDeclined={this.props.sendDeclined}
+            sendInterview={this.props.sendInterview}
           />
         ))}
       </div>
