@@ -138,6 +138,8 @@ class ResearchPost extends Component {
       owner: this.state.post.owner.cruzid,
       cruzid: this.state.post.owner.cruzid,
       tags: this.state.post.tags,
+      reqSkills: this.state.post.reqSkills,
+      prefSkills: this.state.post.prefSkills,
       summary: this.state.post.summary,
       description: this.state.post.description,
       department: {
@@ -163,6 +165,8 @@ class ResearchPost extends Component {
       owner: this.state.post.cruzid,
       cruzid: this.state.post.cruzid,
       tags: this.state.post.tags,
+      reqSkills: this.state.post.reqSkills,
+      prefSkills: this.state.post.prefSkills,
       summary: this.state.post.summary,
       description: this.state.post.description,
       department: {
@@ -243,7 +247,7 @@ class ResearchPost extends Component {
 
               <br />
 
-              <h1 className="title" style={{ marginBottom: '0px' }}>{ this.state.post.title }</h1>
+              <h1 className="title" style={{ marginBottom: '0px' }}>{this.state.post.title}</h1>
               <Link to={`/profile/${this.state.post.owner.cruzid}`}>
                 <a className="subtitle">by {this.state.post.owner.name}</a>
               </Link>
@@ -270,6 +274,20 @@ class ResearchPost extends Component {
                 <h1 className="title is-5">
                   <div dangerouslySetInnerHTML={{ __html: md.render(this.state.post.description) }} />
                 </h1>
+              </div>
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Required Skills</h2>
+                <div className="tags" style={{ display: 'flex', justifyContent: 'center' }}>
+                  {this.state.post.reqSkills.map(skill => (<span className="tag is-medium" key={skill}>{skill}</span>))}
+                </div>
+              </div>
+
+              <div className="box">
+                <h2 className="subtitle is-uppercase is-size-7">Preferred Skills</h2>
+                <div className="tags" style={{ display: 'flex', justifyContent: 'center' }}>
+                  {this.state.post.prefSkills.map(skill => (<span className="tag is-medium" key={skill}>{skill}</span>))}
+                </div>
               </div>
 
               <div className="box">

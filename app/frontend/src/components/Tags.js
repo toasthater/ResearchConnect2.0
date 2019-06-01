@@ -12,7 +12,15 @@ class Tags extends React.Component {
     super(props);
     let temp = [];
     if (this.props.post) {
-      temp = this.props.post.tags;
+      if (this.props.name === "tags"){
+        temp = this.props.post.tags;
+      }
+      else if (this.props.name === "reqSkills"){
+        temp = this.props.post.reqSkills;
+      }
+      else if (this.props.name === "prefSkills"){
+        temp = this.props.post.prefSkills;
+      }
     }
 
     this.state = { tags: temp, value: '', props };

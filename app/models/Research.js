@@ -19,6 +19,8 @@ const ResearchSchema = new Schema({
     default: Date.now,
   },
   tags: [String],
+  reqSkills: [String],
+  prefSkills: [String],
   summary: String,
   description: String,
   department: {
