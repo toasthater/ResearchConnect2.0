@@ -97,6 +97,7 @@ class ResearchPost extends Component {
     if (!this.state.post.questions || this.state.post.questions.length === 0) {
       const val = await axios.post("/api/apply", { postID: args.id, applicant: this.props.auth._id });
       alert(val.data);
+      this.props.sendApplied(args.id, this.state.post.cruzid);
     } else {
       this.setState({ showModal: true });
     }
@@ -243,7 +244,7 @@ class ResearchPost extends Component {
 
               <br />
 
-              <h1 className="title" style={{ marginBottom: '0px' }}>{ this.state.post.title }</h1>
+              <h1 className="title" style={{ marginBottom: '0px' }}>{this.state.post.title}</h1>
               <Link to={`/profile/${this.state.post.owner.cruzid}`}>
                 <a className="subtitle">by {this.state.post.owner.name}</a>
               </Link>

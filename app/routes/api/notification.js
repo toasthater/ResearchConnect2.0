@@ -6,42 +6,41 @@ const keys = require('../../config/keys');
 const SGmail = require('@sendgrid/mail');
 const Researches = require("../../models/Research");
 
-const moment = require('moment');
+const moment = require('moment')
+
 /* Function for creating a new notification schema and store it in the
  * database. Also push the ID of the notification to the user's database.
  * 
  * It also sends email to the recepient's email address to notify them. */
 async function createNewNotification(req, res) {
-  var subject, message, templateID, applicant
+  var subject, message, templateID
 
   let researchPost = await Researches.findById(req.body.params.postID);
   let recipientUser = await User.findOne({ cruzid: req.body.params.cruzid });
   let researchOwner = await User.findOne({ cruzid: researchPost.cruzid });
 
   if (req.body.params.type === 'applied') {
-    subject = "New Applicant"
-    message = "A student has applied to your " + researchPost.title + " post."
+    subject = 'New Applicant'
+    message = 'A student has applied to your ' + researchPost.title + ' post.'
     templateID = 'd-d368a58506994f63a4b4e29f138f9569'
     applicant = req.user
-    //scheduleTime = 0
   }
   else if (req.body.params.type === 'accepted') {
     subject = "Application Accepted"
     message = "Your application for " + researchPost.title + " has been accepted."
     templateID = 'd-8fdceda611e74b0b83bb33438d34eba3'
-    //scheduleTime = 0
   }
   else if (req.body.params.type === 'declined') {
     subject = "Application Declined"
     message = "Your application for " + researchPost.title + " has been declined."
     templateID = 'd-3a640d1cef3a467b804b0710d786cc92'
-    //scheduleTime = 0
   }
+
+  //
   else if (req.body.params.type === 'interview') {
-    subject = "Interview Scheduled"
-    message = "Interview has been scheduled for the research project " + researchPost.title + "."
+    subject = "Schedule an interview with " + recipientUser.name
+    message = "Please schedule an interview for the research post " + researchPost.title + "."
     templateID = 'd-7f803775393441cfb35db4782a0446c0'
-    //scheduleTime = "24:00"
   }
   else {
     console.log("invalid query type...")
@@ -51,13 +50,12 @@ async function createNewNotification(req, res) {
     type: req.body.params.type,
     cruzid: req.body.params.cruzid,
     to: recipientUser.email,
-    from: "ResearchConnect <admin@researchconnect.net>",
+    from: 'ResearchConnect <notify@researchconnect.me>',
     subject: subject,
     message: message,
     title: researchPost.title,
     recipientName: recipientUser.name,
     recipientResume: recipientUser.resume ? recipientUser.resume : "No resume available"
-    //scheduleTime = 0
   }).save();
 
   new_notification.then(response => {
@@ -87,8 +85,6 @@ async function createNewNotification(req, res) {
             applicant_email: req.user.email,
             applicant_resume: req.user.resume ? req.user.resume : "No resume available",
 
-            //Used in the "Interview" sendGrid email template
-            schedule_time: "24:00:01"
           }
         }
       ],
@@ -106,11 +102,25 @@ async function createNewNotification(req, res) {
     SGmail.setApiKey(keys.sendgridAPI);
     SGmail.send(email);
 
-    //Applying to application sends an email to the applicant as well
+    //If it was applied, send a confirmation email to the student
     if (req.body.params.type === 'applied') {
-
       email.personalizations[0].to[0].email = req.user.email
       email.personalizations[0].to[0].name = req.user.name
+      email.template_id = "d-7baf5179e5884663b7840101b30aed2f"
+
+      SGmail.send(email);
+    }
+
+    if (req.body.params.type === 'interview') {
+      email.personalizations[0].to[0].email = req.user.email
+      email.personalizations[0].to[0].name = req.user.name
+
+      email.from.email = researchOwner.email
+      email.from.name = researchOwner.name
+
+      email.reply_to.email = researchOwner.email
+      email.reply_to.name = researchOwner.name
+
       email.template_id = "d-7baf5179e5884663b7840101b30aed2f"
 
       SGmail.send(email);
@@ -207,8 +217,8 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
 
+router.post("/", (req, res) => {
   if (req.body.params.type === 'clear') {
     removeNotification(req, res);
   }
