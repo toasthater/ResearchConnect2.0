@@ -6,73 +6,7 @@ const keys = require('../../config/keys');
 const SGmail = require('@sendgrid/mail');
 const Researches = require("../../models/Research");
 
-const moment = require('moment')
-
-//Send a reminder email to all research posts with applicants in it still, every 24 hours
-/*
-cron.schedule("* *", function () {
-  var async = require('async');
-  var cruzIdList = []
-  var postTitleList = []
-
-  Researches.find({}, function (err, result) {
-    async.eachSeries(result, function (researchPost, next) {
-      //console.log(result)
-      if (researchPost.applicants.length > 0) {
-        var ownerCruzID = JSON.stringify(researchPost.cruzid)
-        var ownerPostTitle = JSON.stringify(researchPost.title)
-
-        if (cruzIdList.indexOf(ownerCruzID) === -1) {
-          cruzIdList.push(ownerCruzID);
-          postTitleList.push(ownerPostTitle);
-        }
-      }
-      next()
-    })
-
-    //Done with searching for all ID's of professors that need to be notified
-    if (cruzIdList.length > 0) {
-      for (let i = 0; i < cruzIdList.length; i++) {
-        var userID = JSON.parse(cruzIdList[i])
-        var postTitle = JSON.parse(postTitleList[i])
-
-        User.findOne({ cruzid: userID }, function (err, userData) {
-
-          const reminderEmail = {
-            personalizations: [
-              {
-                to: [
-                  {
-                    email: userData.email,
-                    name: userData.name
-                  }
-                ],
-
-                dynamic_template_data: {
-                  recipient_name: userData.name,
-                  research_title: postTitle
-                }
-              }
-            ],
-            from: {
-              email: "admin@researchconnect.net",
-              name: "ResearchConnect"
-            },
-            reply_to: {
-              email: "admin@researchconnect.net",
-              name: "ResearchConnect"
-            },
-            template_id: "d-366c49281d5943cb86cff4343db3cd90"
-          }
-
-          //SGmail.setApiKey(keys.sendgridAPI);
-          //SGmail.send(reminderEmail)
-        })
-      }
-    }
-  })
-});
-*/
+const moment = require('moment');
 /* Function for creating a new notification schema and store it in the
  * database. Also push the ID of the notification to the user's database.
  * 

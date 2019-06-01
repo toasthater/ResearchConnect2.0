@@ -63,50 +63,51 @@ router.post('/', async (req, res) => {
     );
     req.busboy.on(
       'file',
-      async (fieldname, file, filename, name, encoding, mimetype) => {
+      (fieldname, file, filename, name, encoding, mimetype) => {
         if (filename && filename !== undefined) {
-          console.log('Going in here anyway!!');
-          console.log(filename);
           const tmpPath = path.join(os.tmpdir(), `${req.user.id}_${filename}`);
-          file.pipe(fs.createWriteStream(tmpPath));
-          const upload = cloudinary.v2.uploader.upload(
-            tmpPath,
-            {
-              public_id: req.user.id,
-              unique_filename: false,
-              overwrite: true,
-            },
-            (err) => {
-              if (err) {
-                console.log(err);
-              }
-            },
-          );
-
-          upload
-            .then((data) => {
-              User.findByIdAndUpdate(
-                req.user.id,
-                { $set: { profile_pic: data.url } },
-                (err, user) => {
-                  if (err) {
-                    console.log('Something wrong when updating data!');
-                    res.send(null);
-                    res_sent = true;
-                  } else {
-                    edited_user = user;
-                    done_file = true;
-                    if (done_fields && done_file) {
-                      res.send(edited_user);
+          file.on('end', () => {
+            const upload = cloudinary.v2.uploader.upload(
+              tmpPath,
+              {
+                public_id: req.user.id + "_pic",
+                unique_filename: false,
+                overwrite: true,
+              },
+              (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              },
+            );
+  
+            upload
+              .then((data) => {
+                User.findByIdAndUpdate(
+                  req.user.id,
+                  { $set: { profile_pic: data.url } },
+                  (err, user) => {
+                    if (err) {
+                      console.log('Something wrong when updating data!');
+                      res.send(null);
                       res_sent = true;
+                    } else {
+                      edited_user = user;
+                      done_file = true;
+                      if (done_fields && done_file) {
+                        res.send(edited_user);
+                        res_sent = true;
+                      }
                     }
-                  }
-                },
-              );
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+                  },
+                );
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+          
+          file.pipe(fs.createWriteStream(tmpPath));
         }
       },
     );

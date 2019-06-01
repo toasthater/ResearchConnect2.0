@@ -32,12 +32,7 @@ class SearchResults extends Component {
       );
     }
 
-<<<<<<< HEAD
     // Return a HTML body with formated posts
-=======
-    // googleId always exists in users, but not posts, so it can be used to check the type of the result
-    // (index % mod) === eq filters posts into 3 distinct data sets, one for each column of the page
->>>>>>> 5346396d2786ae99ae32daa46a6b88873d2c392b
     return (
       <React.Fragment>
         {results.filter((_, index) => (index % mod) === eq).map(item => (

@@ -138,6 +138,7 @@ class StudentProfile extends Component {
                           : profileImg
                       }
                       alt={this.props.profile.name}
+                      style={{height: "128px", width: "auto"}}
                     />
                   </figure>
                 </div>

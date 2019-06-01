@@ -63,12 +63,14 @@ export const uploadResume = resume => async (dispatch) => {
     config: { headers: { 'Content-Type': 'multipart/form-data' } },
   });
 
-  console.log(res.data);
-
   dispatch({
     type: UPDATE_RESUME,
     payload: res.data,
   });
+
+  // Make sure the new resume gets into the auth
+  const user = await axios.get('/api/current_user');
+  dispatch({ type: FETCH_USER, payload: user.data });
 
   dispatch({ type: PARTIAL_LOADING, payload: true });
 };

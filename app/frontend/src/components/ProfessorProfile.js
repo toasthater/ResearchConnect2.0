@@ -81,7 +81,7 @@ class ProfessorProfile extends Component {
                           : profileImg
                       }
                       alt={this.props.profile.name}
-                      width={200}
+                      style={{height: "128px", width: "auto"}}
                     />
                   </figure>
                 </div>

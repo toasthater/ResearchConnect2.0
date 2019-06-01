@@ -21,43 +21,45 @@ router.post('/', (req, res) => {
   req.busboy.on('file', (fieldname, file, filename, name, encoding, mimetype) => {
     // These two lines are used to create a temporary path on the local machine for Cloudinary purposes
     const tmpPath = path.join(os.tmpdir(), `${req.user.id}.pdf`);
-    file.pipe(fs.createWriteStream(tmpPath));
-
-    // Cloudinary is another database where we store resumes and pictures
-    const upload = cloudinary.v2.uploader.upload(tmpPath, {
-      public_id: req.user.id,
-      unique_filename: false,
-      overwrite: true,
-    }, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
-
-    // After the upload is done store the URL onto the User
-    upload.then((data) => {
-      User.findByIdAndUpdate(req.user.id, { $set: { resume: data.url } }, (err, result) => {
+    file.on('end', () => {
+      // Cloudinary is another database where we store resumes and pictures
+      const upload = cloudinary.v2.uploader.upload(tmpPath, {
+        public_id: req.user.id + "_resume",
+        unique_filename: false,
+        overwrite: true,
+      }, (err) => {
         if (err) {
           console.log(err);
-          res.send('Error uploading resume');
-        } else {
-          const relevantStudent = Student.findOne({
-            cruzid: {
-              $regex: result.cruzid,
-              $options: 'i',
-            },
-          });
-
-          relevantStudent.then((student) => {
-            student.resume = data.url;
-            student.save().then(() => res.send('Done uploading resume'));
-          });
         }
       });
-    }).catch((err) => {
-      console.log(err);
-      res.send('Error uploading resume');
+
+      // After the upload is done store the URL onto the User
+      upload.then((data) => {
+        User.findByIdAndUpdate(req.user.id, { $set: { resume: data.url } }, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.send('Error uploading resume');
+          } else {
+            const relevantStudent = Student.findOne({
+              cruzid: {
+                $regex: result.cruzid,
+                $options: 'i',
+              },
+            });
+
+            relevantStudent.then((student) => {
+              student.resume = data.url;
+              student.save().then(() => res.send('Done uploading resume'));
+            });
+          }
+        });
+      }).catch((err) => {
+        console.log(err);
+        res.send('Error uploading resume');
+      });
     });
+
+    file.pipe(fs.createWriteStream(tmpPath));
   });
 
   req.pipe(req.busboy);
