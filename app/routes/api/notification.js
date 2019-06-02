@@ -6,42 +6,87 @@ const keys = require('../../config/keys');
 const SGmail = require('@sendgrid/mail');
 const Researches = require("../../models/Research");
 
-const moment = require('moment');
+const moment = require('moment')
+
 /* Function for creating a new notification schema and store it in the
  * database. Also push the ID of the notification to the user's database.
  * 
  * It also sends email to the recepient's email address to notify them. */
 async function createNewNotification(req, res) {
-  var subject, message, templateID, applicant
+  var subject, message, templateID, to, toName, from, fromName, fromEmail
+
+  var emailTo
 
   let researchPost = await Researches.findById(req.body.params.postID);
   let recipientUser = await User.findOne({ cruzid: req.body.params.cruzid });
   let researchOwner = await User.findOne({ cruzid: researchPost.cruzid });
 
   if (req.body.params.type === 'applied') {
-    subject = "New Applicant"
-    message = "A student has applied to your " + researchPost.title + " post."
+    to = recipientUser.email
+    toName = recipientUser.name
+    from = 'ResearchConnect <notify@researchconnect.me>'
+    fromName = 'ResearchConnect'
+    fromEmail = 'notify@researchconnect.me'
+    subject = 'New Applicant'
+    message = 'A student has applied to your ' + researchPost.title + ' post.'
     templateID = 'd-d368a58506994f63a4b4e29f138f9569'
     applicant = req.user
-    //scheduleTime = 0
+
+    emailTo = [{
+      email: recipientUser.email,
+      name: recipientUser.name
+    }]
   }
   else if (req.body.params.type === 'accepted') {
+    to = recipientUser.email
+    toName = recipientUser.name
+    from = 'ResearchConnect <notify@researchconnect.me>'
+    fromName = 'ResearchConnect'
+    fromEmail = 'notify@researchconnect.me'
     subject = "Application Accepted"
     message = "Your application for " + researchPost.title + " has been accepted."
     templateID = 'd-8fdceda611e74b0b83bb33438d34eba3'
-    //scheduleTime = 0
+
+    emailTo = [{
+      email: recipientUser.email,
+      name: recipientUser.name
+    }]
   }
   else if (req.body.params.type === 'declined') {
+    to = recipientUser.email
+    toName = recipientUser.name
+    from = 'ResearchConnect <notify@researchconnect.me>'
+    fromName = 'ResearchConnect'
+    fromEmail = 'notify@researchconnect.me'
     subject = "Application Declined"
     message = "Your application for " + researchPost.title + " has been declined."
     templateID = 'd-3a640d1cef3a467b804b0710d786cc92'
-    //scheduleTime = 0
+
+    emailTo = [{
+      email: recipientUser.email,
+      name: recipientUser.name
+    }]
   }
+
+  //This one send an email to the student to initiate the interview process
   else if (req.body.params.type === 'interview') {
-    subject = "Interview Scheduled"
-    message = "Interview has been scheduled for the research project " + researchPost.title + "."
+    to = [recipientUser.email, researchOwner.email]
+    toName = [recipientUser.name, researchOwner.name]
+    from = researchOwner.email
+    fromName = researchOwner.name
+    fromEmail = researchOwner.email
+    subject = "Schedule an interview with " + recipientUser.name
+    message = "Please schedule an interview for the research post " + researchPost.title + "."
     templateID = 'd-7f803775393441cfb35db4782a0446c0'
-    //scheduleTime = "24:00"
+
+    emailTo = [{
+      email: recipientUser.email,
+      name: recipientUser.name
+    },
+    {
+      email: researchOwner.email,
+      name: researchOwner.name
+    }]
   }
   else {
     console.log("invalid query type...")
@@ -50,14 +95,13 @@ async function createNewNotification(req, res) {
   const new_notification = new Notification({
     type: req.body.params.type,
     cruzid: req.body.params.cruzid,
-    to: recipientUser.email,
-    from: "ResearchConnect <admin@researchconnect.net>",
+    to: to,
+    from: from,
     subject: subject,
     message: message,
     title: researchPost.title,
-    recipientName: recipientUser.name,
-    recipientResume: recipientUser.resume ? recipientUser.resume : "No resume available"
-    //scheduleTime = 0
+    recipientName: req.user.name,
+    recipientResume: req.user.resume ? req.user.resume : "None"
   }).save();
 
   new_notification.then(response => {
@@ -70,15 +114,10 @@ async function createNewNotification(req, res) {
     const email = {
       personalizations: [
         {
-          to: [
-            {
-              email: recipientUser.email,
-              name: recipientUser.name
-            }
-          ],
+          to: emailTo,
 
           dynamic_template_data: {
-            recipient_name: recipientUser.name,
+            recipient_name: toName,
             research_owner: researchOwner.name,
             research_title: researchPost.title,
 
@@ -87,18 +126,16 @@ async function createNewNotification(req, res) {
             applicant_email: req.user.email,
             applicant_resume: req.user.resume ? req.user.resume : "No resume available",
 
-            //Used in the "Interview" sendGrid email template
-            schedule_time: "24:00:01"
           }
         }
       ],
       from: {
-        email: "admin@researchconnect.net",
-        name: "ResearchConnect"
+        email: 'notify@researchconnect.me',
+        name: 'ResearchConnect'
       },
       reply_to: {
-        email: "admin@researchconnect.net",
-        name: "ResearchConnect"
+        email: fromEmail,
+        name: fromName
       },
       template_id: templateID
     }
@@ -106,9 +143,8 @@ async function createNewNotification(req, res) {
     SGmail.setApiKey(keys.sendgridAPI);
     SGmail.send(email);
 
-    //Applying to application sends an email to the applicant as well
+    //If it was applied, send a confirmation email to the student
     if (req.body.params.type === 'applied') {
-
       email.personalizations[0].to[0].email = req.user.email
       email.personalizations[0].to[0].name = req.user.name
       email.template_id = "d-7baf5179e5884663b7840101b30aed2f"
@@ -207,8 +243,8 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
 
+router.post("/", (req, res) => {
   if (req.body.params.type === 'clear') {
     removeNotification(req, res);
   }

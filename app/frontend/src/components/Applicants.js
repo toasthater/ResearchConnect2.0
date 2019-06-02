@@ -37,7 +37,7 @@ class Applicants extends Component {
   formatApplicant() {
     // Pull student data out of applications
     const applicants = this.state.post.applicants.filter(applicant => applicant.student);
-    
+
     // Return neatly formatted ApplicantCards
     return (
       <div className="flex-container">
@@ -51,9 +51,13 @@ class Applicants extends Component {
               status: applicant.status,
               student: applicant.student,
               cruzid: applicant.student.cruzid,
-              ownerProfile: `/profile/${ applicant.student.cruzid}`,
+              ownerProfile: `/profile/${applicant.student.cruzid}`,
               responses: applicant.responses,
             }}
+            postID={this.state.post._id}
+            sendAccepted={this.props.sendAccepted}
+            sendDeclined={this.props.sendDeclined}
+            sendInterview={this.props.sendInterview}
           />
         ))}
       </div>
