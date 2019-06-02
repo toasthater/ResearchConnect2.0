@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 class ApplicantCard extends PureComponent {
   state = {
     showModal: false,
+    disableInterviewButton: false
   };
 
   onSubmit(applicationID, accept) {
@@ -19,12 +20,11 @@ class ApplicantCard extends PureComponent {
   }
 
   handleInterviewSubmission() {
-
-
-    console.log(this.props)
-
     this.props.sendInterview(this.props.postID, this.props.applicant.cruzid)
 
+    this.setState({
+      disableInterviewButton: true
+    })
   }
 
   getQuestions = () => {
@@ -100,6 +100,7 @@ class ApplicantCard extends PureComponent {
                         href={'#' + this.props.match.url}
                         className="button is-info"
                         onClick={() => this.handleInterviewSubmission()}
+                        disabled={this.state.disableInterviewButton}
                       //target="_blank"
                       //rel="noopener noreferrer"
                       >
