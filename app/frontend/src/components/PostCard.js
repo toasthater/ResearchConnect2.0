@@ -36,7 +36,7 @@ class PostCard extends PureComponent {
             {post.summary}
           </div>
           <p className="subtitle is-6">
-            Start Date: <a className="has-text-link">{(post.date.getMonth() + 1) + '/' + post.date.getDate() + '/' + post.date.getFullYear()} </a>
+            Deadline: <a className="has-text-link">{(post.date.getMonth() + 1) + '/' + post.date.getDate() + '/' + post.date.getFullYear()} </a>
           </p>
           <div className="tag is-info" style={{ margin: '0.25em 0px' }}>{post.department}</div>
         </div>

@@ -35,7 +35,7 @@ router.get('/', (req, res) => {
         })
       }
 
-      if (req.user.isProfessor) {
+      if (req.user && req.user.isProfessor) {
         res.send(result);
       }
       else {

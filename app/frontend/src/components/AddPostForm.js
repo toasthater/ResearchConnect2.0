@@ -283,7 +283,7 @@ class AddPostForm extends React.Component {
                 </div>
 
                 <div className="field" align="center">
-                    <label className="label">Start Date</label>
+                    <label className="label">Deadline</label>
                     <div align="center">
                         <Calendar
                             onChange={this.onChange}
