@@ -82,8 +82,8 @@ class App extends Component {
               exact
               path="/post"
               component={ResearchPost}
-              // loggedIn={this.props.auth}
-              // accountSetup={this.props.auth.isSetup}
+              loggedIn={this.props.auth}
+              accountSetup={this.props.auth.isSetup}
             />
             <PrivateRoute
               exact
