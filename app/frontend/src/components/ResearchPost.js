@@ -262,11 +262,11 @@ class ResearchPost extends Component {
               <br />
 
               <h1 className="title" style={{ marginBottom: '0px' }}>{this.state.post.title}</h1>
-              <Link to={`/profile/${this.state.post.owner.cruzid}`}>
-                <a className="subtitle">by {this.state.post.owner.name}</a>
+              <Link to={`/profile/${this.state.post.owner.cruzid}`}  className="subtitle">
+                by <span className="has-text-link">{this.state.post.owner.name}</span>
               </Link>
               <br /><br />
-              <div class="tags" style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="tags" style={{ display: 'flex', justifyContent: 'center' }}>
                 {this.state.post.tags.map(tag => (<span className="tag is-medium" key={tag}>{tag}</span>))}
               </div>
 
