@@ -31,6 +31,7 @@ class ResearchPost extends Component {
       const args = qs.parse(this.props.location.search);
       id = args.id ? args.id : '';
     }
+    console.log(id)
 
     const post = await axios.get('/api/research_posts/', {
       params: {
@@ -88,8 +89,15 @@ class ResearchPost extends Component {
       return;
     }
 
-    const args = qs.parse(this.props.location.search);
-    this.props.history.push('/applicants?id=' + args.id);
+    let id;
+    if (this.props.match && this.props.match.params && this.props.match.params.id) {
+      id = this.props.match.params.id;
+    } else {
+      const args = qs.parse(this.props.location.search);
+      id = args.id ? args.id : '';
+    }
+
+    this.props.history.push('/applicants?id=' + id);
   }
 
   async applyToPost() {
