@@ -22,6 +22,7 @@
   "rules": {
     "template-curly-spacing" : "off",
     "indent": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "react/jsx-one-expression-per-line": "off"
   }
 }

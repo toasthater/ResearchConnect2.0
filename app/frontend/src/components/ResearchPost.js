@@ -6,14 +6,14 @@ import axios from 'axios';
 import * as actions from '../actions';
 import Spinner from './Spinner';
 import DepartmentImage from './DepartmentImage';
-import Modal from 'react-modal';
+import Modal from './Modal';
 
 const md = require('markdown-it')({
   breaks: true
 });
 
-Modal.defaultStyles.overlay.top = "5%";
-Modal.defaultStyles.content.background = "#efebeb";
+// Modal.defaultStyles.overlay.top = "5%";
+// Modal.defaultStyles.content.background = "#efebeb";
 
 class ResearchPost extends Component {
   state = {
