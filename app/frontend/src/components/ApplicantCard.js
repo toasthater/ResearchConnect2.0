@@ -52,7 +52,66 @@ class ApplicantCard extends PureComponent {
   }
 
   render() {
-    const applicant = this.props.applicant;
+    const { applicant } = this.props;
+    return (
+      <React.Fragment>
+        <div className="column">
+          {applicant.student.name}
+        </div>
+        <div className="column">
+          <Link to={applicant.ownerProfile}>{applicant.cruzid}</Link>
+        </div>
+        {(!this.props.questions || this.props.questions.length === 0 || !this.props.applicant.responses || this.props.applicant.responses.length === 0) ?
+          <React.Fragment>
+            <div className="column is-2"><button className="button is-danger is-link is-fullwidth" onClick={() => this.onSubmit(applicant.id, false)}>Decline</button></div>
+            <div className="column is-2"><button className="button is-link is-fullwidth" onClick={() => this.onSubmit(applicant.id, true)}>Accept</button></div>
+          </React.Fragment> :
+          <React.Fragment>
+            <div className="column is-2"><button className="button is-link is-fullwidth" onClick={() => this.openModal()}>Review</button></div>
+          </React.Fragment>
+        }
+        <div className="column is-2">
+          <a
+              align="center"
+              href={applicant.student.resume}
+              className="button is-info  is-fullwidth"
+              target="_blank"
+              rel="noopener noreferrer"
+              download={`${applicant.cruzid}_Resume.pdf`}
+              disabled={!applicant.student.resume}
+            >
+            {applicant.student.resume ? 'Download Resume' : 'No Resume Available'}
+          </a>
+        </div>
+        <div className="column is-2">
+          <a
+              align="center"
+              href={'#' + this.props.match.url}
+              className="button is-info  is-fullwidth"
+              onClick={() => this.handleInterviewSubmission()}
+              disabled={this.state.disableInterviewButton}
+            //target="_blank"
+            //rel="noopener noreferrer"
+          >
+            Interview
+          </a>
+        </div>
+        <Modal isOpen={this.state.showModal} contentLabel="Questionnaire">
+          {this.getQuestions()}
+          <div className="columns" align="center">
+            <div className="column">
+              <button onClick={() => this.onSubmit(applicant.id, false)} className="button is-link is-danger">Decline</button>
+            </div>
+            <div className="column">
+              <button onClick={() => this.onSubmit(applicant.id, true)} className="button is-link">Accept</button>
+            </div>
+            <div className="column">
+              <button onClick={() => this.closeModal()} className="button is-warning is-link">Close</button>
+            </div>
+          </div>
+        </Modal>
+      </React.Fragment>
+    );
     if (applicant.status === 'pending') {
       return (
         <div key={applicant.id} className="flex-item">
@@ -62,72 +121,19 @@ class ApplicantCard extends PureComponent {
                 <div className="card-content">
                   <div className="media">
                     <div className="media-content">
-                      <Link className="subtitle is-6 has-text-link" to={applicant.ownerProfile}>{applicant.cruzid}</Link>
+
                     </div>
                   </div>
 
                   <div className="content">
-                    {(!this.props.questions || this.props.questions.length === 0 || !this.props.applicant.responses || this.props.applicant.responses.length === 0) ?
-                      <div className="columns" align="center">
-                        <div className="column">
-                          <button className="button is-danger is-link" onClick={() => this.onSubmit(applicant.id, false)}>Decline</button>
-                        </div>
-                        <div className="column">
-                          <button className="button is-link" onClick={() => this.onSubmit(applicant.id, true)}>Accept</button>
-                        </div>
-                      </div> :
-                      <div>
-                        <button className="button is-link" onClick={() => this.openModal()}>Review</button>
-                      </div>}
+
                   </div>
                   <footer className="card-footer">
-                    <div>
-                      <a
-                        align="center"
-                        href={applicant.student.resume}
-                        className="button is-info"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download={`${applicant.cruzid}_Resume.pdf`}
-                        disabled={!applicant.student.resume}
-                      >
-                        {applicant.student.resume ? 'Download Resume' : 'No Resume Available'}
-                      </a>
-                      <br /><br />
-
-                      <a
-                        align="center"
-                        href={'#' + this.props.match.url}
-                        className="button is-info"
-                        onClick={() => this.handleInterviewSubmission()}
-                        disabled={this.state.disableInterviewButton}
-                      //target="_blank"
-                      //rel="noopener noreferrer"
-                      >
-                        Interview
-                      </a>
-
-                    </div>
                   </footer>
                 </div>
               </div>
             </div>
           </div>
-
-          <Modal isOpen={this.state.showModal} contentLabel="Questionnaire">
-            {this.getQuestions()}
-            <div className="columns" align="center">
-              <div className="column">
-                <button onClick={() => this.onSubmit(applicant.id, false)} className="button is-link is-danger">Decline</button>
-              </div>
-              <div className="column">
-                <button onClick={() => this.onSubmit(applicant.id, true)} className="button is-link">Accept</button>
-              </div>
-              <div className="column">
-                <button onClick={() => this.closeModal()} className="button is-warning is-link">Close</button>
-              </div>
-            </div>
-          </Modal>
         </div>
       );
     }

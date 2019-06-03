@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
           path: 'applicants',
           populate: {
             path: 'student',
-          }
+          },
         });
     }
 
@@ -50,6 +50,7 @@ router.get('/', (req, res) => {
     });
   } else {
     Research.find({})
+      .sort('-created')
       .populate('owner')
       .populate('department')
       .populate({

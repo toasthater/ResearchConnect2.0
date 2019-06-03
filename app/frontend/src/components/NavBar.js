@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import brandingImg from '../assets/logo.svg';
+import signinButton from '../assets/google_signin_blue.png';
 import * as actions from '../actions';
 
 import SearchBar from './SearchBar';
@@ -84,11 +85,23 @@ class NavBar extends Component {
                 <div className="navbar-start" />
                 {this.props.auth && this.props.auth.isSetup && <SearchBar onSubmit={(values) => { this.submitSearch(values); }} />}
                 <div className="navbar-end">
+                  {!this.props.auth && (<div className="navbar-item">
+                    <a href="/auth/google" className="has-text-centered">
+                      <button
+                        style={{
+                        background: `url("${signinButton}")`, backgroundSize: 'cover', width: 196, height: 46, border: 'none', display: 'inline-block'
+                      }}
+                        className="button"
+                        onClick={this.signIn}
+                        title="Sign In"
+                      />
+                    </a>
+                  </div>)}
                   {this.props.auth && this.props.auth.isProfessor && (
                     <NavLink className="navbar-item" to="/new" onClick={this.close}>
                       New Research
                     </NavLink>
-)}
+                  )}
                   <div className="navbar-item">
                     {this.renderLoginButton()}
                   </div>

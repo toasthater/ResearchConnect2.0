@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import signinButton from '../assets/google_signin.png';
+import signinButton from '../assets/google_signin_white.png';
 
 export default class Landing extends Component {
   render() {

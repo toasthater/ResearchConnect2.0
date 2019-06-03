@@ -34,36 +34,6 @@ class Applicants extends Component {
     });
   }
 
-  formatApplicant() {
-    // Pull student data out of applications
-    const applicants = this.state.post.applicants.filter(applicant => applicant.student);
-
-    // Return neatly formatted ApplicantCards
-    return (
-      <div className="flex-container">
-        {applicants.map(applicant => (
-          <ApplicantCard
-            onSubmit={this.onSubmit}
-            key={applicant._id}
-            questions={this.state.post.questions}
-            applicant={{
-              id: applicant._id,
-              status: applicant.status,
-              student: applicant.student,
-              cruzid: applicant.student.cruzid,
-              ownerProfile: `/profile/${applicant.student.cruzid}`,
-              responses: applicant.responses,
-            }}
-            postID={this.state.post._id}
-            sendAccepted={this.props.sendAccepted}
-            sendDeclined={this.props.sendDeclined}
-            sendInterview={this.props.sendInterview}
-          />
-        ))}
-      </div>
-    );
-  }
-
   onSubmit = (applicationID, accept) => {
     // Inform the backend of the change in application status
     axios.post('/api/apply', {
@@ -84,6 +54,41 @@ class Applicants extends Component {
         });
       }
     }
+  }
+
+  formatApplicant() {
+    // Pull student data out of applications
+    const applicants = this.state.post.applicants.filter(applicant => applicant.student);
+
+    // Return neatly formatted ApplicantCards
+    return (
+      <div className="container">
+        {applicants.map(applicant => (
+          <React.Fragment>
+            <div className="columns">
+              <ApplicantCard
+                onSubmit={this.onSubmit}
+                key={applicant._id}
+                questions={this.state.post.questions}
+                applicant={{
+                  id: applicant._id,
+                  status: applicant.status,
+                  student: applicant.student,
+                  cruzid: applicant.student.cruzid,
+                  ownerProfile: `/profile/${applicant.student.cruzid}`,
+                  responses: applicant.responses,
+                }}
+                postID={this.state.post._id}
+                sendAccepted={this.props.sendAccepted}
+                sendDeclined={this.props.sendDeclined}
+                sendInterview={this.props.sendInterview}
+              />
+            </div>
+            <hr />
+          </React.Fragment>
+        ))}
+      </div>
+    );
   }
 
   render() {
