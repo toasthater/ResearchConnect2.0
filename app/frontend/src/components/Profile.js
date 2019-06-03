@@ -247,6 +247,8 @@ class Profile extends Component {
               summary: post.summary,
               department: post.department.name,
               ownerProfile: "/profile/" + post.owner.cruzid,
+              deadline: post.deadline,
+              date: new Date(post.deadline),
               applicants: this.props.auth.isProfessor ? post.applicants.map(applicant => applicant.student ? applicant.student.cruzid : "") : null
             }}
           />
