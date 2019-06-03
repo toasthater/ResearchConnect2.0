@@ -24,8 +24,13 @@ class ResearchPost extends Component {
   };
 
   async componentDidMount() {
-    const args = qs.parse(this.props.location.search);
-    const id = args.id ? args.id : '';
+    let id;
+    if (this.props.match && this.props.match.params && this.props.match.params.id) {
+      id = this.props.match.params.id;
+    } else {
+      const args = qs.parse(this.props.location.search);
+      id = args.id ? args.id : '';
+    }
 
     const post = await axios.get('/api/research_posts/', {
       params: {
@@ -305,6 +310,9 @@ class ResearchPost extends Component {
 
               {!this.props.auth.isProfessor && !this.state.hasApplied && this.state.post.status === 'Open' &&
                 <button className="button is-success" onClick={() => this.applyToPost()} style={{ marginLeft: "1em" }}>Apply</button>}
+
+              {!this.props.auth.isProfessor && this.state.hasApplied && this.state.post.status === 'Open' &&
+                <button className="button is-success" disabled onClick={() => this.applyToPost()} style={{ marginLeft: "1em" }}>Applied</button>}
 
               {this.props.auth.isProfessor && this.state.post.owner.cruzid === this.props.auth.cruzid && this.state.post.status === 'Open' &&
                 <button className="button is-warning" onClick={() => this.handleClose()} style={{ marginLeft: "1em" }}>Close</button>}

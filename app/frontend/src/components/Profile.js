@@ -189,7 +189,7 @@ class Profile extends Component {
         <br />
         <h2 align="left">{`Summary: ${research.summary}`}</h2>
         <br />
-        <Link className="card-footer-item info" to={`/post?id=${research._id}`}>Learn More</Link>
+        <Link className="card-footer-item info" to={`/post/${research._id}`}>Learn More</Link>
       </div>
     ));
 
