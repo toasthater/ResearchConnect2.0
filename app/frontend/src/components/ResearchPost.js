@@ -105,12 +105,12 @@ class ResearchPost extends Component {
       return;
     }
 
-    const args = qs.parse(this.props.location.search);
+    let post_id = this.props.match.params.id;
 
     if (!this.state.post.questions || this.state.post.questions.length === 0) {
-      const val = await axios.post("/api/apply", { postID: args.id, applicant: this.props.auth._id });
+      const val = await axios.post("/api/apply", { postID: post_id, applicant: this.props.auth._id });
       alert(val.data);
-      this.props.sendApplied(args.id, this.state.post.cruzid);
+      this.props.sendApplied(post_id, this.state.post.cruzid);
     } else {
       this.setState({ showModal: true });
     }
@@ -249,6 +249,8 @@ class ResearchPost extends Component {
       this.props.history.push('/');
       return '';
     }
+
+    console.log(this.props.match);
 
     return (this.state.post !== null ? (
       <div className="section">
