@@ -34,7 +34,21 @@ router.post('/', async (req, res) => {
           }
       });
 
+      if (!newStudent) {
+        res.send("Could not find user '" + req.user.cruzid + "'");
+        return;
+      }
+
       const research = await Research.findById(req.body.postID);
+      if (!research) {
+        res.send("Could not find research post, maybe it was deleted. Try refreshing.");
+        return;
+      }
+
+      if (research.status.toString() === "Closed") {                        
+        res.send("You are trying to apply to a closed post!");
+        return;
+      }
 
       for (let i = 0; i < research.applicants.length; i++) {
         const oldApplication = await Application.findById(research.applicants[i]);
@@ -93,6 +107,7 @@ router.post('/', async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.send("Error in application");
   }
 });
 
