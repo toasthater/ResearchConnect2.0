@@ -10,10 +10,6 @@ class SearchResults extends Component {
     this.setState({ search: [] });
   }
 
-  async componentDidUpdate() {
-    console.log(this.props.search);
-  }
-
   // Search through requested posts and if they exist format them
   formatPost(mod, eq) {
     const results = this.props.search;
@@ -60,6 +56,7 @@ class SearchResults extends Component {
               summary: item.summary,
               department: item.department.name,
               ownerProfile: `/profile/${item.owner.cruzid}`,
+              date: new Date(item.deadline),
             }}
           />
         ))}

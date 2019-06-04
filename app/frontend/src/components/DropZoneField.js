@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import ReactDropzone from 'react-dropzone';
 
+const fixImageRotation = require('fix-image-rotation').fixRotation;
+
 class DropZoneField extends Component {
-    onDrop = (acceptedFiles, rejectedFiles) => {
+    onDrop = async (acceptedFiles, rejectedFiles) => {
       const { onChange } = this.props.input;
-      const files = this.props.input.value || [];
+      const files = [];
+
+      acceptedFiles = await fixImageRotation(acceptedFiles);
+      rejectedFiles = await fixImageRotation(rejectedFiles);
+
       acceptedFiles.map(
         file => files.push(
           {

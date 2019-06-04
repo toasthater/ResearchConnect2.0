@@ -231,8 +231,7 @@ class Profile extends Component {
     );
   }
 
-  formatPost(mod, eq) {
-    const { research: posts } = this.state;
+  formatPost(posts, mod, eq) {
     return (
       <React.Fragment>
         {posts.filter((_, index) => (index % mod) === eq).map(post => (
@@ -333,13 +332,13 @@ class Profile extends Component {
                   {posts.length ? (
                     <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
                       <div className="column is-one-third">
-                        {this.formatPost(3, 0)}
+                        {this.formatPost(posts, 3, 0)}
                       </div>
                       <div className="column is-one-third">
-                        {this.formatPost(3, 1)}
+                        {this.formatPost(posts, 3, 1)}
                       </div>
                       <div className="column is-one-third">
-                        {this.formatPost(3, 2)}
+                        {this.formatPost(posts, 3, 2)}
                       </div>
                     </div>
                   ) : (
@@ -354,7 +353,17 @@ class Profile extends Component {
                 <TabPanel>
                   {this.state.followingLoaded ?
                     ((this.state.followedResearch && this.state.followedResearch.length > 0) ?
-                      this.formatPost(this.state.followedResearch)
+                      <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
+                        <div className="column is-one-third">
+                          {this.formatPost(this.state.followedResearch, 3, 0)}
+                        </div>
+                        <div className="column is-one-third">
+                          {this.formatPost(this.state.followedResearch, 3, 1)}
+                        </div>
+                        <div className="column is-one-third">
+                          {this.formatPost(this.state.followedResearch, 3, 2)}
+                        </div>
+                      </div>
                       : <p>No research to show</p>)
                     : <Spinner fullPage />}
                 </TabPanel>
@@ -362,7 +371,17 @@ class Profile extends Component {
                 <TabPanel>
                   {this.state.departmentLoaded ?
                     ((this.state.departmentResearch && this.state.departmentResearch.length > 0) ?
-                      this.formatPost(this.state.departmentResearch)
+                      <div className="columns is-multiline" style={{ paddingTop: '1em' }}>
+                        <div className="column is-one-third">
+                          {this.formatPost(this.state.departmentResearch, 3, 0)}
+                        </div>
+                        <div className="column is-one-third">
+                          {this.formatPost(this.state.departmentResearch, 3, 1)}
+                        </div>
+                        <div className="column is-one-third">
+                          {this.formatPost(this.state.departmentResearch, 3, 2)}
+                        </div>
+                      </div>
                       : <p>No research to show</p>)
                     : <Spinner fullPage />}
                 </TabPanel>
