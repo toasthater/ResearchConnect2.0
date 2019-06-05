@@ -105,7 +105,13 @@ class ResearchPost extends Component {
       return;
     }
 
-    let post_id = this.props.match.params.id;
+    let post_id;
+    if (this.props.match && this.props.match.params && this.props.match.params.id) {
+      post_id = this.props.match.params.id;
+    } else {
+      const args = qs.parse(this.props.location.search);
+      post_id = args.id ? args.id : '';
+    }
 
     if (!this.state.post.questions || this.state.post.questions.length === 0) {
       const val = await axios.post("/api/apply", { postID: post_id, applicant: this.props.auth._id });
@@ -224,10 +230,16 @@ class ResearchPost extends Component {
       }
     }
 
-    const args = qs.parse(this.props.location.search);
+    let id;
+    if (this.props.match && this.props.match.params && this.props.match.params.id) {
+      id = this.props.match.params.id;
+    } else {
+      const args = qs.parse(this.props.location.search);
+      id = args.id ? args.id : '';
+    }
 
     const val = await axios.post("/api/apply", {
-      postID: args.id,
+      postID: id,
       applicant: this.props.auth._id,
       responses: this.state.responses
     });
