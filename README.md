@@ -39,7 +39,15 @@
 * We aim to connect UCSC students to faculty and research opportunities.
 
 ## Install
-
+* `Create a .env file in research_connect/app with the following (fill in your own):`
+```
+MONGO_URL=""GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+COOKIE_KEY=""
+CLOUDINARY_CLOUD_NAME=""
+CLOUDINARY_API_KEY=""
+CLOUDINARY_API_SECRET=""
+```
 * `$ cd research_connect/app/frontend`
 * `$ npm install`
 
