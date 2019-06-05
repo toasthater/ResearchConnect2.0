@@ -41,7 +41,8 @@
 ## Install
 * `Create a .env file in research_connect/app with the following (fill in your own):`
 ```
-MONGO_URL=""GOOGLE_CLIENT_ID=""
+MONGO_URL=""
+GOOGLE_CLIENT_ID=""
 GOOGLE_CLIENT_SECRET=""
 COOKIE_KEY=""
 CLOUDINARY_CLOUD_NAME=""
