@@ -145,8 +145,14 @@ async function createNewNotification(req, res) {
 
     //If it was applied, send a confirmation email to the student
     if (req.body.params.type === 'applied') {
-      email.personalizations[0].to[0].email = req.user.email
-      email.personalizations[0].to[0].name = req.user.name
+      let tempEmailTo = [{
+        email: req.user.email,
+        name: req.user.name
+      }]
+
+      email.personalizations[0].to = tempEmailTo
+      email.personalizations[0].dynamic_template_data.recipient_name = req.user.name
+
       email.template_id = "d-7baf5179e5884663b7840101b30aed2f"
 
       SGmail.send(email);
