@@ -289,3 +289,25 @@ export const sendInterview = (postID, studentID) => async dispatch => {
 
   return res.data;
 };
+
+export const fetch_adminRequests = (cruzid) => async dispatch => {
+  let res = await axios.get("/api/adminSettings/", {
+    params: {
+      cruzid: cruzid,
+      type: 'adminRequest'
+    }
+  });
+
+  return res.data;
+};
+
+export const fetch_bugReports = (cruzid) => async dispatch => {
+  let res = await axios.get("/api/adminSettings/", {
+    params: {
+      cruzid: cruzid,
+      type: 'bugReport'
+    }
+  });
+
+  return res.data;
+};
