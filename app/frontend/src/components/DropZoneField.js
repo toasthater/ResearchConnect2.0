@@ -34,7 +34,7 @@ class DropZoneField extends Component {
           type: 'rejected',
         }),
       );
-      console.log(files);
+      // console.log(files);
       onChange(files);
       this.forceUpdate();
     }

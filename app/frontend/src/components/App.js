@@ -103,7 +103,7 @@ class App extends Component {
             // Auto-update service worker on route change
             history.listen(() => {
               if (window.swUpdate === true) {
-                console.log('Reloading');
+                // console.log('Reloading');
                 window.location.reload();
               }
             });

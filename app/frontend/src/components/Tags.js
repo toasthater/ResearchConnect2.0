@@ -8,7 +8,7 @@ const BACKSPACE_KEY = 8;
 
 class Tags extends React.Component {
   constructor(props) {
-    console.log(props);
+    // console.log(props);
     super(props);
     let temp = [];
     if (this.props.post) {
@@ -31,7 +31,7 @@ class Tags extends React.Component {
   }
 
   handleChange(e) {
-    console.log(this.state);
+    // console.log(this.state);
     this.setState({
       value: e.target.value,
     });

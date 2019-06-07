@@ -31,7 +31,7 @@ class ResearchPost extends Component {
       const args = qs.parse(this.props.location.search);
       id = args.id ? args.id : '';
     }
-    console.log(id)
+    // console.log(id)
 
     const post = await axios.get('/api/research_posts/', {
       params: {
@@ -145,7 +145,7 @@ class ResearchPost extends Component {
   }
 
   handleClose() {
-    console.log(this.state);
+    // console.log(this.state);
     if (!this.props.auth.isProfessor || !(this.props.auth.cruzid === this.state.post.owner.cruzid)) {
       return;
     }
@@ -262,7 +262,7 @@ class ResearchPost extends Component {
       return '';
     }
 
-    console.log(this.props.match);
+    // console.log(this.props.match);
 
     return (this.state.post !== null ? (
       <div className="section">
@@ -298,7 +298,7 @@ class ResearchPost extends Component {
 
               <div className="box">
                 <h2 className="subtitle is-uppercase is-size-7">Description</h2>
-                {console.log(this.state.post.description)}
+                {/* {console.log(this.state.post.description)} */}
                 <h1 className="title is-5">
                   <div dangerouslySetInnerHTML={{ __html: md.render(this.state.post.description) }} />
                 </h1>

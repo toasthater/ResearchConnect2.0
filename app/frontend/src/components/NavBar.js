@@ -135,13 +135,13 @@ class NavBar extends Component {
               <Link className="navbar-item" to="/settings">
                 Settings
                 </Link>
-              <a className="navbar-item link-label" href={'#' + this.props.match.url} onClick={() => this.requestAdminAccess()}>
+              {/* <a className="navbar-item link-label" href={'#' + this.props.match.url} onClick={() => this.requestAdminAccess()}>
                 Request admin access
               </a>
 
               <a className="navbar-item" href={'#' + this.props.match.url} onClick={() => this.reportBugs()}>
                 Report a bug
-              </a>
+              </a> */}
               <hr className="navbar-divider" />
               <a className="navbar-item" href="/api/logout">
                 Logout

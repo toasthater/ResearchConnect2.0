@@ -111,7 +111,7 @@ class AddPostForm extends React.Component {
         await this.validate();
         if (this.state.valid === true) {
             await axios.post('/api/research_posts', { ...this.state });
-            console.log(this.state);
+            // console.log(this.state);
             this.setState({
                 title: '',
                 tags: [],
@@ -180,9 +180,9 @@ class AddPostForm extends React.Component {
 
     // These two functons are to handle changes to the Tags input for Tags
     tagsChange = (new_tags) => {
-        console.log(new_tags);
+        // console.log(new_tags);
         this.setState({ tags: new_tags }, () => {
-            console.log(this.state.tags);
+            // console.log(this.state.tags);
         });
     }
     getTags = () => this.state.tags
@@ -190,18 +190,18 @@ class AddPostForm extends React.Component {
 
     // These two functons are to handle changes to the Tags input for required skills
     reqSkillsChange = (new_skills) => {
-        console.log(new_skills);
+        // console.log(new_skills);
         this.setState({ reqSkills: new_skills }, () => {
-            console.log(this.state.reqSkills);
+            // console.log(this.state.reqSkills);
         });
     }
     getReqSkills = () => this.state.reqSkills
 
     // These two functons are to handle changes to the Tags input for preferred skills
     prefSkillsChange = (new_skills) => {
-        console.log(new_skills);
+        // console.log(new_skills);
         this.setState({ prefSkills: new_skills }, () => {
-            console.log(this.state.prefSkills);
+            // console.log(this.state.prefSkills);
         });
     }
     getPrefSkills = () => this.state.prefSkills

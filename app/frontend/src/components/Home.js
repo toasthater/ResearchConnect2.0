@@ -27,7 +27,7 @@ class Home extends Component {
     }
 
     const filteredPosts = allPosts.filter((post) => {
-      console.log(post)
+      // console.log(post)
       return (
         post.summary.toLowerCase().includes(f) ||
         post.department.name.toLowerCase().includes(f) ||
@@ -72,7 +72,7 @@ class Home extends Component {
         // this.closePosts();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         this.setState({
           allPosts: posts,
           posts,

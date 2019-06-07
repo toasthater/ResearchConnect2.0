@@ -114,7 +114,7 @@ class Profile extends Component {
         }
 
         if (response.data.isProfessor === true) {
-          console.log('Fetching Professor Profile...');
+          // console.log('Fetching Professor Profile...');
 
           axios.get('/api/faculty_members/', {
             params: {
@@ -139,7 +139,7 @@ class Profile extends Component {
             }))
             .catch(error => console.log(error));
         } else {
-          console.log('Fetching Student Profile...');
+          // console.log('Fetching Student Profile...');
 
           axios.get('/api/students/', {
             params: {
@@ -257,7 +257,7 @@ class Profile extends Component {
   }
 
   async makeProfessor(val) {
-    console.log(this.state)
+    // console.log(this.state)
     var request = {
       isAdmin: this.props.auth.isAdmin ? this.props.auth.isAdmin : false,
       name: this.state.profile.name,
@@ -295,7 +295,7 @@ class Profile extends Component {
     }
 
     const { research: posts } = this.state;
-    console.log(posts)
+    // console.log(posts)
 
     return (
       <section className="section">
