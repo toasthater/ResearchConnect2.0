@@ -15,7 +15,7 @@ class AddPostForm extends React.Component {
         prefSkills: [],
         summary: '',
         description: '',
-        department: { label: 'Computer Science and Engineering', value: '5c4ab51421e1383889614c73' },
+        department: { label: 'Academic Senate', value: '5c4ab51421e1383889614c73' },
         deadline: new Date(),
         owner: this.props.auth.cruzid,
         valid: false,

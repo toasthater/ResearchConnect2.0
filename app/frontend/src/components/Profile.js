@@ -10,7 +10,6 @@ import * as actions from '../actions';
 import Spinner from './Spinner';
 import StudentProfile from './StudentProfile';
 import ProfessorProfile from './ProfessorProfile';
-import InfoPage from './ProfessorInfoPage';
 import PostCard from './PostCard';
 
 class Profile extends Component {

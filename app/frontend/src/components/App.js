@@ -18,10 +18,6 @@ import Setup from './Setup';
 import NewResearch from './NewResearch';
 import PageNotFound from './ErrorPage';
 
-import DisplayProfessor from './DisplayProfessor';
-import ProTip from './ProTip';
-import ProfessorInfo from './ProfessorInfo';
-
 NavLink.defaultProps.activeClassName = 'is-active';
 
 const PrivateRoute = ({
@@ -71,28 +67,6 @@ class App extends Component {
               exact
               path="/new"
               component={NewResearch}
-              loggedIn={this.props.auth}
-              accountSetup={this.props.auth.isSetup}
-            />
-            {/* added to test the professor display*/}
-            <PrivateRoute
-              exact
-              path="/professor/all"
-              component={DisplayProfessor}
-              loggedIn={this.props.auth}
-              accountSetup={this.props.auth.isSetup}
-            />
-            <PrivateRoute
-              exact
-              path="/pro_tip"
-              component={ProTip}
-              loggedIn={this.props.auth}
-              accountSetup={this.props.auth.isSetup}
-            />
-            <PrivateRoute
-              exact
-              path="/info/:cruzid"
-              component={ProfessorInfo}
               loggedIn={this.props.auth}
               accountSetup={this.props.auth.isSetup}
             />
