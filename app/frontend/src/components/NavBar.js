@@ -225,6 +225,20 @@ class NavBar extends Component {
                   New Research
                     </NavLink>
               )}
+              {/* added to link view professors */}
+              
+              {this.props.auth && (
+                <NavLink className="navbar-item" to="/professor/all" onClick={this.close}>
+                  Professors
+                    </NavLink>
+              )}
+              
+              {/* added to link view of pro tips */}
+              {this.props.auth && !this.props.auth.isProfessor && (
+                <NavLink className="navbar-item" to="/pro_tip" onClick={this.close}>
+                  Pro Tips
+                    </NavLink>
+              )}
               <div className="navbar-item">
                 {this.renderLoginButton()}
               </div>

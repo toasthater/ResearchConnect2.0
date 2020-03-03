@@ -23,6 +23,8 @@ const endorse = require('./routes/api/endorse');
 const toggleProfessor = require('./routes/api/toggleProfessor');
 const adminSettings = require('./routes/api/adminSettings');
 
+
+
 require('./models/User');
 require('./models/Student');
 require('./models/FacultyMember');
@@ -68,6 +70,12 @@ app.use("/api/notification", notification);
 app.use("/api/endorse", endorse);
 app.use("/api/toggleProfessor", toggleProfessor)
 app.use('/api/adminSettings', adminSettings);
+
+// my changes
+const activeFaculty = require('./routes/api/active_faculty_members');
+require('./models/ActiveFaculty');
+app.use('/api/active_faculty_members', activeFaculty);
+//-----------------------
 
 // DB config
 const db = require('./config/keys').mongoURI;
